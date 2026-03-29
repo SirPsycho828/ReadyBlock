@@ -363,6 +363,7 @@
     "skills": "Skills"
   },
   "profile": {
+    "name": "Name",
     "address": "Address",
     "members": "People",
     "adults": "adults",
@@ -396,7 +397,8 @@
     "privacy": "Privacy",
     "dataSharingPreferences": "Data sharing preferences",
     "privacyDescription": "Choose who can see your emergency needs information.",
-    "privacySaved": "Privacy preferences saved"
+    "privacySaved": "Privacy preferences saved",
+    "savePrivacy": "Save Privacy Settings"
   },
   "resource": {
     "type": {

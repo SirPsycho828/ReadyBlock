@@ -363,6 +363,7 @@
     "skills": "Habilidades"
   },
   "profile": {
+    "name": "Nombre",
     "address": "Dirección",
     "members": "Personas",
     "adults": "adultos",
@@ -396,7 +397,8 @@
     "privacy": "Privacidad",
     "dataSharingPreferences": "Preferencias de compartir datos",
     "privacyDescription": "Elige quién puede ver tu información de necesidades de emergencia.",
-    "privacySaved": "Preferencias de privacidad guardadas"
+    "privacySaved": "Preferencias de privacidad guardadas",
+    "savePrivacy": "Guardar configuración de privacidad"
   },
   "resource": {
     "type": {
