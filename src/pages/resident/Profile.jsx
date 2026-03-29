@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 import { getHousehold, getContacts, addContact, updateContact, deleteContact } from '@/services/household.service';
-import { getHouseholdResources, addResource, RESOURCE_TYPES } from '@/services/resource.service';
+import { getHouseholdResources, addResource, updateResource, deleteResource, RESOURCE_TYPES } from '@/services/resource.service';
 import { getUserSkills, addSkill, SKILL_CATEGORIES, SKILL_LEVELS } from '@/services/skills.service';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -122,6 +122,8 @@ export default function Profile() {
       <ResourcesSection
         resources={resources}
         onAdd={(r) => setResources((prev) => [...prev, r])}
+        onDelete={(id) => setResources((prev) => prev.filter((r) => r.id !== id))}
+        onUpdate={(updated) => setResources((prev) => prev.map((r) => r.id === updated.id ? updated : r))}
       />
 
       {/* Skills */}
@@ -324,25 +326,67 @@ function ContactsSection({ contacts, onAdd, onDelete, onUpdate }) {
 
 // ─── Resources Section ─────────────────────────────────────────────
 
-function ResourcesSection({ resources, onAdd }) {
+function ResourcesSection({ resources, onAdd, onDelete, onUpdate }) {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingResource, setEditingResource] = useState(null);
   const [name, setName] = useState('');
   const [type, setType] = useState('tools');
+  const [details, setDetails] = useState('');
   const [shareable, setShareable] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  function openAdd() {
+    setEditingResource(null);
+    setName('');
+    setType('tools');
+    setDetails('');
+    setShareable(true);
+    setDialogOpen(true);
+  }
+
+  function openEdit(resource) {
+    setEditingResource(resource);
+    setName(resource.name || '');
+    setType(resource.type || 'tools');
+    setDetails(resource.details || '');
+    setShareable(resource.shareable !== false);
+    setDialogOpen(true);
+  }
 
   async function handleSave() {
     if (!name) return;
     setSaving(true);
-    const result = await addResource({ name, type, quantity: 1, condition: 'good', shareable, location: 'home', requiresTraining: false });
-    setSaving(false);
-    if (result.success) {
-      onAdd(result.data);
-      setName('');
-      setType('tools');
-      setDialogOpen(false);
-      toast.success(t('profile.resourceAdded'));
+
+    if (editingResource) {
+      const updates = { name: name.trim(), type, details: details.trim(), shareable };
+      const result = await updateResource(editingResource.id, updates);
+      setSaving(false);
+      if (result.success) {
+        onUpdate({ ...editingResource, ...updates });
+        setDialogOpen(false);
+        toast.success(t('profile.resourceUpdated'));
+      }
+    } else {
+      const result = await addResource({
+        name: name.trim(),
+        type,
+        details: details.trim(),
+        quantity: 1,
+        condition: 'good',
+        shareable,
+        location: 'home',
+        requiresTraining: false,
+      });
+      setSaving(false);
+      if (result.success) {
+        onAdd(result.data);
+        setName('');
+        setType('tools');
+        setDetails('');
+        setDialogOpen(false);
+        toast.success(t('profile.resourceAdded'));
+      }
     }
   }
 
@@ -359,8 +403,9 @@ function ResourcesSection({ resources, onAdd }) {
           <div className="space-y-2">
             {resources.map((r) => (
               <div key={r.id} className="flex items-center justify-between rounded-lg border p-3">
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium">{r.name}</p>
+                  {r.details && <p className="text-xs text-muted-foreground">{r.details}</p>}
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="secondary" className="text-xs">
                       {t(`resource.type.${r.type}`)}
@@ -370,21 +415,45 @@ function ResourcesSection({ resources, onAdd }) {
                     </Badge>
                   </div>
                 </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => openEdit(r)}
+                    aria-label={t('profile.editResource')}
+                  >
+                    <Pencil size={14} className="text-muted-foreground hover:text-primary" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={async () => {
+                      const result = await deleteResource(r.id);
+                      if (result.success) {
+                        onDelete(r.id);
+                        toast.success(t('profile.resourceRemoved'));
+                      }
+                    }}
+                    aria-label={t('common.delete')}
+                  >
+                    <Trash2 size={14} className="text-muted-foreground hover:text-destructive" />
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
         )}
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="w-full border-dashed">
-              <Plus size={16} aria-hidden="true" />
-              {t('profile.addResource')}
-            </Button>
-          </DialogTrigger>
+          <Button variant="outline" className="w-full border-dashed" onClick={openAdd}>
+            <Plus size={16} aria-hidden="true" />
+            {t('profile.addResource')}
+          </Button>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t('profile.addResource')}</DialogTitle>
+              <DialogTitle>
+                {editingResource ? t('profile.editResource') : t('profile.addResource')}
+              </DialogTitle>
               <DialogDescription>{t('household.resources')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
@@ -410,6 +479,16 @@ function ResourcesSection({ resources, onAdd }) {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="resource-details">{t('profile.resourceDetails')}</Label>
+                <Input
+                  id="resource-details"
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  placeholder={t('profile.resourceDetailsPlaceholder')}
+                  className="h-11"
+                />
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
