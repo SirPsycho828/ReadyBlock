@@ -1,7 +1,10 @@
 {
   "app": {
     "name": "ReadyBlock",
-    "tagline": "Your neighborhood, prepared together."
+    "tagline": "Your neighborhood, prepared together.",
+    "tagline_line1": "Know your neighbors.",
+    "tagline_line2": "Know your resources.",
+    "tagline_line3": "Know you're not alone."
   },
   "nav": {
     "home": "Home",
@@ -31,14 +34,30 @@
     "backToSignIn": "Back to Sign In",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
+    "backToReadyBlock": "Back to ReadyBlock",
+    "welcomeBack": "Welcome back. Sign in to check on your block.",
+    "joinSubtitle": "Join your block in just 2 minutes.",
+    "pwCheck8Chars": "At least 8 characters",
+    "pwCheckNumber": "Contains a number",
+    "pwCheckUppercase": "Contains uppercase",
+    "pwCheckSpecial": "Contains special character",
+    "pwWeak": "Weak",
+    "pwFair": "Fair",
+    "pwGood": "Good",
+    "pwStrong": "Strong",
+    "firstName": "Your first name",
+    "firstNamePlaceholder": "How should we greet you?",
     "createAccount": "Create Account",
     "verifyAddress": "Verify Your Address",
     "addressPlaceholder": "Enter your street address",
     "pendingTitle": "Almost there!",
     "pendingMessage": "Your address is being verified and you'll be assigned to your neighborhood shortly.",
     "pendingWhileWaiting": "You'll receive a notification once your neighborhood coordinator has confirmed your address.",
+    "continueToDashboard": "Continue to Dashboard",
     "verifyAddressDescription": "We need your address to connect you with your neighborhood block.",
     "streetAddress": "Street address",
+    "address2": "Apt, suite, unit (optional)",
+    "address2Placeholder": "Apt 4B, Unit 12, etc.",
     "city": "City",
     "state": "State",
     "zip": "ZIP code",
@@ -79,9 +98,9 @@
     "viewQueue": "View"
   },
   "theme": {
-    "light": "Light",
+    "light": "Blue Sky",
     "system": "System",
-    "dark": "Dark",
+    "dark": "Storm",
     "label": "Appearance"
   },
   "common": {
@@ -113,7 +132,8 @@
   "emergency": {
     "imAlive": "I'm Alive",
     "imAliveConfirm": "Mark yourself as safe?",
-    "imAliveDescription": "Sends a safety notification to your {{count}} designated contacts.",
+    "imAliveDescription": "Your {{count}} designated contact will receive an SMS text and email letting them know you're safe. Works offline — messages are queued and sent automatically as soon as your device reconnects.",
+    "imAliveDescriptionPlural": "Your {{count}} designated contacts will each receive an SMS text and email letting them know you're safe. Works offline — messages are queued and sent automatically as soon as your device reconnects.",
     "imAliveSent": "Delivered to {{count}} of {{total}} contacts",
     "imAliveQueued": "Status saved. Will send when connected.",
     "imAliveUndo": "Undo",
@@ -150,13 +170,21 @@
     "contactsDescription": "Add an emergency contact outside your neighborhood who can be reached if local phones are down.",
     "primaryContactName": "Contact name",
     "primaryContactPhone": "Contact phone",
+    "primaryContactEmail": "Contact email",
+    "contactPhoneOrEmail": "At least a phone number or email is required.",
     "petType": "Pet type",
+    "petTypeLabel": "Type",
     "petTypePlaceholder": "e.g., Dog, Cat, Fish",
     "petCount": "How many?",
+    "addPet": "Add another pet",
+    "addFirstPet": "Add a pet",
     "resourcesDescription": "Do you have any of these available to share in an emergency?",
     "resource_generator": "Generator",
     "resource_vehicle": "Vehicle (4WD / truck)",
     "resource_tools": "Tools (chainsaw, hand tools)",
+    "resource_solarPanel": "Solar panel / battery pack",
+    "resource_waterStorage": "Water storage (jugs, barrels)",
+    "resource_firstAidKit": "First aid kit",
     "resource_extraSpace": "Extra space for neighbors",
     "languagesDescription": "What languages are spoken in your household?",
     "needsConsent": "This information helps your coordinator prepare for emergencies. You choose who can see it.",
@@ -180,6 +208,12 @@
     "drillNamePlaceholder": "e.g., Spring Emergency Drill",
     "endDrill": "End Drill",
     "drillBlockedDuringEmergency": "Drills cannot be started during an active emergency."
+  },
+  "map": {
+    "layer_households": "Households",
+    "layer_rallyPoints": "Rally Points",
+    "unassigned": "Your address is outside the current coverage area. A coordinator will assign you to the nearest block.",
+    "loading": "Loading your neighborhood map..."
   },
   "plans": {
     "rallyPoints": "Rally Points",
@@ -221,8 +255,93 @@
     "resourceInventory": "Do you have a generator, tools, or supplies to share? Adding resources helps your whole block.",
     "welfareChecks": "No active emergency. Your welfare check list will appear here when needed."
   },
+  "onboarding": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "step_yourName": "What's your name?",
+    "step_yourName_desc": "So your neighbors know who you are.",
+    "step_address": "Where do you live?",
+    "step_address_desc": "We'll match you with your neighborhood block.",
+    "step_basics": "Who lives here?",
+    "step_basics_desc": "Helps your coordinator plan for everyone.",
+    "step_contacts": "Emergency contact",
+    "step_contacts_desc": "Someone outside your neighborhood who can be reached if local phones are down.",
+    "step_pets": "Any pets?",
+    "step_pets_desc": "Pets need to be accounted for in emergencies too.",
+    "step_resources": "Resources to share",
+    "step_resources_desc": "Anything you could lend neighbors in a crisis?",
+    "step_skills": "Skills & training",
+    "step_skills_desc": "Any professional or volunteer skills that could help in an emergency?",
+    "skillsDescription": "Check any that apply to anyone in your household.",
+    "skill_nurseDoctor": "Nurse or Doctor",
+    "skill_emt": "EMT / Paramedic",
+    "skill_cprFirstAid": "CPR / First Aid certified",
+    "skill_firefighter": "Firefighter (active or retired)",
+    "skill_searchRescue": "Search & Rescue trained",
+    "skill_hamRadio": "Ham Radio operator",
+    "skill_electrician": "Electrician",
+    "skill_plumber": "Plumber",
+    "skill_mechanic": "Mechanic",
+    "skill_constructionCarpentry": "Construction / Carpentry",
+    "skill_chainsawTreeRemoval": "Chainsaw / Tree removal",
+    "skill_mentalHealthCounselor": "Mental health counselor",
+    "skill_childcare": "Childcare provider",
+    "skill_animalCare": "Animal care / Veterinary",
+    "step_languages": "Languages spoken",
+    "step_languages_desc": "Helps coordinators connect neighbors who can help translate.",
+    "step_needs": "Emergency needs",
+    "step_needs_desc": "Optional and private. Helps your coordinator check on the right people first.",
+    "complete": "You're all set! Welcome to your block."
+  },
+  "landing": {
+    "hero": {
+      "title": "Know your neighbors. Know your resources. Know you're not alone.",
+      "subtitle": "ReadyBlock connects your household with your block so when emergencies hit, no one is on their own.",
+      "cta": "Join your block",
+      "learnMore": "Learn how it works"
+    },
+    "features": {
+      "title": "Built by neighbors. For neighbors.",
+      "subtitle": "Everything you need to make your block more resilient — before, during, and after an emergency.",
+      "map": {
+        "title": "Map Your Block",
+        "description": "See who's on your street, what resources are nearby, and how ready your neighborhood is."
+      },
+      "resources": {
+        "title": "Share Resources",
+        "description": "Generators, medical skills, chainsaws, shelter space — know what your block has before you need it."
+      },
+      "checkIn": {
+        "title": "Check In Fast",
+        "description": "One tap tells your contacts you're safe. In an emergency, every second counts."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "step1": { "title": "Register your household", "description": "Your address, your people, your pets — 2 minutes." },
+      "step2": { "title": "Add resources & skills", "description": "What you can share, what you know. Your block gets stronger." },
+      "step3": { "title": "Know your block", "description": "See your neighbors, track readiness, be prepared together." }
+    },
+    "community": {
+      "title": "Built in Asheville. Ready for anything.",
+      "description": "After Hurricane Helene showed us what neighbors can do, ReadyBlock was born. Because the best emergency plan is knowing who's on your block.",
+      "cta": "Get started — it takes 2 minutes"
+    },
+    "nav": {
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    },
+    "footer": {
+      "credit": "ReadyBlock 2026 · Asheville, NC",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "about": "About"
+    }
+  },
   "dashboard": {
     "welcome": "Hi, {{name}}",
+    "blockReadiness": "Block Readiness",
+    "checkInNow": "Check in now",
     "noNeighborhood": "Not yet assigned to a neighborhood",
     "getStarted": "Get Your Household Ready",
     "getStartedDescription": "Complete these steps so your block coordinator knows how to help you in an emergency.",
@@ -255,7 +374,18 @@
     "addContact": "Add an emergency contact",
     "addResource": "Add a resource",
     "addSkill": "Add a skill or certification",
-    "contactRemoved": "Contact removed"
+    "contactAdded": "Contact added",
+    "contactUpdated": "Contact updated",
+    "contactRemoved": "Contact removed",
+    "editContact": "Edit contact",
+    "resourceAdded": "Resource added",
+    "resourceName": "What is it?",
+    "resourceNamePlaceholder": "e.g., Generator, Chainsaw, Water tank",
+    "resourceType": "Category",
+    "shareableLabel": "Available to share with neighbors",
+    "skillAdded": "Skill added",
+    "skillCategory": "Skill type",
+    "skillLevel": "Experience level"
   },
   "settings": {
     "account": "Account",
@@ -263,13 +393,17 @@
     "notifications": "Notifications",
     "notificationsDescription": "Push notifications will be available once your neighborhood is set up.",
     "privacy": "Privacy",
-    "dataSharingPreferences": "Data sharing preferences"
+    "dataSharingPreferences": "Data sharing preferences",
+    "privacyDescription": "Choose who can see your emergency needs information.",
+    "privacySaved": "Privacy preferences saved"
   },
   "resource": {
     "type": {
       "medical": "Medical",
       "power": "Power",
       "water": "Water",
+      "food": "Food",
+      "shelter": "Shelter",
       "foodShelter": "Food & Shelter",
       "tools": "Tools",
       "communications": "Communications"

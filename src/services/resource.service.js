@@ -18,7 +18,8 @@ export const RESOURCE_TYPES = [
   'medical',
   'power',
   'water',
-  'foodShelter',
+  'food',
+  'shelter',
   'tools',
   'communications',
 ];
