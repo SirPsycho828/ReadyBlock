@@ -13,19 +13,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import NeighborhoodMap from '@/components/map/NeighborhoodMap';
 
-/** Ray-casting point-in-polygon test. */
-function pointInPolygon(lat, lng, boundary) {
-  let inside = false;
-  for (let i = 0, j = boundary.length - 1; i < boundary.length; j = i++) {
-    const yi = boundary[i].lng, yj = boundary[j].lng;
-    const xi = boundary[i].lat, xj = boundary[j].lat;
-    if ((yi > lng) !== (yj > lng) && lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi) {
-      inside = !inside;
-    }
-  }
-  return inside;
-}
-
 export default function MapView() {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
@@ -55,17 +42,9 @@ export default function MapView() {
           setLocalNeighborhood(nhData);
           setNeighborhood(nhData);
 
-          // Place "You" dot inside the boundary.
-          // If household has no coords or coords are outside the polygon, use centroid.
-          if (hh && nhData.centroidLat) {
-            const hasCoords = hh.lat && hh.lng;
-            const inside = hasCoords && nhData.boundary?.length >= 3
-              && pointInPolygon(hh.lat, hh.lng, nhData.boundary);
-            if (!inside) {
-              setUserHousehold({ ...hh, lat: nhData.centroidLat, lng: nhData.centroidLng });
-            } else {
-              setUserHousehold(hh);
-            }
+          // Use real household coordinates when available, centroid only if missing
+          if (hh && (!hh.lat || !hh.lng) && nhData.centroidLat) {
+            setUserHousehold({ ...hh, lat: nhData.centroidLat, lng: nhData.centroidLng });
           } else {
             setUserHousehold(hh);
           }

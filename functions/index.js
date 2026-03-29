@@ -55,6 +55,9 @@ export const onHouseholdCreate = onDocumentCreated({ document: 'households/{hous
   const data = snap.data();
   const householdId = event.params.householdId;
 
+  // Skip seed data — it already has correct lat/lng/neighborhoodId
+  if (data._seeded) return;
+
   if (!data.address) {
     await snap.ref.update({ assignmentStatus: 'no-address' });
     return;
@@ -509,11 +512,26 @@ export const seedHouseholds = onRequest({ timeoutSeconds: 540, memory: '1GiB', c
       const ln = mnLn + Math.random() * (mxLn - mnLn);
       testPts.push({ lat: la, lng: ln, inside: pointInBoundary(la, ln, b) });
     }
+    // Also fetch actual seed households for this neighborhood
+    const hhSnap = await db.collection('households')
+      .where('neighborhoodId', '==', nhDoc.id)
+      .where('_seeded', '==', true)
+      .limit(15)
+      .get();
+    const seedHouseholds = hhSnap.docs.map(d => {
+      const hd = d.data();
+      return {
+        id: d.id, lat: hd.lat, lng: hd.lng,
+        inside: pointInBoundary(hd.lat, hd.lng, b),
+      };
+    });
+
     return res.json({
       id: nhDoc.id, name: nh.name, boundaryLen: b.length, sample,
       bbox: { mnLa, mxLa, mnLn, mxLn }, centroid: { lat: cLat, lng: cLng },
       centroidInside: pointInBoundary(cLat, cLng, b), testPts,
       storedCentroid: { lat: nh.centroidLat, lng: nh.centroidLng },
+      seedHouseholds,
     });
   }
 
@@ -589,7 +607,6 @@ export const seedHouseholds = onRequest({ timeoutSeconds: 540, memory: '1GiB', c
 
       await add(db.collection('households').doc(id), {
         _seeded: true,
-        address: `${randInt(100, 9999)} ${pick(STREETS)}, Asheville, NC 28801`,
         displayName: `${pick(FIRST)} ${pick(LAST)}`,
         lat, lng,
         neighborhoodId: nhId,
