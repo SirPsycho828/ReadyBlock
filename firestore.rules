@@ -1,0 +1,291 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper Functions ─────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function getUserRole() {
+      return getUserData().role;
+    }
+
+    function getUserNeighborhood() {
+      return getUserData().neighborhoodId;
+    }
+
+    function getUserCity() {
+      return getUserData().cityId;
+    }
+
+    function isCaptain() {
+      let role = getUserRole();
+      return role == 'blockCaptain' || role == 'neighborhoodCaptain' || role == 'cityCountyCaptain';
+    }
+
+    function isCityAdmin() {
+      return getUserRole() == 'cityCountyCaptain';
+    }
+
+    function isSameNeighborhood(neighborhoodId) {
+      return getUserNeighborhood() == neighborhoodId;
+    }
+
+    function isSameCity(cityId) {
+      return getUserCity() == cityId;
+    }
+
+    // Server-managed fields that clients can NEVER write
+    function noServerFields(data) {
+      return !data.diff(resource.data).affectedKeys()
+        .hasAny(['role', 'neighborhoodId', 'cityId', 'lat', 'lng', 'assignmentStatus', 'assignedAt']);
+    }
+
+    function noHouseholdServerFields(data) {
+      return !data.diff(resource.data).affectedKeys()
+        .hasAny(['neighborhoodId', 'lat', 'lng', 'assignmentStatus', 'cityId', 'assignedAt']);
+    }
+
+    // ─── Users ────────────────────────────────────────────────────────
+    match /users/{uid} {
+      // Read: own doc, or captain in same neighborhood, or city admin in same city
+      allow read: if isOwner(uid)
+        || (isCaptain() && isSameNeighborhood(resource.data.neighborhoodId))
+        || (isCityAdmin() && isSameCity(resource.data.cityId));
+
+      // Create: own doc only (initial profile)
+      allow create: if isOwner(uid)
+        && !request.resource.data.keys().hasAny(['role', 'neighborhoodId', 'cityId']);
+
+      // Update: own non-server fields only
+      allow update: if isOwner(uid) && noServerFields(request.resource.data);
+
+      allow delete: if false; // Never delete via client
+    }
+
+    // ─── Households ───────────────────────────────────────────────────
+    match /households/{householdId} {
+      // Read: owner, captain in same neighborhood, city admin in same city
+      allow read: if isOwner(householdId)
+        || (isCaptain() && isSameNeighborhood(resource.data.neighborhoodId))
+        || (isCityAdmin() && isSameCity(resource.data.cityId));
+
+      // Create: own household
+      allow create: if isOwner(householdId)
+        && !request.resource.data.keys().hasAny(['neighborhoodId', 'lat', 'lng', 'assignmentStatus', 'cityId', 'assignedAt']);
+
+      // Update: owner (restricted fields) OR captain (3 fields only)
+      allow update: if (isOwner(householdId) && noHouseholdServerFields(request.resource.data))
+        || (isCaptain()
+            && isSameNeighborhood(resource.data.neighborhoodId)
+            && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['hasVulnerableMembers', 'vulnerableDetails', 'vulnerableFlagUpdatedAt']));
+
+      allow delete: if false; // Households marked vacant, never deleted
+
+      // ─── Sensitive subcollection ──────────────────────────────────
+      match /sensitive/{docId} {
+        allow read: if isOwner(householdId)
+          || (isCaptain() && isSameNeighborhood(
+               get(/databases/$(database)/documents/households/$(householdId)).data.neighborhoodId))
+          || (isCityAdmin() && isSameCity(
+               get(/databases/$(database)/documents/households/$(householdId)).data.cityId));
+
+        allow create, update: if isOwner(householdId);
+        allow delete: if false;
+      }
+
+      // ─── Contacts subcollection ───────────────────────────────────
+      match /contacts/{contactId} {
+        allow read: if isOwner(householdId)
+          || (isCaptain() && isSameNeighborhood(
+               get(/databases/$(database)/documents/households/$(householdId)).data.neighborhoodId))
+          || (isCityAdmin() && isSameCity(
+               get(/databases/$(database)/documents/households/$(householdId)).data.cityId));
+
+        allow create, update, delete: if isOwner(householdId);
+      }
+
+      // ─── Members subcollection ────────────────────────────────────
+      match /members/{memberId} {
+        allow read: if isOwner(householdId)
+          || isOwner(memberId)
+          || (isCaptain() && isSameNeighborhood(
+               get(/databases/$(database)/documents/households/$(householdId)).data.neighborhoodId));
+
+        // All member writes go through Cloud Functions
+        allow write: if false;
+      }
+    }
+
+    // ─── Neighborhoods ────────────────────────────────────────────────
+    match /neighborhoods/{neighborhoodId} {
+      allow read: if isSignedIn()
+        && (isSameNeighborhood(neighborhoodId)
+            || (isCityAdmin() && isSameCity(resource.data.cityId)));
+
+      // Captain: operational fields only (rally points, emergency mode)
+      allow update: if isCaptain()
+        && isSameNeighborhood(neighborhoodId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['primaryRallyPoint', 'backupRallyPoint', 'emergencyMode',
+                    'emergencyEventName', 'emergencyActivatedAt', 'emergencyActivatedBy']);
+
+      allow create, delete: if false; // Admin via Cloud Functions
+
+      // ─── Neighborhood members ───────────────────────────────────
+      match /members/{memberId} {
+        allow read: if isSignedIn()
+          && (isOwner(memberId)
+              || (isCaptain() && isSameNeighborhood(neighborhoodId))
+              || (isCityAdmin() && isSameCity(
+                   get(/databases/$(database)/documents/neighborhoods/$(neighborhoodId)).data.cityId)));
+
+        allow write: if false; // Cloud Functions only
+      }
+    }
+
+    // ─── Resources ────────────────────────────────────────────────────
+    match /resources/{resourceId} {
+      allow read: if isSignedIn()
+        && (isSameNeighborhood(resource.data.neighborhoodId)
+            || (isCityAdmin() && isSameCity(resource.data.cityId)));
+
+      allow create: if isSignedIn()
+        && request.resource.data.householdId == request.auth.uid;
+
+      allow update, delete: if isSignedIn()
+        && resource.data.householdId == request.auth.uid;
+    }
+
+    // ─── Skills ───────────────────────────────────────────────────────
+    match /skills/{skillId} {
+      allow read: if isSignedIn()
+        && (isSameNeighborhood(resource.data.neighborhoodId)
+            || (isCityAdmin() && isSameCity(resource.data.cityId)));
+
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid;
+
+      allow update, delete: if isSignedIn()
+        && resource.data.uid == request.auth.uid;
+    }
+
+    // ─── Alerts ───────────────────────────────────────────────────────
+    match /alerts/{alertId} {
+      allow read: if isSignedIn()
+        && isSameNeighborhood(resource.data.neighborhoodId);
+
+      // Only captains can create alerts (also enforced by Cloud Function)
+      allow create: if isCaptain()
+        && isSameNeighborhood(request.resource.data.neighborhoodId);
+
+      allow update: if isSignedIn()
+        && isSameNeighborhood(resource.data.neighborhoodId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['acknowledgedBy']);
+
+      allow delete: if false;
+    }
+
+    // ─── Drills ───────────────────────────────────────────────────────
+    match /drills/{drillId} {
+      allow read: if isSignedIn()
+        && isSameNeighborhood(resource.data.neighborhoodId);
+
+      allow create: if isCaptain()
+        && isSameNeighborhood(request.resource.data.neighborhoodId);
+
+      allow update: if isCaptain()
+        && isSameNeighborhood(resource.data.neighborhoodId);
+
+      allow delete: if false;
+
+      // Drill statuses — completely isolated from real data
+      match /statuses/{householdId} {
+        allow read: if isSignedIn()
+          && isSameNeighborhood(
+               get(/databases/$(database)/documents/drills/$(drillId)).data.neighborhoodId);
+
+        allow create, update: if isSignedIn()
+          && (isOwner(householdId)
+              || (isCaptain() && isSameNeighborhood(
+                   get(/databases/$(database)/documents/drills/$(drillId)).data.neighborhoodId)));
+
+        allow delete: if false;
+      }
+    }
+
+    // ─── Protocols (Action Plans) ─────────────────────────────────────
+    match /protocols/{protocolId} {
+      allow read: if isSignedIn()
+        && (resource.data.neighborhoodId == null
+            || isSameNeighborhood(resource.data.neighborhoodId));
+
+      allow write: if false; // Admin via Cloud Functions only
+    }
+
+    // ─── Coordinator Notes ────────────────────────────────────────────
+    match /coordinatorNotes/{noteId} {
+      // Never visible to residents
+      allow read: if isCaptain()
+        && isSameNeighborhood(resource.data.neighborhoodId);
+
+      allow create: if isCaptain()
+        && isSameNeighborhood(request.resource.data.neighborhoodId);
+
+      allow update: if isCaptain()
+        && isSameNeighborhood(resource.data.neighborhoodId)
+        && resource.data.authorId == request.auth.uid;
+
+      allow delete: if false;
+    }
+
+    // ─── Audit Logs ───────────────────────────────────────────────────
+    match /auditLogs/{logId} {
+      // Only city admins can read; never client-writable
+      allow read: if isCityAdmin();
+      allow write: if false; // Cloud Functions only
+    }
+
+    // ─── Verification Requests ────────────────────────────────────────
+    match /verificationRequests/{requestId} {
+      allow read: if isSignedIn()
+        && (resource.data.requestorUid == request.auth.uid
+            || (isCaptain() && isSameNeighborhood(resource.data.neighborhoodId)));
+
+      allow create: if isSignedIn()
+        && request.resource.data.requestorUid == request.auth.uid;
+
+      allow update: if isCaptain()
+        && isSameNeighborhood(resource.data.neighborhoodId);
+
+      allow delete: if false;
+    }
+
+    // ─── Coordinator Agreements ───────────────────────────────────────
+    match /coordinatorAgreements/{agreementId} {
+      allow read: if isOwner(resource.data.uid)
+        || isCityAdmin();
+
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid;
+
+      allow update, delete: if false;
+    }
+
+    // ─── Invite Codes ─────────────────────────────────────────────────
+    match /inviteCodes/{codeId} {
+      // Never readable by clients; redemption via Cloud Function
+      allow read, write: if false;
+    }
+  }
+}

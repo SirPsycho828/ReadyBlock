@@ -1,0 +1,95 @@
+/* ReadyBlock Design Tokens — Semantic CSS Custom Properties */
+/* Source of truth: docs/planning/04_UI_System_and_Components.md */
+
+:root {
+  /* Surface */
+  --color-surface-app: #F7F5F2;
+  --color-surface-primary: #FFFFFF;
+  --color-surface-secondary: #EEF0F5;
+
+  /* Text */
+  --color-text-primary: #1A202C;
+  --color-text-secondary: #4A5568;
+  --color-text-inverse: #FFFFFF;
+
+  /* Brand */
+  --color-brand-primary: #1B4F8A;
+  --color-brand-secondary: #2A8C7E;
+
+  /* Status — functional only, never decorative */
+  --color-status-confirmed: #27AE60;
+  --color-status-alert: #C0392B;
+  --color-status-alert-bg: #C0392B;
+  --color-status-caution: #E67E22;
+  --color-status-neutral: #95A5A6;
+
+  /* Border */
+  --color-border-default: #CBD5E0;
+  --color-border-focus: #1B4F8A;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  /* Spacing (base: 4px) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Border Radius */
+  --radius-community: 12px;
+  --radius-city: 4px;
+  --radius-full: 9999px;
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --duration-crawl: 600ms;
+
+  /* Typography */
+  --font-display: 'DM Serif Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Dark mode */
+.dark {
+  --color-surface-app: #141820;
+  --color-surface-primary: #1E2432;
+  --color-surface-secondary: #252D3D;
+
+  --color-text-primary: #E8EAF0;
+  --color-text-secondary: #9AA5B4;
+  --color-text-inverse: #1A202C;
+
+  --color-brand-primary: #4A85C8;
+  --color-brand-secondary: #3DB5A3;
+
+  --color-status-confirmed: #34C96E;
+  --color-status-alert: #E05A4A;
+  --color-status-alert-bg: #8B1E14;
+  --color-status-caution: #F0973A;
+  --color-status-neutral: #95A5A6;
+
+  --color-border-default: #2D3548;
+  --color-border-focus: #4A85C8;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-crawl: 0ms;
+  }
+}
