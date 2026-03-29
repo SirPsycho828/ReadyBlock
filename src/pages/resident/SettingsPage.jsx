@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Globe, Palette, Bell, Shield, ChevronRight, AlertTriangle } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { LogOut, Sun, Monitor, Moon, AlertTriangle, Loader2, Save } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useTheme } from '@/hooks/useTheme';
 import { useAuthStore } from '@/stores/authStore';
 import { signOutUser, forceSignOut } from '@/services/auth.service';
-import { hasQueuedWrites } from '@/services/offlineQueue';
+import { getSensitiveData, updateSensitiveData } from '@/services/household.service';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle,
+  DialogDescription, DialogFooter,
+} from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
@@ -32,143 +43,283 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-4 pt-2">
-      <h1
-        className="text-3xl text-[var(--color-text-primary)]"
-        style={{ fontFamily: 'var(--font-display)' }}
-      >
+    <div className="space-y-6 pt-2 pb-6">
+      <h1 className="text-3xl" style={{ fontFamily: 'var(--font-display)' }}>
         {t('nav.settings')}
       </h1>
 
       {/* Account */}
-      <SettingsSection title={t('settings.account')}>
-        <div className="px-4 py-3">
-          <p className="font-medium text-[var(--color-text-primary)]">{user?.displayName || user?.email}</p>
-          <p className="text-sm text-[var(--color-text-secondary)]">{user?.email}</p>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-1">{t(`roles.${role || 'unverified'}`)}</p>
-        </div>
-      </SettingsSection>
+      <section>
+        <SectionLabel>{t('settings.account')}</SectionLabel>
+        <Card>
+          <CardContent className="py-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">{user?.displayName || user?.email}</p>
+                <p className="text-sm text-muted-foreground">{user?.email}</p>
+              </div>
+              <Badge variant="secondary">{t(`roles.${role || 'unverified'}`)}</Badge>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
 
       {/* Appearance */}
-      <SettingsSection title={t('theme.label')}>
-        <div className="px-4 py-3">
-          <ThemeToggle />
-        </div>
-      </SettingsSection>
+      <section>
+        <SectionLabel>{t('theme.label')}</SectionLabel>
+        <Card>
+          <CardContent className="py-4">
+            <ThemeButtons />
+          </CardContent>
+        </Card>
+      </section>
 
       {/* Language */}
-      <SettingsSection title={t('settings.language')}>
-        <div className="px-4 py-3 flex gap-2">
-          {[
-            { code: 'en', label: 'English' },
-            { code: 'es', label: 'Español' },
-          ].map(({ code, label }) => (
-            <button
-              key={code}
-              onClick={() => i18n.changeLanguage(code)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                i18n.language === code
-                  ? 'bg-[var(--color-brand-primary)] text-white'
-                  : 'bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)]'
-              }`}
-              style={{ minHeight: 44 }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </SettingsSection>
+      <section>
+        <SectionLabel>{t('settings.language')}</SectionLabel>
+        <Card>
+          <CardContent className="py-4">
+            <div className="flex gap-2">
+              {[
+                { code: 'en', label: 'English' },
+                { code: 'es', label: 'Espanol' },
+              ].map(({ code, label }) => (
+                <Button
+                  key={code}
+                  variant={i18n.language === code ? 'default' : 'outline'}
+                  onClick={() => i18n.changeLanguage(code)}
+                  className="flex-1"
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
 
-      {/* Notifications placeholder */}
-      <SettingsSection title={t('settings.notifications')}>
-        <div className="px-4 py-3">
-          <p className="text-sm text-[var(--color-text-secondary)]">{t('settings.notificationsDescription')}</p>
-        </div>
-      </SettingsSection>
+      {/* Notifications */}
+      <section>
+        <SectionLabel>{t('settings.notifications')}</SectionLabel>
+        <Card>
+          <CardContent className="py-4">
+            <p className="text-sm text-muted-foreground">{t('settings.notificationsDescription')}</p>
+          </CardContent>
+        </Card>
+      </section>
 
       {/* Privacy */}
-      <SettingsSection title={t('settings.privacy')}>
-        <SettingsLink icon={Shield} label={t('settings.dataSharingPreferences')} to="/onboarding" />
-      </SettingsSection>
+      <DataSharingSection />
 
-      {/* Sign out */}
-      <div
-        className="rounded-xl bg-[var(--color-surface-primary)] shadow-sm overflow-hidden"
-        style={{ borderRadius: 'var(--radius-community)' }}
+      {/* Sign Out */}
+      <Button
+        variant="destructive"
+        className="w-full"
+        size="lg"
+        onClick={handleSignOut}
       >
-        <button
-          onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-4 py-4 text-[var(--color-status-alert)] hover:bg-[var(--color-surface-secondary)] transition-colors"
-          style={{ minHeight: 48 }}
-        >
-          <LogOut size={20} aria-hidden="true" />
-          <span className="font-medium">{t('auth.signOut')}</span>
-        </button>
-      </div>
+        <LogOut size={18} aria-hidden="true" />
+        {t('auth.signOut')}
+      </Button>
 
       {/* Sign-out warning dialog */}
-      {showSignOutWarning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div
-            className="w-full max-w-sm rounded-xl bg-[var(--color-surface-primary)] p-6 shadow-lg"
-            style={{ borderRadius: 'var(--radius-community)' }}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle size={20} className="text-[var(--color-status-caution)]" aria-hidden="true" />
-              <h2 className="font-bold text-[var(--color-text-primary)]">{t('queue.warningTitle')}</h2>
-            </div>
-            <p className="text-sm text-[var(--color-text-secondary)] mb-6">
+      <Dialog open={showSignOutWarning} onOpenChange={setShowSignOutWarning}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle size={20} className="text-amber-500" aria-hidden="true" />
+              {t('queue.warningTitle')}
+            </DialogTitle>
+            <DialogDescription>
               {t('queue.signOutWarning', { count: queueCount })}
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowSignOutWarning(false)}
-                className="flex-1 rounded-lg bg-[var(--color-brand-primary)] text-white font-medium"
-                style={{ minHeight: 48 }}
-              >
-                {t('queue.staySignedIn')}
-              </button>
-              <button
-                onClick={handleForceSignOut}
-                className="flex-1 rounded-lg border border-[var(--color-border-default)] text-[var(--color-text-primary)] font-medium"
-                style={{ minHeight: 48 }}
-              >
-                {t('queue.signOutAnyway')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowSignOutWarning(false)}>
+              {t('queue.staySignedIn')}
+            </Button>
+            <Button variant="outline" onClick={handleForceSignOut}>
+              {t('queue.signOutAnyway')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-function SettingsSection({ title, children }) {
+// ─── Section Label ─────────────────────────────────────────────────
+
+function SectionLabel({ children }) {
   return (
-    <div
-      className="rounded-xl bg-[var(--color-surface-primary)] shadow-sm overflow-hidden"
-      style={{ borderRadius: 'var(--radius-community)' }}
-    >
-      <div className="px-4 pt-3 pb-1">
-        <h2 className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">{title}</h2>
-      </div>
+    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 px-1">
       {children}
+    </p>
+  );
+}
+
+// ─── Theme Buttons ─────────────────────────────────────────────────
+
+function ThemeButtons() {
+  const { t } = useTranslation();
+  const { theme, setTheme } = useTheme();
+
+  const options = [
+    { value: 'light', icon: Sun, label: t('theme.light') },
+    { value: 'system', icon: Monitor, label: t('theme.system') },
+    { value: 'dark', icon: Moon, label: t('theme.dark') },
+  ];
+
+  return (
+    <div className="flex gap-2" role="radiogroup" aria-label={t('theme.label')}>
+      {options.map(({ value, icon: Icon, label }) => (
+        <Button
+          key={value}
+          role="radio"
+          aria-checked={theme === value}
+          variant={theme === value ? 'default' : 'outline'}
+          className="flex-1"
+          onClick={() => setTheme(value)}
+        >
+          <Icon size={16} aria-hidden="true" />
+          {label}
+        </Button>
+      ))}
     </div>
   );
 }
 
-function SettingsLink({ icon: Icon, label, to }) {
+// ─── Data Sharing Section ──────────────────────────────────────────
+
+function DataSharingSection() {
+  const { t } = useTranslation();
+  const user = useAuthStore((s) => s.user);
+  const [scope, setScope] = useState(null);
+  const [medicalEquipment, setMedicalEquipment] = useState(false);
+  const [mobilityLimitation, setMobilityLimitation] = useState(false);
+  const [checkOnMeFirst, setCheckOnMeFirst] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+    getSensitiveData(user.uid).then((res) => {
+      if (res.success && res.data) {
+        setScope(res.data.sharingScope || 'none');
+        setMedicalEquipment(res.data.medicalEquipment || false);
+        setMobilityLimitation(res.data.mobilityLimitation || false);
+        setCheckOnMeFirst(res.data.checkOnMeFirst || false);
+      } else {
+        setScope('none');
+      }
+      setLoading(false);
+    });
+  }, [user?.uid]);
+
+  function updateScope(newScope) {
+    setScope(newScope);
+    setDirty(true);
+    if (newScope === 'none') {
+      setMedicalEquipment(false);
+      setMobilityLimitation(false);
+      setCheckOnMeFirst(false);
+    }
+  }
+
+  function updateCheckbox(setter) {
+    return (checked) => {
+      setter(!!checked);
+      setDirty(true);
+    };
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    await updateSensitiveData(user.uid, {
+      sharingScope: scope,
+      medicalEquipment,
+      mobilityLimitation,
+      checkOnMeFirst,
+      consentTimestamp: new Date().toISOString(),
+      consentVersion: '1.0',
+    });
+    setSaving(false);
+    setDirty(false);
+    toast.success(t('settings.privacySaved'));
+  }
+
+  const scopes = [
+    { value: 'coordinatorOnly', key: 'sharingCoordinatorOnly' },
+    { value: 'coordinatorAndNeighbors', key: 'sharingCoordinatorAndNeighbors' },
+    { value: 'none', key: 'sharingNone' },
+  ];
+
   return (
-    <a
-      href={to}
-      className="flex items-center justify-between px-4 py-3 hover:bg-[var(--color-surface-secondary)] transition-colors"
-      style={{ minHeight: 48 }}
-    >
-      <div className="flex items-center gap-3">
-        <Icon size={18} className="text-[var(--color-text-secondary)]" aria-hidden="true" />
-        <span className="text-sm text-[var(--color-text-primary)]">{label}</span>
-      </div>
-      <ChevronRight size={16} className="text-[var(--color-text-secondary)]" aria-hidden="true" />
-    </a>
+    <section>
+      <SectionLabel>{t('settings.privacy')}</SectionLabel>
+      <Card>
+        <CardContent className="py-4 space-y-4">
+          <p className="text-sm text-muted-foreground">
+            {t('settings.privacyDescription')}
+          </p>
+          {loading ? (
+            <div className="flex justify-center py-4">
+              <Loader2 size={18} className="animate-spin text-primary" />
+            </div>
+          ) : (
+            <>
+              <RadioGroup value={scope} onValueChange={updateScope}>
+                {scopes.map(({ value, key }) => (
+                  <div
+                    key={value}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors',
+                      scope === value
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border',
+                    )}
+                    onClick={() => updateScope(value)}
+                  >
+                    <RadioGroupItem value={value} id={`privacy-${value}`} />
+                    <Label htmlFor={`privacy-${value}`} className="cursor-pointer flex-1">
+                      {t(`household.${key}`)}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+
+              {scope !== 'none' && (
+                <div className="space-y-3 pt-2">
+                  {[
+                    { key: 'medicalEquipment', checked: medicalEquipment, setter: setMedicalEquipment },
+                    { key: 'mobilityLimitation', checked: mobilityLimitation, setter: setMobilityLimitation },
+                    { key: 'checkOnMeFirst', checked: checkOnMeFirst, setter: setCheckOnMeFirst },
+                  ].map(({ key, checked, setter }) => (
+                    <label
+                      key={key}
+                      className="flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors hover:bg-muted/50"
+                    >
+                      <Checkbox
+                        checked={checked}
+                        onCheckedChange={updateCheckbox(setter)}
+                      />
+                      <span className="text-sm">{t(`household.${key}`)}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              {dirty && (
+                <Button onClick={handleSave} disabled={saving} className="w-full">
+                  {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                  {t('settings.savePrivacy')}
+                </Button>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </section>
   );
 }
