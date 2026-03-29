@@ -357,9 +357,10 @@
     "viewNeighborhood": "Ver tu cuadra",
     "emergencyPlans": "Ver planes",
     "neighborhoodStatus": "Tu vecindario",
-    "households": "Registrados",
+    "households": "Hogares",
     "readiness": "Preparación",
-    "total": "Total"
+    "resources": "Recursos",
+    "skills": "Habilidades"
   },
   "profile": {
     "address": "Dirección",

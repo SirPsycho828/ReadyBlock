@@ -357,9 +357,10 @@
     "viewNeighborhood": "See your block",
     "emergencyPlans": "View plans",
     "neighborhoodStatus": "Your Neighborhood",
-    "households": "Registered",
+    "households": "Households",
     "readiness": "Readiness",
-    "total": "Total"
+    "resources": "Resources",
+    "skills": "Skills"
   },
   "profile": {
     "address": "Address",
