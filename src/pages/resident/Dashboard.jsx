@@ -85,6 +85,23 @@ export default function ResidentDashboard() {
     { icon: FileText, label: t('nav.plans'), description: t('dashboard.emergencyPlans'), to: '/plans' },
   ];
 
+  const resourceTypeConfig = {
+    medical:        { icon: Heart,    label: t('resource.type.medical') },
+    power:          { icon: Zap,      label: t('resource.type.power') },
+    water:          { icon: Droplets, label: t('resource.type.water') },
+    food:           { icon: Utensils, label: t('resource.type.food') },
+    shelter:        { icon: HomeIcon, label: t('resource.type.shelter') },
+    tools:          { icon: Wrench,   label: t('resource.type.tools') },
+    communications: { icon: Radio,    label: t('resource.type.communications') },
+  };
+
+  const resourceCounts = {};
+  for (const type of Object.keys(resourceTypeConfig)) {
+    resourceCounts[type] = neighborhoodResources.filter((r) => r.type === type).length;
+  }
+  // Count legacy foodShelter as food
+  resourceCounts.food += neighborhoodResources.filter((r) => r.type === 'foodShelter').length;
+
   return (
     <div className="space-y-6 pb-6 pt-2">
       {/* ── Header ── */}
@@ -265,6 +282,40 @@ export default function ResidentDashboard() {
               </p>
               <p className="text-[10px] text-muted-foreground">{t('dashboard.skills')}</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Resource Inventory ── */}
+      {neighborhood && (
+        <div>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-teal-400/70 px-1">
+            {t('dashboard.neighborhoodStatus')} — {t('dashboard.resources')}
+          </p>
+          <div className="grid grid-cols-4 gap-2">
+            {Object.entries(resourceTypeConfig).map(([type, { icon: Icon, label }]) => {
+              const count = resourceCounts[type];
+              return (
+                <div
+                  key={type}
+                  className="resource-inventory-card group relative flex flex-col items-center rounded-xl border border-teal-400/10 bg-teal-900/40 p-3 text-center transition-all hover:border-teal-400/25"
+                >
+                  <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-teal-400/10 transition-colors group-hover:bg-teal-400/20">
+                    <Icon size={20} className="text-teal-400" aria-hidden="true" />
+                  </div>
+                  <p
+                    className={cn(
+                      'text-xl leading-none mb-0.5',
+                      count > 0 ? 'text-amber-400' : 'text-muted-foreground/40',
+                    )}
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    {count}
+                  </p>
+                  <p className="text-[9px] leading-tight text-muted-foreground">{label}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
