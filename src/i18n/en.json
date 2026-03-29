@@ -391,6 +391,9 @@
     "resourceDetailsPlaceholder": "e.g., Honda EU2200i, 50lb bag of rice",
     "shareableLabel": "Available to share with neighbors",
     "skillAdded": "Skill added",
+    "editSkill": "Edit skill",
+    "skillUpdated": "Skill updated",
+    "skillRemoved": "Skill removed",
     "skillCategory": "Skill type",
     "skillLevel": "Experience level"
   },

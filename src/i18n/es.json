@@ -391,6 +391,9 @@
     "resourceDetailsPlaceholder": "ej., Honda EU2200i, bolsa de arroz de 50lb",
     "shareableLabel": "Disponible para compartir con vecinos",
     "skillAdded": "Habilidad agregada",
+    "editSkill": "Editar habilidad",
+    "skillUpdated": "Habilidad actualizada",
+    "skillRemoved": "Habilidad eliminada",
     "skillCategory": "Tipo de habilidad",
     "skillLevel": "Nivel de experiencia"
   },

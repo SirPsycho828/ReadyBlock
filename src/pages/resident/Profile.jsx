@@ -7,7 +7,7 @@ import {
 import { useAuthStore } from '@/stores/authStore';
 import { getHousehold, getContacts, addContact, updateContact, deleteContact } from '@/services/household.service';
 import { getHouseholdResources, addResource, updateResource, deleteResource, RESOURCE_TYPES } from '@/services/resource.service';
-import { getUserSkills, addSkill, SKILL_CATEGORIES, SKILL_LEVELS } from '@/services/skills.service';
+import { getUserSkills, addSkill, updateSkill, withdrawSkill, SKILL_CATEGORIES, SKILL_LEVELS } from '@/services/skills.service';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -130,6 +130,8 @@ export default function Profile() {
       <SkillsSection
         skills={skills}
         onAdd={(s) => setSkills((prev) => [...prev, s])}
+        onDelete={(id) => setSkills((prev) => prev.filter((s) => s.id !== id))}
+        onUpdate={(updated) => setSkills((prev) => prev.map((s) => s.id === updated.id ? updated : s))}
       />
     </div>
   );
@@ -517,23 +519,50 @@ function ResourcesSection({ resources, onAdd, onDelete, onUpdate }) {
 
 // ─── Skills Section ────────────────────────────────────────────────
 
-function SkillsSection({ skills, onAdd }) {
+function SkillsSection({ skills, onAdd, onDelete, onUpdate }) {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingSkill, setEditingSkill] = useState(null);
   const [category, setCategory] = useState('medical');
   const [level, setLevel] = useState('basic');
   const [saving, setSaving] = useState(false);
 
+  function openAdd() {
+    setEditingSkill(null);
+    setCategory('medical');
+    setLevel('basic');
+    setDialogOpen(true);
+  }
+
+  function openEdit(skill) {
+    setEditingSkill(skill);
+    setCategory(skill.category || 'medical');
+    setLevel(skill.level || 'basic');
+    setDialogOpen(true);
+  }
+
   async function handleSave() {
     setSaving(true);
-    const result = await addSkill({ category, level, neighborhoodId: '' });
-    setSaving(false);
-    if (result.success) {
-      onAdd(result.data);
-      setCategory('medical');
-      setLevel('basic');
-      setDialogOpen(false);
-      toast.success(t('profile.skillAdded'));
+
+    if (editingSkill) {
+      const updates = { category, level };
+      const result = await updateSkill(editingSkill.id, updates);
+      setSaving(false);
+      if (result.success) {
+        onUpdate({ ...editingSkill, ...updates });
+        setDialogOpen(false);
+        toast.success(t('profile.skillUpdated'));
+      }
+    } else {
+      const result = await addSkill({ category, level, neighborhoodId: '' });
+      setSaving(false);
+      if (result.success) {
+        onAdd(result.data);
+        setCategory('medical');
+        setLevel('basic');
+        setDialogOpen(false);
+        toast.success(t('profile.skillAdded'));
+      }
     }
   }
 
@@ -556,21 +585,45 @@ function SkillsSection({ skills, onAdd }) {
                     {t(`skill.level.${s.level}`)}
                   </Badge>
                 </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => openEdit(s)}
+                    aria-label={t('profile.editSkill')}
+                  >
+                    <Pencil size={14} className="text-muted-foreground hover:text-primary" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={async () => {
+                      const result = await withdrawSkill(s.id);
+                      if (result.success) {
+                        onDelete(s.id);
+                        toast.success(t('profile.skillRemoved'));
+                      }
+                    }}
+                    aria-label={t('common.delete')}
+                  >
+                    <Trash2 size={14} className="text-muted-foreground hover:text-destructive" />
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
         )}
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="w-full border-dashed">
-              <Plus size={16} aria-hidden="true" />
-              {t('profile.addSkill')}
-            </Button>
-          </DialogTrigger>
+          <Button variant="outline" className="w-full border-dashed" onClick={openAdd}>
+            <Plus size={16} aria-hidden="true" />
+            {t('profile.addSkill')}
+          </Button>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t('profile.addSkill')}</DialogTitle>
+              <DialogTitle>
+                {editingSkill ? t('profile.editSkill') : t('profile.addSkill')}
+              </DialogTitle>
               <DialogDescription>{t('profile.skills')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
