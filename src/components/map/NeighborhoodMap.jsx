@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -57,9 +57,21 @@ export default function NeighborhoodMap({
   backupRallyPoint,
   activeLayer,
 }) {
+  const wrapperRef = useRef(null);
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const layersRef = useRef({ boundary: null, households: [], rally: [], user: [] });
+  const [fullscreen, setFullscreen] = useState(false);
+
+  // ── Fullscreen toggle ──
+  const toggleFullscreen = useCallback(() => {
+    setFullscreen((prev) => {
+      const next = !prev;
+      // Let the DOM update, then tell Leaflet to recalculate size
+      setTimeout(() => mapRef.current?.invalidateSize({ animate: true }), 50);
+      return next;
+    });
+  }, []);
 
   // ── Initialize map ──
   useEffect(() => {
@@ -212,9 +224,34 @@ export default function NeighborhoodMap({
 
   return (
     <div
-      ref={containerRef}
-      className="w-full rounded-lg"
-      style={{ aspectRatio: '1/1', maxHeight: 400, minHeight: 300 }}
-    />
+      ref={wrapperRef}
+      className={fullscreen ? 'fixed inset-0 z-50' : 'relative'}
+    >
+      <div
+        ref={containerRef}
+        className="w-full rounded-lg"
+        style={fullscreen
+          ? { width: '100%', height: '100%' }
+          : { aspectRatio: '1/1', maxHeight: 400, minHeight: 300 }}
+      />
+
+      {/* Fullscreen toggle button */}
+      <button
+        onClick={toggleFullscreen}
+        className="absolute top-2 right-2 z-[1000] flex items-center justify-center w-8 h-8 rounded"
+        style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--foreground)' }}
+        aria-label={fullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+      >
+        {fullscreen ? (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+          </svg>
+        )}
+      </button>
+    </div>
   );
 }

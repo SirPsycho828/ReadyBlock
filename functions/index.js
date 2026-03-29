@@ -5,7 +5,10 @@
 import { initializeApp, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import { onDocumentCreated, onDocumentUpdated } from 'firebase-functions/v2/firestore';
-import { onCall, HttpsError } from 'firebase-functions/v2/https';
+import { onCall, onRequest, HttpsError } from 'firebase-functions/v2/https';
+import { defineSecret } from 'firebase-functions/params';
+
+const googleMapsApiKey = defineSecret('GOOGLE_MAPS_API_KEY');
 
 if (!getApps().length) initializeApp();
 
@@ -46,7 +49,7 @@ export const onUserCreate = onDocumentCreated('users/{uid}', async (event) => {
 /**
  * onHouseholdCreate — geocode address, assign neighborhood
  */
-export const onHouseholdCreate = onDocumentCreated('households/{householdId}', async (event) => {
+export const onHouseholdCreate = onDocumentCreated({ document: 'households/{householdId}', secrets: [googleMapsApiKey], timeoutSeconds: 60, memory: '512MiB' }, async (event) => {
   const snap = event.data;
   if (!snap) return;
   const data = snap.data();
@@ -58,40 +61,66 @@ export const onHouseholdCreate = onDocumentCreated('households/{householdId}', a
   }
 
   try {
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-    let lat, lng;
-
-    if (apiKey) {
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(data.address)}&key=${apiKey}`;
-      const response = await fetch(url);
-      const result = await response.json();
-      if (result.status === 'OK' && result.results.length > 0) {
-        lat = result.results[0].geometry.location.lat;
-        lng = result.results[0].geometry.location.lng;
-      } else {
-        await snap.ref.update({ assignmentStatus: 'geocode-failed' });
-        return;
-      }
-    } else {
+    const apiKey = googleMapsApiKey.value();
+    if (!apiKey) {
       await snap.ref.update({ assignmentStatus: 'pending-geocode' });
       return;
     }
 
-    // Find neighborhood by boundary
-    const neighborhoodsSnap = await getDb().collection('neighborhoods').get();
-    let assigned = null;
-    for (const ndoc of neighborhoodsSnap.docs) {
+    // 1. Geocode the address
+    console.log(`Geocoding: ${data.address}`);
+    const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(data.address)}&key=${apiKey}`;
+    const geoResp = await fetch(geoUrl);
+    const geoResult = await geoResp.json();
+
+    if (geoResult.status !== 'OK' || !geoResult.results.length) {
+      console.log(`Geocode failed: ${geoResult.status}`);
+      await snap.ref.update({ assignmentStatus: 'geocode-failed' });
+      return;
+    }
+
+    const lat = geoResult.results[0].geometry.location.lat;
+    const lng = geoResult.results[0].geometry.location.lng;
+    console.log(`Geocoded to: ${lat}, ${lng}`);
+
+    // 2. Search Asheville city neighborhoods (type: 'city') by centroid proximity
+    const SEARCH_RADIUS = 0.03;
+    const nearbySnap = await getDb().collection('neighborhoods')
+      .where('type', '==', 'city')
+      .get();
+
+    console.log(`Checking ${nearbySnap.size} city neighborhoods...`);
+
+    // Sort by centroid distance, check nearest first
+    const candidates = [];
+    for (const ndoc of nearbySnap.docs) {
       const nh = ndoc.data();
-      if (nh.boundary && pointInBoundary(lat, lng, nh.boundary)) {
-        assigned = { id: ndoc.id, ...nh };
+      if (!nh.boundary || nh.boundary.length < 3) continue;
+      const dist = Math.hypot((nh.centroidLat || 0) - lat, (nh.centroidLng || 0) - lng);
+      candidates.push({ id: ndoc.id, nh, dist });
+    }
+    candidates.sort((a, b) => a.dist - b.dist);
+
+    let assigned = null;
+    for (const { id, nh } of candidates) {
+      if (pointInBoundary(lat, lng, nh.boundary)) {
+        assigned = { id, ...nh };
+        console.log(`Matched: ${nh.name} (${id})`);
         break;
       }
+    }
+
+    // Fallback: assign to nearest city neighborhood
+    if (!assigned && candidates.length > 0) {
+      const nearest = candidates[0];
+      assigned = { id: nearest.id, ...nearest.nh };
+      console.log(`No polygon match. Nearest: ${nearest.nh.name} (${nearest.id}, dist: ${nearest.dist.toFixed(4)})`);
     }
 
     if (assigned) {
       await snap.ref.update({
         neighborhoodId: assigned.id,
-        cityId: assigned.cityId || null,
+        cityId: assigned.cityId || 'buncombe-nc',
         lat, lng,
         assignmentStatus: 'assigned',
         assignedAt: FieldValue.serverTimestamp(),
@@ -349,6 +378,309 @@ export const exportNeighborhoodData = onCall(async (request) => {
       skills: skillsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
     },
   };
+});
+
+/**
+ * seedNeighborhoods — ONE-TIME seed function. Remove after use.
+ */
+export const seedNeighborhoods = onRequest({ timeoutSeconds: 540, memory: '512MiB', cors: true }, async (req, res) => {
+  const COUNTY_ID = 'buncombe-nc';
+  const source = req.query.source || 'county';
+
+  let created = 0;
+  let total = 0;
+
+  if (source === 'city') {
+    // Asheville city neighborhoods
+    const url = 'https://services.arcgis.com/aJ16ENn1AaqdFlqx/arcgis/rest/services/Neighborhoods/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson&outSR=4326&resultRecordCount=200';
+    const resp = await fetch(url);
+    const geojson = await resp.json();
+    total = geojson.features.length;
+
+    for (const feature of geojson.features) {
+      const name = (feature.properties?.name || '').trim();
+      if (!name) continue;
+      const id = 'city-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const coords = feature.geometry.coordinates[0];
+      const boundary = coords.map(([lng, lat]) => ({ lat, lng }));
+      const centroidLat = boundary.reduce((s, p) => s + p.lat, 0) / boundary.length;
+      const centroidLng = boundary.reduce((s, p) => s + p.lng, 0) / boundary.length;
+
+      await getDb().collection('neighborhoods').doc(id).set({
+        name, cityId: COUNTY_ID, type: 'city', boundary, centroidLat, centroidLng,
+        emergencyMode: false, preparednessScore: 0, householdCount: 0, registeredCount: 0,
+        organizationName: feature.properties.nameoforganization || '',
+        createdAt: FieldValue.serverTimestamp(),
+      }, { merge: true });
+      created++;
+    }
+  } else {
+    // Buncombe County tax neighborhoods — full county coverage
+    // Fetch in batches (API may limit results)
+    let offset = 0;
+    const batchSize = 100;
+    let hasMore = true;
+
+    while (hasMore) {
+      const url = `https://services9.arcgis.com/p32OFU0tOg1QpCBl/arcgis/rest/services/Buncombe_County_Tax_Neighborhoods_2022/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson&outSR=4326&resultRecordCount=${batchSize}&resultOffset=${offset}`;
+      const resp = await fetch(url);
+      const geojson = await resp.json();
+
+      if (!geojson.features || geojson.features.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      total += geojson.features.length;
+
+      for (const feature of geojson.features) {
+        // Try common field names for the neighborhood name
+        const props = feature.properties || {};
+        const name = (props.NHBD_NAME || props.NbhdName || props.NAME || props.name || props.OBJECTID || '').toString().trim();
+        if (!name) continue;
+
+        const id = 'county-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+        // Handle MultiPolygon vs Polygon
+        let coords;
+        if (feature.geometry.type === 'MultiPolygon') {
+          coords = feature.geometry.coordinates[0][0]; // largest ring
+        } else {
+          coords = feature.geometry.coordinates[0];
+        }
+
+        // Simplify large boundaries (keep every Nth point if > 200 points)
+        if (coords.length > 200) {
+          const step = Math.ceil(coords.length / 150);
+          coords = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
+        }
+
+        const boundary = coords.map(([lng, lat]) => ({ lat, lng }));
+        const centroidLat = boundary.reduce((s, p) => s + p.lat, 0) / boundary.length;
+        const centroidLng = boundary.reduce((s, p) => s + p.lng, 0) / boundary.length;
+
+        await getDb().collection('neighborhoods').doc(id).set({
+          name, cityId: COUNTY_ID, type: 'county', boundary, centroidLat, centroidLng,
+          emergencyMode: false, preparednessScore: 0, householdCount: 0, registeredCount: 0,
+          createdAt: FieldValue.serverTimestamp(),
+        }, { merge: true });
+        created++;
+      }
+
+      if (geojson.features.length < batchSize) {
+        hasMore = false;
+      } else {
+        offset += batchSize;
+      }
+    }
+  }
+
+  res.json({ success: true, created, total, source });
+});
+
+/**
+ * seedHouseholds — Populate every neighborhood with 5-10 households,
+ * random resources, and 1-3 rally points. Also fixes existing
+ * households missing lat/lng. Idempotent (uses deterministic IDs).
+ *
+ * GET /seedHouseholds
+ * GET /seedHouseholds?clear=true  — delete existing seed data first
+ */
+export const seedHouseholds = onRequest({ timeoutSeconds: 540, memory: '1GiB', cors: true }, async (req, res) => {
+  const db = getDb();
+
+  // ── Debug mode: test boundary + point generation for a specific neighborhood ──
+  if (req.query.debug) {
+    const nhDoc = await db.collection('neighborhoods').doc(req.query.debug).get();
+    if (!nhDoc.exists) return res.json({ error: 'not found', id: req.query.debug });
+    const nh = nhDoc.data();
+    const b = nh.boundary || [];
+    const sample = b.slice(0, 3).map(p => ({ lat: p.lat, lng: p.lng, latType: typeof p.lat, lngType: typeof p.lng }));
+    const cLat = b.reduce((s, p) => s + p.lat, 0) / b.length;
+    const cLng = b.reduce((s, p) => s + p.lng, 0) / b.length;
+    const testPts = [];
+    let mnLa = Infinity, mxLa = -Infinity, mnLn = Infinity, mxLn = -Infinity;
+    for (const p of b) {
+      if (p.lat < mnLa) mnLa = p.lat; if (p.lat > mxLa) mxLa = p.lat;
+      if (p.lng < mnLn) mnLn = p.lng; if (p.lng > mxLn) mxLn = p.lng;
+    }
+    for (let i = 0; i < 20; i++) {
+      const la = mnLa + Math.random() * (mxLa - mnLa);
+      const ln = mnLn + Math.random() * (mxLn - mnLn);
+      testPts.push({ lat: la, lng: ln, inside: pointInBoundary(la, ln, b) });
+    }
+    return res.json({
+      id: nhDoc.id, name: nh.name, boundaryLen: b.length, sample,
+      bbox: { mnLa, mxLa, mnLn, mxLn }, centroid: { lat: cLat, lng: cLng },
+      centroidInside: pointInBoundary(cLat, cLng, b), testPts,
+      storedCentroid: { lat: nh.centroidLat, lng: nh.centroidLng },
+    });
+  }
+
+  // ── Data pools ──
+  const FIRST = ['James','Mary','Robert','Patricia','John','Jennifer','Michael','Linda','David','Elizabeth','William','Barbara','Richard','Susan','Joseph','Jessica','Thomas','Sarah','Charles','Karen','Chris','Nancy','Daniel','Lisa','Matt','Betty','Tony','Sandra','Mark','Ashley','Don','Kim','Steven','Donna','Paul','Emily','Andrew','Michelle','Josh','Carol','Ken','Amanda','Kevin','Melissa','Brian','Deborah','George','Steph','Ed','Laura','Ron','Cynthia','Tim','Janet','Jason','Ruth','Jeff','Maria','Ryan','Catherine','Jacob','Heather','Gary','Diane','Nick','Olivia','Eric','Julie'];
+  const LAST = ['Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Rodriguez','Martinez','Hernandez','Lopez','Gonzalez','Wilson','Anderson','Thomas','Taylor','Moore','Jackson','Martin','Lee','Perez','Thompson','White','Harris','Sanchez','Clark','Lewis','Robinson','Walker','Young','Allen','King','Wright','Scott','Torres','Hill','Flores','Green','Adams','Nelson','Baker','Hall','Rivera','Campbell','Mitchell','Carter','Roberts','Gomez','Phillips','Evans','Turner','Diaz','Parker','Cruz','Edwards','Collins','Reyes','Stewart','Morris','Morales','Murphy','Cook','Rogers','Morgan','Peterson','Cooper','Reed','Bailey','Bell','Howard','Ward','Cox','Russell','Patel','Kim','Chen','Nguyen','Yamamoto','Tanaka','Okafor','Owusu'];
+  const STREETS = ['Haywood Rd','Patton Ave','Merrimon Ave','Charlotte St','Broadway St','Biltmore Ave','Tunnel Rd','Hendersonville Rd','Sweeten Creek Rd','New Leicester Hwy','Fairview Rd','Smoky Park Hwy','Brevard Rd','Sand Hill Rd','Riverside Dr','Montford Ave','Pearson Dr','Kimberly Ave','College St','Walnut St','Lexington Ave','Page Ave','Clingman Ave','Hilliard Ave','Elk Mountain Rd','Weaverville Hwy','Swannanoa River Rd','Kenilworth Rd','Overlook Rd','Town Mountain Rd','Sunset Dr','Liberty Rd','Louisiana Ave','Craven St','Flint St','Meadow Rd','Burlington Ave','Westwood Pl','Forest Hill Dr','Springdale Ave','Cedar Hill Dr','Lakeshore Dr','Dogwood Rd','Maple St','Oak Forest Dr','Pinecrest Rd'];
+  const RESOURCES = {
+    medical: ['First aid kit','AED','Blood pressure monitor','Medical oxygen tank','Emergency medication supply','Trauma kit'],
+    power: ['Honda EU2200i generator','Solar panel array','EcoFlow battery bank','Propane generator','Car inverter','UPS battery backup'],
+    water: ['55-gal water drum','LifeStraw filter','Rain barrel system','Water purification tablets','5-gal water jugs (x4)','Berkey water filter'],
+    foodShelter: ['72-hr emergency food kit','Freeze-dried food supply','Camp stove + fuel','Emergency tent','Sleeping bags (x4)','MRE case (12 meals)'],
+    tools: ['Chainsaw','Tool set','Tarps (x6)','Come-along winch','Pry bar set','Rope (200ft)','Work gloves (12 pairs)'],
+    communications: ['Ham radio (Baofeng UV-5R)','CB radio','NOAA weather radio','Satellite communicator (Garmin inReach)','Walkie-talkies (x4)','Signal mirror + whistle kit'],
+  };
+  const RALLY_NAMES = ['Community Center','Park Pavilion','Church Parking Lot','Elementary School','Fire Station','Library','Recreation Center','Town Square','Ballfield','Trailhead'];
+  const LOCATIONS = ['home','garage','shed','basement','vehicle','closet'];
+  const TYPES = Object.keys(RESOURCES);
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+  function randomPointIn(boundary) {
+    let mnLa = Infinity, mxLa = -Infinity, mnLn = Infinity, mxLn = -Infinity;
+    for (const p of boundary) {
+      if (p.lat < mnLa) mnLa = p.lat; if (p.lat > mxLa) mxLa = p.lat;
+      if (p.lng < mnLn) mnLn = p.lng; if (p.lng > mxLn) mxLn = p.lng;
+    }
+    for (let t = 0; t < 200; t++) {
+      const la = mnLa + Math.random() * (mxLa - mnLa);
+      const ln = mnLn + Math.random() * (mxLn - mnLn);
+      if (pointInBoundary(la, ln, boundary)) return { lat: la, lng: ln };
+    }
+    return { lat: boundary.reduce((s, p) => s + p.lat, 0) / boundary.length, lng: boundary.reduce((s, p) => s + p.lng, 0) / boundary.length };
+  }
+
+  // ── Optionally clear previous seed data ──
+  if (req.query.clear === 'true') {
+    const oldHH = await db.collection('households').where('_seeded', '==', true).get();
+    const oldRes = await db.collection('resources').where('_seeded', '==', true).get();
+    let b = db.batch(), n = 0;
+    for (const d of [...oldHH.docs, ...oldRes.docs]) { b.delete(d.ref); n++; if (n >= 400) { await b.commit(); b = db.batch(); n = 0; } }
+    // Also delete seed neighborhood members
+    const nhSnap2 = await db.collection('neighborhoods').get();
+    for (const nhDoc of nhSnap2.docs) {
+      const memSnap = await nhDoc.ref.collection('members').where('_seeded', '==', true).get();
+      for (const m of memSnap.docs) { b.delete(m.ref); n++; if (n >= 400) { await b.commit(); b = db.batch(); n = 0; } }
+    }
+    if (n > 0) await b.commit();
+  }
+
+  // ── Seed neighborhoods (optionally filter by ?nh=id) ──
+  const filterNh = req.query.nh; // seed only this neighborhood
+  const nhSnap = filterNh
+    ? await Promise.resolve({ docs: [(await db.collection('neighborhoods').doc(filterNh).get())].filter(d => d.exists) })
+    : await db.collection('neighborhoods').get();
+  const stats = { neighborhoods: 0, households: 0, resources: 0, rallyPoints: 0, fixed: 0 };
+  let batch = db.batch(), bc = 0;
+  async function flush() { if (bc > 0) { await batch.commit(); batch = db.batch(); bc = 0; } }
+  async function add(ref, data) { batch.set(ref, data); bc++; if (bc >= 400) await flush(); }
+
+  for (const nhDoc of nhSnap.docs) {
+    const nh = nhDoc.data();
+    if (!nh.boundary || nh.boundary.length < 3) continue;
+    const nhId = nhDoc.id;
+    const hhCount = randInt(5, 10);
+
+    // Households
+    for (let i = 0; i < hhCount; i++) {
+      const id = `seed-${nhId}-${i}`;
+      const { lat, lng } = randomPointIn(nh.boundary);
+      const members = randInt(1, 5);
+      const adults = Math.min(members, randInt(1, 3));
+
+      await add(db.collection('households').doc(id), {
+        _seeded: true,
+        address: `${randInt(100, 9999)} ${pick(STREETS)}, Asheville, NC 28801`,
+        displayName: `${pick(FIRST)} ${pick(LAST)}`,
+        lat, lng,
+        neighborhoodId: nhId,
+        cityId: nh.cityId || 'asheville-nc',
+        assignmentStatus: 'assigned',
+        assignedAt: FieldValue.serverTimestamp(),
+        status: 'active',
+        memberCount: members,
+        adultCount: adults,
+        childCount: members - adults,
+        petType: Math.random() > 0.6 ? pick(['dog','cat','dog and cat']) : '',
+        petCount: Math.random() > 0.6 ? randInt(1, 3) : 0,
+        languagesSpoken: Math.random() > 0.8 ? ['en','es'] : ['en'],
+        profileComplete: true,
+        hasVulnerableMembers: Math.random() > 0.75,
+        evacuationStatus: 'safe',
+        enteredBy: id,
+        isCoordinatorEntered: false,
+        createdAt: FieldValue.serverTimestamp(),
+        lastModified: FieldValue.serverTimestamp(),
+      });
+
+      // 1-3 resources per household
+      const rc = randInt(1, 3);
+      for (let j = 0; j < rc; j++) {
+        const t = pick(TYPES);
+        await add(db.collection('resources').doc(`seed-res-${nhId}-${i}-${j}`), {
+          _seeded: true,
+          type: t,
+          name: pick(RESOURCES[t]),
+          quantity: randInt(1, 3),
+          condition: pick(['good','good','fair']),
+          shareable: Math.random() > 0.25,
+          location: pick(LOCATIONS),
+          requiresTraining: t === 'communications' || t === 'medical' ? Math.random() > 0.5 : false,
+          householdId: id,
+          neighborhoodId: nhId,
+          lastVerified: FieldValue.serverTimestamp(),
+          createdAt: FieldValue.serverTimestamp(),
+        });
+        stats.resources++;
+      }
+
+      // Neighborhood member
+      await add(db.collection('neighborhoods').doc(nhId).collection('members').doc(id), {
+        _seeded: true, uid: id, role: 'householdMember', householdId: id, joinedAt: FieldValue.serverTimestamp(),
+      });
+      stats.households++;
+    }
+
+    // Rally points (1-3)
+    const rc = randInt(1, 3);
+    const p1 = randomPointIn(nh.boundary);
+    const rallyUpdate = {
+      primaryRallyPoint: { name: `${nh.name} ${pick(RALLY_NAMES)}`, lat: p1.lat, lng: p1.lng, description: 'Primary emergency gathering location' },
+      householdCount: FieldValue.increment(hhCount),
+      registeredCount: FieldValue.increment(hhCount),
+      preparednessScore: randInt(15, 80),
+    };
+    stats.rallyPoints++;
+    if (rc >= 2) {
+      const p2 = randomPointIn(nh.boundary);
+      rallyUpdate.backupRallyPoint = { name: `${nh.name} ${pick(RALLY_NAMES)}`, lat: p2.lat, lng: p2.lng, description: 'Backup gathering location' };
+      stats.rallyPoints++;
+    }
+    batch.update(nhDoc.ref, rallyUpdate);
+    bc++; if (bc >= 400) await flush();
+    stats.neighborhoods++;
+  }
+
+  // ── Fix existing households missing lat/lng ──
+  const allHH = await db.collection('households').get();
+  for (const doc of allHH.docs) {
+    const d = doc.data();
+    if (d._seeded) continue; // skip seed data
+    if (d.neighborhoodId && (!d.lat || !d.lng)) {
+      const nhDoc = nhSnap.docs.find((n) => n.id === d.neighborhoodId);
+      if (nhDoc) {
+        const nh = nhDoc.data();
+        if (nh.boundary && nh.boundary.length >= 3) {
+          const { lat, lng } = randomPointIn(nh.boundary);
+          batch.update(doc.ref, { lat, lng, assignmentStatus: 'assigned' });
+          bc++; if (bc >= 400) await flush();
+          stats.fixed++;
+        }
+      }
+    }
+  }
+
+  await flush();
+  res.json({ success: true, stats });
 });
 
 // ─── Helpers ───────────────────────────────────────────────────────
