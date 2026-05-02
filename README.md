@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/images/logo_wide.png" alt="ReadyBlock" width="420" />
+<img src=".github/screenshots/logo_wide.png" alt="ReadyBlock" width="420" />
 
 <br />
 
@@ -31,24 +31,24 @@
 <table>
   <tr>
     <td align="center">
-      <img src="landing-storm-mode.png" alt="Landing page in Storm theme" width="400" />
+      <img src=".github/screenshots/landing-storm-mode.png" alt="Landing page in Storm theme" width="400" />
       <br />
       <sub><b>Landing &mdash; Storm Theme</b></sub>
     </td>
     <td align="center">
-      <img src="dashboard-updated.png" alt="Resident dashboard" width="400" />
+      <img src=".github/screenshots/dashboard-updated.png" alt="Resident dashboard" width="400" />
       <br />
       <sub><b>Resident Dashboard</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="landing-light-mode.png" alt="Landing page in Blue Sky theme" width="400" />
+      <img src=".github/screenshots/landing-light-mode.png" alt="Landing page in Blue Sky theme" width="400" />
       <br />
       <sub><b>Landing &mdash; Blue Sky Theme</b></sub>
     </td>
     <td align="center">
-      <img src="about-page.png" alt="About page with Hurricane Helene origin story" width="400" />
+      <img src=".github/screenshots/about-page.png" alt="About page with Hurricane Helene origin story" width="400" />
       <br />
       <sub><b>About &mdash; The Helene Story</b></sub>
     </td>
