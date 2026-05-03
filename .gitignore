@@ -17,6 +17,26 @@ dist-ssr
 .env.local
 .env.*.local
 
+# Build output (duplicates removed)
+dist
+dist-ssr
+
+# Internal docs and planning
+docs/
+
+# Firebase cache
+.firebase/
+
+# Playwright MCP screenshots
+.playwright-mcp/
+
+# Root-level screenshots (dev artifacts)
+/*.png
+
+# Seed/utility scripts with hardcoded config
+scripts/call-seed*
+scripts/call-seed-households*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
