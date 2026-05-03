@@ -31,26 +31,24 @@
 <table>
   <tr>
     <td align="center">
-      <img src=".github/screenshots/landing-storm-mode.png" alt="Landing page in Storm theme" width="400" />
+      <img src="public/pitch/images/slide-05.webp" alt="Home dashboard showing Block Readiness score" width="280" />
       <br />
-      <sub><b>Landing &mdash; Storm Theme</b></sub>
+      <sub><b>Home Dashboard</b></sub>
     </td>
     <td align="center">
-      <img src=".github/screenshots/dashboard-updated.png" alt="Resident dashboard" width="400" />
+      <img src="public/pitch/images/slide-09.webp" alt="Storm mode with active event alert and I'm Okay check-in" width="280" />
       <br />
-      <sub><b>Resident Dashboard</b></sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src=".github/screenshots/landing-light-mode.png" alt="Landing page in Blue Sky theme" width="400" />
-      <br />
-      <sub><b>Landing &mdash; Blue Sky Theme</b></sub>
+      <sub><b>Storm Mode &mdash; Safety Check-In</b></sub>
     </td>
     <td align="center">
-      <img src=".github/screenshots/about-page.png" alt="About page with Hurricane Helene origin story" width="400" />
+      <img src="public/pitch/images/slide-06.webp" alt="Leaflet neighborhood map with rally points" width="280" />
       <br />
-      <sub><b>About &mdash; The Helene Story</b></sub>
+      <sub><b>Neighborhood Map</b></sub>
+    </td>
+    <td align="center">
+      <img src="public/pitch/images/slide-11.webp" alt="Rally point details and welfare check status" width="280" />
+      <br />
+      <sub><b>Welfare Check Status</b></sub>
     </td>
   </tr>
 </table>
