@@ -31,24 +31,24 @@
 <table>
   <tr>
     <td align="center">
-      <img src="public/pitch/images/slide-04.webp" alt="Home dashboard showing Block Readiness score" width="280" />
+      <img src="public/pitch/images/slide-17.webp" alt="Captain Dashboard with welfare check status and neighborhood stats" width="280" />
       <br />
-      <sub><b>Home Dashboard</b></sub>
+      <sub><b>Captain Dashboard</b></sub>
     </td>
     <td align="center">
-      <img src="public/pitch/images/slide-10.webp" alt="Storm mode with active event alert and I'm Okay check-in" width="280" />
+      <img src="public/pitch/images/slide-10.webp" alt="Storm mode Leaflet map with household markers and rally points" width="280" />
       <br />
-      <sub><b>Storm Mode &mdash; Safety Check-In</b></sub>
+      <sub><b>Storm Mode &mdash; Map</b></sub>
     </td>
     <td align="center">
-      <img src="public/pitch/images/slide-07.webp" alt="Leaflet neighborhood map with rally points" width="280" />
+      <img src="public/pitch/images/slide-13.webp" alt="Recovery mode with I'm Okay check-in and emergency broadcast" width="280" />
       <br />
-      <sub><b>Neighborhood Map</b></sub>
+      <sub><b>Recovery &mdash; Check-In</b></sub>
     </td>
     <td align="center">
-      <img src="public/pitch/images/slide-13.webp" alt="Rally point details and welfare check status" width="280" />
+      <img src="public/pitch/images/slide-20.webp" alt="City admin dashboard with neighborhood overview and city map" width="280" />
       <br />
-      <sub><b>Welfare Check Status</b></sub>
+      <sub><b>City Admin Dashboard</b></sub>
     </td>
   </tr>
 </table>
