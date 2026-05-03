@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReadyBlock — Brand Guide</title>
+<link href="./ReadyBlock — Brand Guide_files/css2" rel="stylesheet">
+<style>
+
+/* ============================================
+   TOKENS
+   ============================================ */
+:root {
+  /* Brand colors */
+  --teal-900: #0A2424;
+  --teal-800: #0D2B2B;
+  --teal-700: #1A4A4A;
+  --teal-600: #1D5C5C;
+  --teal-500: #2D8A7A;
+  --teal-400: #4DB8A0;
+  --teal-200: #A8D8D0;
+  --teal-100: #D4EDE9;
+  --teal-50:  #E6F3F0;
+
+  --amber-900: #3A2000;
+  --amber-800: #7A4A10;
+  --amber-600: #C4782A;
+  --amber-500: #E8A830;
+  --amber-200: #F5D8A8;
+  --amber-50:  #FDF3E3;
+
+  --coral-600: #E05C3A;
+  --coral-50:  #FBEAE7;
+
+  --ink:       #1C1917;
+  --ink-soft:  #3D3B38;
+  --muted:     #6B7280;
+  --rule:      #D8D4CC;
+  --paper:     #FAF7F2;
+  --paper-mid: #F5F0E8;
+
+  /* Storm */
+  --storm-bg:      #0D2B2B;
+  --storm-surface: #1A4A4A;
+  --storm-moon:    #F0EDE6;
+
+  /* Typography */
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans:  'DM Sans', system-ui, sans-serif;
+  --mono:  'DM Mono', 'Courier New', monospace;
+
+  /* Spacing */
+  --page-pad: 3.5rem;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   COVER
+   ============================================ */
+.cover {
+  background: var(--teal-600);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--page-pad);
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-bg-circle-1 {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: var(--teal-500);
+  opacity: 0.25;
+  top: -200px; right: -200px;
+  pointer-events: none;
+}
+
+.cover-bg-circle-2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: var(--amber-600);
+  opacity: 0.12;
+  bottom: -120px; left: 10%;
+  pointer-events: none;
+}
+
+.cover-badge {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal-400);
+  position: relative;
+  z-index: 1;
+}
+
+.cover-center {
+  position: relative;
+  z-index: 1;
+}
+
+.cover-logo-mark {
+  margin-bottom: 2rem;
+}
+
+.cover-wordmark {
+  font-family: var(--serif);
+  font-size: clamp(4rem, 10vw, 8rem);
+  color: var(--paper);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.cover-wordmark span {
+  color: var(--amber-500);
+}
+
+.cover-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: rgba(250,247,242,0.6);
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
+.cover-version {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: rgba(250,247,242,0.35);
+  letter-spacing: 0.1em;
+}
+
+.cover-principle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--amber-500);
+  text-align: right;
+  max-width: 300px;
+  line-height: 1.4;
+}
+
+/* ============================================
+   NAV / TOC
+   ============================================ */
+.toc {
+  background: var(--ink);
+  padding: var(--page-pad);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.toc-label {
+  font-family: var(--serif);
+  font-size: 2rem;
+  color: var(--paper);
+  line-height: 1.2;
+}
+
+.toc-label span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal-400);
+  margin-bottom: 0.5rem;
+  font-style: normal;
+}
+
+.toc-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.toc-item a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  text-decoration: none;
+  color: rgba(250,247,242,0.65);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.toc-item a:hover { color: var(--teal-400); }
+
+.toc-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--teal-400);
+  opacity: 0.7;
+  min-width: 28px;
+}
+
+/* ============================================
+   PAGE SECTIONS
+   ============================================ */
+.page {
+  padding: var(--page-pad);
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-alt { background: var(--paper-mid); }
+.page-dark { background: var(--ink); }
+.page-storm { background: var(--storm-bg); }
+
+.chapter-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal-500);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chapter-eyebrow::after {
+  content: '';
+  height: 1px;
+  width: 48px;
+  background: var(--teal-100);
+}
+
+.page-dark .chapter-eyebrow { color: var(--teal-400); }
+.page-dark .chapter-eyebrow::after { background: var(--teal-700); }
+.page-storm .chapter-eyebrow { color: var(--teal-400); }
+.page-storm .chapter-eyebrow::after { background: var(--teal-700); }
+
+h2.page-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+
+.page-dark h2.page-title { color: var(--paper); }
+.page-storm h2.page-title { color: var(--storm-moon); }
+
+.page-intro {
+  font-size: 1.05rem;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 640px;
+  margin-bottom: 3rem;
+  line-height: 1.8;
+  border-left: 3px solid var(--rule);
+  padding-left: 1.25rem;
+}
+
+.page-dark .page-intro {
+  color: rgba(250,247,242,0.45);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.page-storm .page-intro {
+  color: rgba(240,237,230,0.5);
+  border-color: rgba(77,184,160,0.3);
+}
+
+/* ============================================
+   SECTION HEADERS (inside pages)
+   ============================================ */
+h3.section-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 3rem 0 1rem;
+}
+
+.page-dark h3.section-title { color: rgba(250,247,242,0.4); }
+.page-storm h3.section-title { color: var(--teal-400); }
+
+/* ============================================
+   LOGO SECTION
+   ============================================ */
+.logo-display-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+}
+
+.logo-cell {
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.logo-cell-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.logo-cell.bg-paper { background: var(--paper); }
+.logo-cell.bg-teal { background: var(--teal-600); }
+.logo-cell.bg-dark { background: var(--ink); }
+
+.logo-cell.bg-teal .logo-cell-label { color: rgba(250,247,242,0.45); }
+.logo-cell.bg-dark .logo-cell-label { color: rgba(250,247,242,0.35); }
+
+/* Clearspace rule */
+.clearspace-demo {
+  display: inline-block;
+  position: relative;
+  border: 1.5px dashed var(--teal-200);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.clearspace-label {
+  position: absolute;
+  top: 50%;
+  left: -60px;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--teal-200);
+  white-space: nowrap;
+}
+
+/* Logo don'ts */
+.donts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.dont-card {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dont-display {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-mid);
+}
+
+.dont-label {
+  padding: 8px 12px;
+  background: var(--coral-50);
+  border-top: 1px solid var(--rule);
+}
+
+.dont-rule {
+  font-size: 0.75rem;
+  color: var(--coral-600);
+  font-weight: 500;
+}
+
+/* ============================================
+   COLOR SECTION
+   ============================================ */
+.color-system {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.color-ramp-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.color-ramp {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 80px;
+}
+
+.color-stop {
+  flex: 1;
+  position: relative;
+  cursor: default;
+}
+
+.color-stop:hover .color-stop-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.color-stop-tooltip {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(28,25,23,0.85);
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.color-named-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.color-named-card {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+
+.color-named-swatch {
+  height: 88px;
+}
+
+.color-named-info {
+  padding: 10px 12px;
+  background: white;
+}
+
+.color-named-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.color-named-hex {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.color-named-use {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* Mode palette comparison */
+.mode-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.mode-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+
+.mode-header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mode-name {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.mode-swatches {
+  display: flex;
+  gap: 6px;
+}
+
+.mode-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.mode-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.mode-pair {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 0.8rem;
+}
+
+.mode-pair:last-child { border-bottom: none; }
+
+.mode-pair-role { color: inherit; opacity: 0.6; }
+.mode-pair-val { font-family: var(--mono); font-size: 0.7rem; }
+
+/* Contrast chips */
+.contrast-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.contrast-chip {
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contrast-sample {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.contrast-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contrast-pair {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  opacity: 0.6;
+}
+
+.contrast-badge {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.badge-aaa { background: rgba(77,184,160,0.25); color: #0F6E56; }
+.badge-aa  { background: rgba(196,120,42,0.2); color: #7a4a10; }
+
+/* ============================================
+   TYPOGRAPHY SECTION
+   ============================================ */
+.type-specimen {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.type-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  border-bottom: 1px solid var(--rule);
+  align-items: center;
+}
+
+.type-row:last-child { border-bottom: none; }
+
+.type-meta {
+  padding: 1rem 1.25rem;
+  border-right: 1px solid var(--rule);
+  background: var(--paper-mid);
+}
+
+.type-meta-name {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal-600);
+  margin-bottom: 2px;
+}
+
+.type-meta-spec {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.type-sample-cell {
+  padding: 1.25rem 1.5rem;
+  background: white;
+}
+
+.font-pair-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.font-card {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.font-card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-mid);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.font-card-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.font-card-role {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  background: var(--teal-50);
+  color: var(--teal-600);
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.font-card-body {
+  padding: 1.25rem;
+  background: white;
+}
+
+.font-alphabet {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.8;
+  word-break: break-all;
+}
+
+/* ============================================
+   VOICE & TONE
+   ============================================ */
+.voice-do-dont {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.voice-card {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+
+.voice-card-header {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.voice-card-header.do   { background: var(--teal-50); }
+.voice-card-header.dont { background: var(--coral-50); }
+
+.voice-badge {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.voice-badge.do   { color: var(--teal-600); }
+.voice-badge.dont { color: var(--coral-600); }
+
+.voice-card-body {
+  background: white;
+  padding: 0.25rem 0;
+}
+
+.voice-example {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.88rem;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.voice-example:last-child { border-bottom: none; }
+
+.voice-principles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.principle-card {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1.5rem 1.25rem;
+  background: white;
+}
+
+.principle-num {
+  font-family: var(--serif);
+  font-size: 2rem;
+  color: var(--teal-100);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.principle-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--teal-600);
+  margin-bottom: 0.5rem;
+}
+
+.principle-body {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ============================================
+   MODE DESIGN LANGUAGE
+   ============================================ */
+.mode-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.phone-mockup {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.pm-header {
+  padding: 16px 18px 12px;
+}
+
+.pm-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+
+.pm-wordmark {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+}
+
+.pm-sub {
+  font-size: 0.72rem;
+  margin-top: 2px;
+  opacity: 0.5;
+}
+
+.pm-body { padding: 14px 18px; }
+
+.pm-section-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.pm-resource-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pm-res {
+  flex: 1;
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid;
+}
+
+.pm-res-num { font-size: 1.2rem; font-weight: 600; line-height: 1; }
+.pm-res-lbl { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; opacity: 0.6; }
+
+.pm-score-bg { height: 5px; border-radius: 3px; margin-bottom: 5px; }
+.pm-score-fill { height: 5px; border-radius: 3px; width: 68%; }
+.pm-score-lbl { font-size: 0.7rem; font-weight: 500; }
+
+.pm-notif {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  border: 1px solid;
+}
+
+.pm-notif-title { font-size: 0.8rem; font-weight: 600; }
+.pm-notif-body  { font-size: 0.7rem; opacity: 0.65; margin-top: 3px; line-height: 1.4; }
+
+.pm-resource-card {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.pm-rc-name  { font-size: 0.82rem; font-weight: 600; }
+.pm-rc-addr  { font-size: 0.7rem; opacity: 0.5; margin-top: 2px; }
+.pm-rc-tag   { display: inline-block; font-size: 0.6rem; font-weight: 600; padding: 2px 7px; border-radius: 3px; margin-top: 5px; letter-spacing: 0.06em; }
+
+.pm-btn {
+  border-radius: 8px;
+  padding: 11px 12px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.pm-btn-label { font-size: 0.82rem; font-weight: 600; }
+.pm-btn-sub   { font-size: 0.65rem; opacity: 0.65; margin-top: 2px; }
+
+/* ============================================
+   UI COMPONENTS
+   ============================================ */
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.component-card {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.component-display {
+  padding: 2rem 1.5rem;
+  background: var(--paper-mid);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 140px;
+}
+
+.component-info {
+  padding: 10px 14px;
+  border-top: 1px solid var(--rule);
+  background: white;
+}
+
+.component-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.component-note {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* Actual component styles */
+.btn-primary {
+  display: inline-block;
+  background: var(--teal-600);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: var(--teal-600);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid var(--teal-600);
+  cursor: pointer;
+}
+
+.btn-amber {
+  display: inline-block;
+  background: var(--amber-600);
+  color: white;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-ghost {
+  display: inline-block;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+}
+
+.btn-storm {
+  display: inline-block;
+  background: var(--teal-400);
+  color: var(--teal-900);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.btn-sos {
+  display: inline-block;
+  background: var(--coral-600);
+  color: white;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.tag-component {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.tag-teal   { background: var(--teal-50); color: var(--teal-600); }
+.tag-amber  { background: var(--amber-50); color: var(--amber-800); }
+.tag-coral  { background: var(--coral-50); color: var(--coral-600); }
+.tag-dark   { background: var(--ink); color: var(--paper); }
+
+.score-bar-demo {
+  width: 100%;
+}
+
+.score-bar-demo-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.score-bar-demo-label strong { color: var(--teal-600); }
+
+.score-bar-track {
+  background: var(--teal-50);
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.score-bar-fill-demo {
+  height: 8px;
+  background: var(--teal-600);
+  border-radius: 6px;
+  width: 68%;
+}
+
+.notif-demo {
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 12px 14px;
+  width: 100%;
+}
+
+.notif-title { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+.notif-body  { font-size: 0.78rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+.notif-demo.amber { border-color: var(--amber-500); background: var(--amber-50); }
+.notif-demo.amber .notif-title { color: var(--amber-800); }
+
+/* ============================================
+   ICONOGRAPHY / IMAGERY NOTES
+   ============================================ */
+.imagery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.imagery-card {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.imagery-preview {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-mid);
+}
+
+.imagery-label {
+  padding: 10px 14px;
+  border-top: 1px solid var(--rule);
+  background: white;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.imagery-sub {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ============================================
+   CLOSING PAGE
+   ============================================ */
+.closing {
+  background: var(--teal-600);
+  padding: var(--page-pad);
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: var(--teal-500);
+  opacity: 0.2;
+  bottom: -200px; right: -100px;
+}
+
+.closing-headline {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--paper);
+  line-height: 1.15;
+  max-width: 640px;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.closing-headline em {
+  color: var(--amber-500);
+  font-style: italic;
+}
+
+.closing-rule {
+  width: 60px;
+  height: 3px;
+  background: var(--amber-500);
+  margin: 2rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+.closing-tagline {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250,247,242,0.4);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.mt-sm { margin-top: 1rem; }
+.mt-md { margin-top: 1.5rem; }
+.mt-lg { margin-top: 2.5rem; }
+p { margin-bottom: 1rem; }
+strong { font-weight: 600; }
+
+@media (max-width: 768px) {
+  :root { --page-pad: 1.5rem; }
+  .toc { grid-template-columns: 1fr; }
+  .color-named-grid { grid-template-columns: repeat(3, 1fr); }
+  .font-pair-grid, .mode-demo, .voice-do-dont, .logo-display-grid,
+  .donts-grid, .contrast-row, .component-grid, .imagery-grid,
+  .voice-principles { grid-template-columns: 1fr 1fr; }
+  .mode-compare, .three-col-type { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     COVER
+     ============================================ -->
+<section class="cover">
+  <div class="cover-bg-circle-1"></div>
+  <div class="cover-bg-circle-2"></div>
+
+  <div class="cover-badge">Brand Identity Guide · v1.0 · 2026</div>
+
+  <div class="cover-center">
+    <div class="cover-logo-mark">
+      <svg width="100" height="100" viewBox="0 0 200 200">
+        <line x1="100" y1="108" x2="52" y2="148" stroke="rgba(250,247,242,0.3)" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="100" y2="148" stroke="rgba(250,247,242,0.3)" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="148" y2="148" stroke="rgba(250,247,242,0.3)" stroke-width="5" stroke-linecap="round"></line>
+        <!-- Captain house -->
+        <rect x="76" y="60" width="48" height="52" rx="7" fill="rgba(250,247,242,0.9)"></rect>
+        <polygon points="100,30 72,62 128,62" fill="rgba(250,247,242,0.9)"></polygon>
+        <rect x="90" y="88" width="20" height="24" rx="3" fill="#1D5C5C" opacity="0.4"></rect>
+        <!-- Left neighbor -->
+        <rect x="24" y="142" width="56" height="46" rx="7" fill="rgba(250,247,242,0.55)"></rect>
+        <polygon points="52,114 20,144 84,144" fill="rgba(250,247,242,0.55)"></polygon>
+        <!-- Center pin (you) -->
+        <path d="M100 136 C100 136 74 158 74 174 C74 188 86 198 100 198 C114 198 126 188 126 174 C126 158 100 136 100 136Z" fill="#C4782A"></path>
+        <circle cx="100" cy="174" r="12" fill="rgba(250,247,242,0.2)"></circle>
+        <rect x="93" y="168" width="14" height="10" rx="2" fill="rgba(250,247,242,0.7)"></rect>
+        <polygon points="100,160 91,168 109,168" fill="rgba(250,247,242,0.7)"></polygon>
+        <!-- Right neighbor -->
+        <rect x="120" y="142" width="56" height="46" rx="7" fill="rgba(250,247,242,0.55)"></rect>
+        <polygon points="148,114 116,144 180,144" fill="rgba(250,247,242,0.55)"></polygon>
+      </svg>
+    </div>
+    <div class="cover-wordmark">Ready<span>Block</span></div>
+    <div class="cover-tagline">Know your neighbors. Know your resources. Know you're not alone.</div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-version">Confidential · HatchThis 2026 · Asheville, NC</div>
+    <div class="cover-principle">"Built by neighbors.<br>For neighbors."</div>
+  </div>
+</section>
+
+<!-- ============================================
+     TABLE OF CONTENTS
+     ============================================ -->
+<section class="toc">
+  <div class="toc-label">
+    <span>Contents</span>
+    Table of<br>Contents
+  </div>
+  <ul class="toc-list">
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#logo"><span class="toc-num">01</span> Logo System</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#color"><span class="toc-num">02</span> Color System</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#typography"><span class="toc-num">03</span> Typography</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#voice"><span class="toc-num">04</span> Voice &amp; Tone</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#modes"><span class="toc-num">05</span> Design Modes</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#components"><span class="toc-num">06</span> UI Components</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#imagery"><span class="toc-num">07</span> Imagery &amp; Icons</a></li>
+    <li class="toc-item"><a href="file:///C:/Users/steve/OneDrive/Desktop/readyblock-brand-guide.html#dont"><span class="toc-num">08</span> Brand Don'ts</a></li>
+  </ul>
+</section>
+
+<!-- ============================================
+     01 LOGO
+     ============================================ -->
+<section class="page" id="logo">
+  <div class="chapter-eyebrow">Section 01</div>
+  <h2 class="page-title">Logo System</h2>
+  <p class="page-intro">The ReadyBlock mark is a neighborhood of connected homes — a captain's house at the top, neighbors on either side, and your home as an amber map pin at the center. It says everything without a word.</p>
+
+  <h3 class="section-title">Primary mark — light, dark, and color backgrounds</h3>
+  <div class="logo-display-grid">
+    <div class="logo-cell bg-paper">
+      <svg width="120" height="130" viewBox="0 0 200 220">
+        <line x1="100" y1="108" x2="52" y2="148" stroke="#B8C8C5" stroke-width="6" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="100" y2="148" stroke="#B8C8C5" stroke-width="6" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="148" y2="148" stroke="#B8C8C5" stroke-width="6" stroke-linecap="round"></line>
+        <rect x="76" y="62" width="48" height="50" rx="7" fill="#1D5C5C"></rect>
+        <polygon points="100,32 72,64 128,64" fill="#1D5C5C"></polygon>
+        <rect x="90" y="88" width="20" height="24" rx="3" fill="#E6F3F0" opacity="0.6"></rect>
+        <rect x="24" y="144" width="56" height="44" rx="7" fill="#7BBFB5"></rect>
+        <polygon points="52,116 20,146 84,146" fill="#7BBFB5"></polygon>
+        <path d="M100 140 C100 140 74 162 74 178 C74 192 86 202 100 202 C114 202 126 192 126 178 C126 162 100 140 100 140Z" fill="#C4782A"></path>
+        <circle cx="100" cy="178" r="12" fill="rgba(250,247,242,0.22)"></circle>
+        <rect x="93" y="172" width="14" height="10" rx="2" fill="rgba(250,247,242,0.7)"></rect>
+        <polygon points="100,163 91,172 109,172" fill="rgba(250,247,242,0.7)"></polygon>
+        <rect x="120" y="144" width="56" height="44" rx="7" fill="#7BBFB5"></rect>
+        <polygon points="148,116 116,146 180,146" fill="#7BBFB5"></polygon>
+        <text x="100" y="218" text-anchor="middle" style="font-family:&#39;DM Serif Display&#39;,serif;font-size:20px;fill:#1C1917;letter-spacing:-0.02em;">ReadyBlock</text>
+      </svg>
+      <div class="logo-cell-label">On light / paper</div>
+    </div>
+    <div class="logo-cell bg-teal">
+      <svg width="120" height="130" viewBox="0 0 200 220">
+        <line x1="100" y1="108" x2="52" y2="148" stroke="rgba(250,247,242,0.3)" stroke-width="6" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="100" y2="148" stroke="rgba(250,247,242,0.3)" stroke-width="6" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="148" y2="148" stroke="rgba(250,247,242,0.3)" stroke-width="6" stroke-linecap="round"></line>
+        <rect x="76" y="62" width="48" height="50" rx="7" fill="rgba(250,247,242,0.9)"></rect>
+        <polygon points="100,32 72,64 128,64" fill="rgba(250,247,242,0.9)"></polygon>
+        <rect x="90" y="88" width="20" height="24" rx="3" fill="#1D5C5C" opacity="0.4"></rect>
+        <rect x="24" y="144" width="56" height="44" rx="7" fill="rgba(250,247,242,0.5)"></rect>
+        <polygon points="52,116 20,146 84,146" fill="rgba(250,247,242,0.5)"></polygon>
+        <path d="M100 140 C100 140 74 162 74 178 C74 192 86 202 100 202 C114 202 126 192 126 178 C126 162 100 140 100 140Z" fill="#C4782A"></path>
+        <circle cx="100" cy="178" r="12" fill="rgba(250,247,242,0.2)"></circle>
+        <rect x="93" y="172" width="14" height="10" rx="2" fill="rgba(250,247,242,0.7)"></rect>
+        <polygon points="100,163 91,172 109,172" fill="rgba(250,247,242,0.7)"></polygon>
+        <rect x="120" y="144" width="56" height="44" rx="7" fill="rgba(250,247,242,0.5)"></rect>
+        <polygon points="148,116 116,146 180,146" fill="rgba(250,247,242,0.5)"></polygon>
+        <text x="100" y="218" text-anchor="middle" style="font-family:&#39;DM Serif Display&#39;,serif;font-size:20px;fill:rgba(250,247,242,0.9);letter-spacing:-0.02em;">ReadyBlock</text>
+      </svg>
+      <div class="logo-cell-label">On brand teal</div>
+    </div>
+    <div class="logo-cell bg-dark">
+      <svg width="120" height="130" viewBox="0 0 200 220">
+        <line x1="100" y1="108" x2="52" y2="148" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="100" y2="148" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"></line>
+        <line x1="100" y1="108" x2="148" y2="148" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"></line>
+        <rect x="76" y="62" width="48" height="50" rx="7" fill="#4DB8A0"></rect>
+        <polygon points="100,32 72,64 128,64" fill="#4DB8A0"></polygon>
+        <rect x="90" y="88" width="20" height="24" rx="3" fill="#0D2B2B" opacity="0.5"></rect>
+        <rect x="24" y="144" width="56" height="44" rx="7" fill="rgba(77,184,160,0.5)"></rect>
+        <polygon points="52,116 20,146 84,146" fill="rgba(77,184,160,0.5)"></polygon>
+        <path d="M100 140 C100 140 74 162 74 178 C74 192 86 202 100 202 C114 202 126 192 126 178 C126 162 100 140 100 140Z" fill="#E8A830"></path>
+        <circle cx="100" cy="178" r="12" fill="rgba(28,25,23,0.2)"></circle>
+        <rect x="93" y="172" width="14" height="10" rx="2" fill="rgba(250,247,242,0.7)"></rect>
+        <polygon points="100,163 91,172 109,172" fill="rgba(250,247,242,0.7)"></polygon>
+        <rect x="120" y="144" width="56" height="44" rx="7" fill="rgba(77,184,160,0.5)"></rect>
+        <polygon points="148,116 116,146 180,146" fill="rgba(77,184,160,0.5)"></polygon>
+        <text x="100" y="218" text-anchor="middle" style="font-family:&#39;DM Serif Display&#39;,serif;font-size:20px;fill:rgba(250,247,242,0.9);letter-spacing:-0.02em;">ReadyBlock</text>
+      </svg>
+      <div class="logo-cell-label">On dark / storm mode</div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Logo anatomy</h3>
+  <div class="grid-2 mt-md">
+    <div>
+      <p style="font-size:0.88rem; color:var(--muted); line-height:1.7;">The mark has four intentional elements, each carrying meaning:</p>
+      <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.75rem;">
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div style="width:12px; height:12px; background:var(--teal-600); border-radius:2px; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="font-size:0.85rem;">Captain's house</strong> <span style="font-size:0.82rem; color:var(--muted); display:block;">Dark teal at top — the community leader, the hub, the organizing force.</span></div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div style="width:12px; height:12px; background:#7BBFB5; border-radius:2px; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="font-size:0.85rem;">Neighbor houses</strong> <span style="font-size:0.82rem; color:var(--muted); display:block;">Light teal flanking — your community, present and connected.</span></div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div style="width:12px; height:12px; background:var(--amber-600); border-radius:2px; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="font-size:0.85rem;">Map pin — your home</strong> <span style="font-size:0.82rem; color:var(--muted); display:block;">Amber pin at center — you are located, you are findable, you belong here.</span></div>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:flex-start;">
+          <div style="width:12px; height:12px; background:var(--rule); border-radius:2px; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="font-size:0.85rem;">Connection lines</strong> <span style="font-size:0.82rem; color:var(--muted); display:block;">Muted strokes linking all homes — the invisible network that makes a block.</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--paper-mid); border:1px solid var(--rule); border-radius:10px; padding:2rem; display:flex; align-items:center; justify-content:center;">
+      <div style="font-family:var(--mono); font-size:0.72rem; color:var(--muted); text-align:center; line-height:2;">
+        <div style="margin-bottom:0.5rem; color:var(--teal-600); font-weight:500;">Minimum size: 32×32px</div>
+        <div>Clear space: ½ × pin height on all sides</div>
+        <div>Wordmark: DM Serif Display, tight tracking</div>
+        <div>Never separate mark from wordmark<br>at sizes below 120px wide</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     02 COLOR
+     ============================================ -->
+<section class="page page-alt" id="color">
+  <div class="chapter-eyebrow">Section 02</div>
+  <h2 class="page-title">Color System</h2>
+  <p class="page-intro">Two palettes. One brand. Blue Sky and Storm Mode are distinct visual worlds that share the same DNA. The shift between them is a feature — make it feel like the sky changing, not a settings toggle.</p>
+
+  <h3 class="section-title">Named colors — primary palette</h3>
+  <div class="color-named-grid">
+    <div class="color-named-card">
+      <div class="color-named-swatch" style="background:#1D5C5C;"></div>
+      <div class="color-named-info">
+        <div class="color-named-name">Block Teal</div>
+        <div class="color-named-hex">#1D5C5C</div>
+        <div class="color-named-use">Primary brand, CTAs, nav, headers</div>
+      </div>
+    </div>
+    <div class="color-named-card">
+      <div class="color-named-swatch" style="background:#2D8A7A;"></div>
+      <div class="color-named-info">
+        <div class="color-named-name">Canopy</div>
+        <div class="color-named-hex">#2D8A7A</div>
+        <div class="color-named-use">Links, interactive elements</div>
+      </div>
+    </div>
+    <div class="color-named-card">
+      <div class="color-named-swatch" style="background:#E6F3F0;"></div>
+      <div class="color-named-info">
+        <div class="color-named-name">Morning Mist</div>
+        <div class="color-named-hex">#E6F3F0</div>
+        <div class="color-named-use">Card surfaces, tag backgrounds</div>
+      </div>
+    </div>
+    <div class="color-named-card">
+      <div class="color-named-swatch" style="background:#C4782A;"></div>
+      <div class="color-named-info">
+        <div class="color-named-name">Appalachian Amber</div>
+        <div class="color-named-hex">#C4782A</div>
+        <div class="color-named-use">Accent, your pin, highlights</div>
+      </div>
+    </div>
+    <div class="color-named-card">
+      <div class="color-named-swatch" style="background:#FAF7F2; border:1px solid #e2ded8;"></div>
+      <div class="color-named-info">
+        <div class="color-named-name">Hearthstone</div>
+        <div class="color-named-hex">#FAF7F2</div>
+        <div class="color-named-use">App background, Blue Sky mode</div>
+      </div>
+    </div>
+    <div class="color-named-card">
+      <div class="color-named-swatch" style="background:#1C1917;"></div>
+      <div class="color-named-info">
+        <div class="color-named-name">Smokehouse</div>
+        <div class="color-named-hex">#1C1917</div>
+        <div class="color-named-use">Body text, headings</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Teal ramp</h3>
+  <div class="color-ramp">
+    <div class="color-stop" style="background:#E6F3F0;"><div class="color-stop-tooltip">50 · #E6F3F0</div></div>
+    <div class="color-stop" style="background:#D4EDE9;"><div class="color-stop-tooltip">100 · #D4EDE9</div></div>
+    <div class="color-stop" style="background:#A8D8D0;"><div class="color-stop-tooltip">200 · #A8D8D0</div></div>
+    <div class="color-stop" style="background:#7BBFB5;"><div class="color-stop-tooltip">300 · #7BBFB5</div></div>
+    <div class="color-stop" style="background:#4DB8A0;"><div class="color-stop-tooltip">400 · #4DB8A0</div></div>
+    <div class="color-stop" style="background:#2D8A7A;"><div class="color-stop-tooltip">500 · #2D8A7A</div></div>
+    <div class="color-stop" style="background:#1D5C5C;"><div class="color-stop-tooltip">600 · #1D5C5C</div></div>
+    <div class="color-stop" style="background:#1A4A4A;"><div class="color-stop-tooltip">700 · #1A4A4A</div></div>
+    <div class="color-stop" style="background:#0D2B2B;"><div class="color-stop-tooltip">800 · #0D2B2B</div></div>
+    <div class="color-stop" style="background:#0A2424;"><div class="color-stop-tooltip">900 · #0A2424</div></div>
+  </div>
+
+  <h3 class="section-title">Amber ramp</h3>
+  <div class="color-ramp">
+    <div class="color-stop" style="background:#FDF3E3;"><div class="color-stop-tooltip">50 · #FDF3E3</div></div>
+    <div class="color-stop" style="background:#FAE5C0;"><div class="color-stop-tooltip">100 · #FAE5C0</div></div>
+    <div class="color-stop" style="background:#F5D8A8;"><div class="color-stop-tooltip">200 · #F5D8A8</div></div>
+    <div class="color-stop" style="background:#EFC078;"><div class="color-stop-tooltip">300 · #EFC078</div></div>
+    <div class="color-stop" style="background:#E8A830;"><div class="color-stop-tooltip">400 · #E8A830</div></div>
+    <div class="color-stop" style="background:#D08A28;"><div class="color-stop-tooltip">500 · #D08A28</div></div>
+    <div class="color-stop" style="background:#C4782A;"><div class="color-stop-tooltip">600 · #C4782A</div></div>
+    <div class="color-stop" style="background:#A86020;"><div class="color-stop-tooltip">700 · #A86020</div></div>
+    <div class="color-stop" style="background:#7A4A10;"><div class="color-stop-tooltip">800 · #7A4A10</div></div>
+    <div class="color-stop" style="background:#3A2000;"><div class="color-stop-tooltip">900 · #3A2000</div></div>
+  </div>
+
+  <h3 class="section-title">Mode palettes</h3>
+  <div class="mode-compare">
+    <div class="mode-card">
+      <div class="mode-header" style="background:var(--teal-600);">
+        <div class="mode-name" style="color:rgba(250,247,242,0.7);">☀ Blue Sky Mode</div>
+        <div class="mode-swatches">
+          <div class="mode-dot" style="background:#FAF7F2;"></div>
+          <div class="mode-dot" style="background:#1D5C5C;"></div>
+          <div class="mode-dot" style="background:#C4782A;"></div>
+          <div class="mode-dot" style="background:#1C1917;"></div>
+        </div>
+      </div>
+      <div class="mode-body">
+        <div class="mode-pair"><span class="mode-pair-role">Background</span><span class="mode-pair-val">#FAF7F2 Hearthstone</span></div>
+        <div class="mode-pair"><span class="mode-pair-role">Surface</span><span class="mode-pair-val">#F5F0E8 Paper mid</span></div>
+        <div class="mode-pair"><span class="mode-pair-role">Primary</span><span class="mode-pair-val">#1D5C5C Block Teal</span></div>
+        <div class="mode-pair"><span class="mode-pair-role">Accent</span><span class="mode-pair-val">#C4782A Appalachian Amber</span></div>
+        <div class="mode-pair"><span class="mode-pair-role">Text</span><span class="mode-pair-val">#1C1917 Smokehouse</span></div>
+        <div class="mode-pair"><span class="mode-pair-role">Muted</span><span class="mode-pair-val">#6B7280</span></div>
+        <div class="mode-pair"><span class="mode-pair-role">Border</span><span class="mode-pair-val">#D8D4CC</span></div>
+      </div>
+    </div>
+    <div class="mode-card" style="border-color:#1A4A4A;">
+      <div class="mode-header" style="background:var(--storm-bg);">
+        <div class="mode-name" style="color:var(--amber-500); letter-spacing:0.1em;">⚡ STORM MODE</div>
+        <div class="mode-swatches">
+          <div class="mode-dot" style="background:#0D2B2B; border-color:#1A4A4A;"></div>
+          <div class="mode-dot" style="background:#4DB8A0; border-color:rgba(255,255,255,0.1);"></div>
+          <div class="mode-dot" style="background:#E8A830; border-color:rgba(255,255,255,0.1);"></div>
+          <div class="mode-dot" style="background:#E05C3A; border-color:rgba(255,255,255,0.1);"></div>
+        </div>
+      </div>
+      <div class="mode-body" style="background:#1A4A4A;">
+        <div class="mode-pair" style="border-color:rgba(255,255,255,0.07); color:var(--storm-moon);"><span class="mode-pair-role">Background</span><span class="mode-pair-val">#0D2B2B Storm Deep</span></div>
+        <div class="mode-pair" style="border-color:rgba(255,255,255,0.07); color:var(--storm-moon);"><span class="mode-pair-role">Surface</span><span class="mode-pair-val">#1A4A4A Storm Surface</span></div>
+        <div class="mode-pair" style="border-color:rgba(255,255,255,0.07); color:var(--storm-moon);"><span class="mode-pair-role">Primary / CTA</span><span class="mode-pair-val">#4DB8A0 Signal</span></div>
+        <div class="mode-pair" style="border-color:rgba(255,255,255,0.07); color:var(--storm-moon);"><span class="mode-pair-role">Banner</span><span class="mode-pair-val">#E8A830 Alert Amber</span></div>
+        <div class="mode-pair" style="border-color:rgba(255,255,255,0.07); color:var(--storm-moon);"><span class="mode-pair-role">SOS / Need Help</span><span class="mode-pair-val">#E05C3A Need Help Coral</span></div>
+        <div class="mode-pair" style="border-color:rgba(255,255,255,0.07); color:var(--storm-moon);"><span class="mode-pair-role">Text</span><span class="mode-pair-val">#F0EDE6 Moonlight</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Contrast ratios — accessibility</h3>
+  <div class="contrast-row">
+    <div class="contrast-chip" style="background:#1D5C5C; color:#FAF7F2;">
+      <div class="contrast-sample">Block Teal on paper</div>
+      <div class="contrast-meta">
+        <span class="contrast-pair">#1D5C5C / #FAF7F2</span>
+        <span class="contrast-badge badge-aaa">8.4:1 AAA</span>
+      </div>
+    </div>
+    <div class="contrast-chip" style="background:#FAF7F2; color:#1C1917; border:1px solid #e2ded8;">
+      <div class="contrast-sample">Ink on Hearthstone</div>
+      <div class="contrast-meta">
+        <span class="contrast-pair">#1C1917 / #FAF7F2</span>
+        <span class="contrast-badge badge-aaa">17.2:1 AAA</span>
+      </div>
+    </div>
+    <div class="contrast-chip" style="background:#C4782A; color:#FAF7F2;">
+      <div class="contrast-sample">Amber on paper</div>
+      <div class="contrast-meta">
+        <span class="contrast-pair">#C4782A / #FAF7F2</span>
+        <span class="contrast-badge badge-aa">4.7:1 AA</span>
+      </div>
+    </div>
+    <div class="contrast-chip" style="background:#0D2B2B; color:#4DB8A0;">
+      <div class="contrast-sample">Signal on Storm Deep</div>
+      <div class="contrast-meta">
+        <span class="contrast-pair">#4DB8A0 / #0D2B2B</span>
+        <span class="contrast-badge badge-aaa">6.1:1 AAA</span>
+      </div>
+    </div>
+    <div class="contrast-chip" style="background:#0D2B2B; color:#E8A830;">
+      <div class="contrast-sample">Alert on Storm Deep</div>
+      <div class="contrast-meta">
+        <span class="contrast-pair">#E8A830 / #0D2B2B</span>
+        <span class="contrast-badge badge-aaa">7.8:1 AAA</span>
+      </div>
+    </div>
+    <div class="contrast-chip" style="background:#E05C3A; color:#FAF7F2;">
+      <div class="contrast-sample">Need Help on white</div>
+      <div class="contrast-meta">
+        <span class="contrast-pair">#E05C3A / #FAF7F2</span>
+        <span class="contrast-badge badge-aa">4.5:1 AA</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     03 TYPOGRAPHY
+     ============================================ -->
+<section class="page" id="typography">
+  <div class="chapter-eyebrow">Section 03</div>
+  <h2 class="page-title">Typography</h2>
+  <p class="page-intro">DM Serif Display for moments that need character and warmth. DM Sans for clear, readable utility. DM Mono for codes, specs, and the functional layer. All three are purposeful — none are decorative.</p>
+
+  <h3 class="section-title">Font family</h3>
+  <div class="font-pair-grid">
+    <div class="font-card">
+      <div class="font-card-header">
+        <div class="font-card-name">DM Serif Display</div>
+        <div class="font-card-role">Display</div>
+      </div>
+      <div class="font-card-body">
+        <div style="font-family:var(--serif); font-size:2.5rem; color:var(--ink); line-height:1.1; margin-bottom:1rem; letter-spacing:-0.02em;">ReadyBlock</div>
+        <div class="font-alphabet" style="font-family:var(--serif);">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br>a b c d e f g h i j k l m n o p q r s t u v w x y z</div>
+        <div style="margin-top:1rem; font-size:0.75rem; color:var(--muted); font-family:var(--mono);">Google Fonts · serif · display/headline use only</div>
+      </div>
+    </div>
+    <div class="font-card">
+      <div class="font-card-header">
+        <div class="font-card-name">DM Sans</div>
+        <div class="font-card-role">UI / Body</div>
+      </div>
+      <div class="font-card-body">
+        <div style="font-family:var(--sans); font-size:2rem; font-weight:300; color:var(--ink); line-height:1.1; margin-bottom:1rem;">Know your block.</div>
+        <div class="font-alphabet" style="font-family:var(--sans); font-weight:400;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br>a b c d e f g h i j k l m n o p q r s t u v w x y z</div>
+        <div style="margin-top:1rem; font-size:0.75rem; color:var(--muted); font-family:var(--mono);">Google Fonts · sans-serif · UI, body, notifications</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Type scale</h3>
+  <div class="type-specimen">
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Display</div>
+        <div class="type-meta-spec">DM Serif Display<br>48–72px / lh 1.0<br>tracking −0.03em</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--serif); font-size:3rem; line-height:1.0; letter-spacing:-0.03em; color:var(--ink);">ReadyBlock</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Headline</div>
+        <div class="type-meta-spec">DM Serif Display<br>28–40px / lh 1.15<br>tracking −0.02em</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--serif); font-size:2rem; line-height:1.15; letter-spacing:-0.02em; color:var(--ink);">Know your neighbors.</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Subhead</div>
+        <div class="type-meta-spec">DM Sans 500<br>18–22px / lh 1.3<br>tracking 0</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--sans); font-size:1.25rem; font-weight:500; line-height:1.3; color:var(--ink);">Montford Neighbors · 14 households</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Body</div>
+        <div class="type-meta-spec">DM Sans 400<br>15–16px / lh 1.7<br>tracking 0</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--sans); font-size:1rem; font-weight:400; line-height:1.7; color:var(--ink);">Your block just got stronger. Six neighbors have registered their resources this week — adding yours takes 2 minutes.</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Label / UI</div>
+        <div class="type-meta-spec">DM Sans 500<br>11–13px / lh 1.4<br>tracking +0.05em</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--sans); font-size:0.78rem; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:var(--teal-600);">Block Readiness · 68%</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Code / Mono</div>
+        <div class="type-meta-spec">DM Mono 400<br>11–13px / lh 1.5<br>tracking +0.04em</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--mono); font-size:0.75rem; letter-spacing:0.04em; color:var(--muted);">#1D5C5C · Block Teal · Primary brand color</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-name">Caption</div>
+        <div class="type-meta-spec">DM Sans 300<br>11–12px / lh 1.5<br>color: muted</div>
+      </div>
+      <div class="type-sample-cell">
+        <div style="font-family:var(--sans); font-size:0.72rem; font-weight:300; color:var(--muted);">Last synced 2 hours ago · Offline data ready</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     04 VOICE & TONE
+     ============================================ -->
+<section class="page page-alt" id="voice">
+  <div class="chapter-eyebrow">Section 04</div>
+  <h2 class="page-title">Voice &amp; Tone</h2>
+  <p class="page-intro">ReadyBlock sounds like the neighbor who has their act together — warm, competent, already thinking ahead. Not a government alert system. Not a Silicon Valley app. A trusted person on your street.</p>
+
+  <h3 class="section-title">Brand voice principles</h3>
+  <div class="voice-principles">
+    <div class="principle-card">
+      <div class="principle-num">01</div>
+      <div class="principle-title">Neighborly, not corporate</div>
+      <div class="principle-body">Every notification, label, and error message should sound like it came from someone you trust — not a government agency or a tech startup. Before publishing any copy, ask: "Could my most trusted neighbor have said this?"</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">02</div>
+      <div class="principle-title">Calm, not alarming</div>
+      <div class="principle-body">ReadyBlock lives on people's phones 364 days a year without a disaster. The everyday register must be warm and confident. Reserve urgency for Storm Mode — use it sparingly so it lands with full weight when it matters.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">03</div>
+      <div class="principle-title">Collective, not individual</div>
+      <div class="principle-body">The product is about community. Language should reflect that. "Your block" over "your profile." "Together" over "you." When someone does something good, the block benefits — make that visible in how you write about it.</div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Do this / not that</h3>
+  <div class="voice-do-dont">
+    <div class="voice-card">
+      <div class="voice-card-header do"><span class="voice-badge do">✓ Sound like ReadyBlock</span></div>
+      <div class="voice-card-body">
+        <div class="voice-example">"Your block just got stronger."</div>
+        <div class="voice-example">"6 of 12 households on your block are ready."</div>
+        <div class="voice-example">"Your neighbors are counting on you."</div>
+        <div class="voice-example">"When it matters most, you'll know who to call."</div>
+        <div class="voice-example">"Time to check in on your block."</div>
+        <div class="voice-example">"Your block knows you're safe."</div>
+        <div class="voice-example">"One tap. Family notified."</div>
+      </div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-card-header dont"><span class="voice-badge dont">✗ Doesn't sound like ReadyBlock</span></div>
+      <div class="voice-card-body">
+        <div class="voice-example">"Optimize your disaster preparedness score."</div>
+        <div class="voice-example">"Emergency alert: complete your profile."</div>
+        <div class="voice-example">"You have not registered your resources."</div>
+        <div class="voice-example">"Leverage community assets in crisis scenarios."</div>
+        <div class="voice-example">"Sign up to prepare for the next disaster."</div>
+        <div class="voice-example">"Action required: update your emergency contacts."</div>
+        <div class="voice-example">"Vulnerability assessment incomplete."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     05 DESIGN MODES
+     ============================================ -->
+<section class="page" id="modes">
+  <div class="chapter-eyebrow">Section 05</div>
+  <h2 class="page-title">Design Modes</h2>
+  <p class="page-intro">The visual shift between Blue Sky and Storm Mode is not a dark mode toggle — it is the product's core brand moment. It should feel like the sky changing. Users should feel the difference before they read a word.</p>
+
+  <h3 class="section-title">Side-by-side — the brand moment</h3>
+  <div class="mode-demo">
+    <!-- Blue Sky phone -->
+    <div>
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px;">☀ Blue Sky — everyday mode</div>
+      <div class="phone-mockup">
+        <div class="pm-header" style="background:var(--teal-600);">
+          <div style="font-family:var(--serif); font-size:1.1rem; color:var(--paper); letter-spacing:-0.01em;">ReadyBlock</div>
+          <div style="font-size:0.72rem; color:rgba(250,247,242,0.5); margin-top:2px;">Montford Neighbors · 14 households</div>
+        </div>
+        <div class="pm-body" style="background:var(--paper);">
+          <div class="pm-section-label" style="color:var(--teal-600);">Your block resources</div>
+          <div class="pm-resource-row">
+            <div class="pm-res" style="background:white; border-color:var(--rule);">
+              <div class="pm-res-num" style="color:var(--teal-600);">4</div>
+              <div class="pm-res-lbl" style="color:var(--muted);">Generators</div>
+            </div>
+            <div class="pm-res" style="background:white; border-color:var(--rule);">
+              <div class="pm-res-num" style="color:var(--teal-600);">3</div>
+              <div class="pm-res-lbl" style="color:var(--muted);">Medical</div>
+            </div>
+            <div class="pm-res" style="background:white; border-color:var(--rule);">
+              <div class="pm-res-num" style="color:var(--teal-600);">2</div>
+              <div class="pm-res-lbl" style="color:var(--muted);">Chainsaws</div>
+            </div>
+          </div>
+          <div class="pm-score-bg" style="background:var(--teal-50);">
+            <div class="pm-score-fill" style="background:var(--teal-600);"></div>
+          </div>
+          <div class="pm-score-lbl" style="color:var(--teal-600);">Block readiness 68%</div>
+          <div class="pm-notif" style="background:var(--amber-50); border-color:var(--amber-500); margin-top:12px;">
+            <div class="pm-notif-title" style="color:var(--amber-800);">Your block is counting on you</div>
+            <div class="pm-notif-body" style="color:var(--amber-800); opacity:0.7;">Adding your generator brings Montford to 75%.</div>
+          </div>
+          <div class="pm-notif" style="background:white; border-color:var(--rule); margin-top:8px;">
+            <div class="pm-notif-title" style="color:var(--ink);">Montford Community Hub</div>
+            <div class="pm-notif-body" style="color:var(--muted);">St. Lawrence Basilica · always open</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Storm Mode phone -->
+    <div>
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px;">⚡ Storm Mode — captain activated</div>
+      <div class="phone-mockup">
+        <div class="pm-header" style="background:var(--storm-bg);">
+          <div style="background:var(--amber-500); padding:4px 10px; border-radius:4px; font-family:var(--mono); font-size:0.65rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#3a2800; display:inline-block; margin-bottom:8px;">⚡ STORM MODE ACTIVE</div>
+          <div style="font-family:var(--serif); font-size:1.1rem; color:var(--storm-moon); letter-spacing:-0.01em;">ReadyBlock</div>
+        </div>
+        <div class="pm-body" style="background:var(--storm-surface);">
+          <div class="pm-section-label" style="color:var(--teal-400);">Resources near you</div>
+          <div class="pm-resource-card" style="background:var(--storm-bg);">
+            <div class="pm-rc-name" style="color:var(--storm-moon);">Generator — 7,500W</div>
+            <div class="pm-rc-addr" style="color:var(--storm-moon);">34 Pearson Ave · 0.1 mi</div>
+            <span class="pm-rc-tag" style="background:rgba(77,184,160,0.2); color:var(--teal-400);">Available</span>
+          </div>
+          <div class="pm-resource-card" style="background:var(--storm-bg);">
+            <div class="pm-rc-name" style="color:var(--storm-moon);">EMT certified</div>
+            <div class="pm-rc-addr" style="color:var(--storm-moon);">51 Pearson Ave · 0.2 mi</div>
+            <span class="pm-rc-tag" style="background:rgba(77,184,160,0.2); color:var(--teal-400);">Available</span>
+          </div>
+          <div class="pm-section-label" style="color:var(--teal-400); margin-top:12px;">Your status</div>
+          <div class="pm-btn" style="background:var(--teal-400);">
+            <div class="pm-btn-label" style="color:var(--teal-900);">I'm OK — notify my contacts</div>
+          </div>
+          <div class="pm-btn" style="background:var(--coral-600);">
+            <div class="pm-btn-label" style="color:white;">I need help</div>
+            <div class="pm-btn-sub" style="color:rgba(255,255,255,0.65);">Alerts your captain immediately</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Mode transition rules</h3>
+  <div class="grid-2 mt-md">
+    <div style="border:1px solid var(--rule); border-radius:10px; padding:1.5rem; background:white;">
+      <div style="font-size:0.78rem; font-weight:600; color:var(--teal-600); margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.08em;">Blue Sky → Storm Mode</div>
+      <ul style="font-size:0.85rem; color:var(--muted); line-height:1.8; padding-left:1rem;">
+        <li>Background shifts from Hearthstone to Storm Deep</li>
+        <li>All surfaces darken by 2 stops on the teal ramp</li>
+        <li>Amber accent activates for the STORM MODE ACTIVE banner</li>
+        <li>Primary CTA color shifts from Block Teal to Signal (#4DB8A0)</li>
+        <li>Resource locations become visible on the map</li>
+        <li>Typography gains 0.02em tracking for legibility under stress</li>
+      </ul>
+    </div>
+    <div style="border:1px solid var(--rule); border-radius:10px; padding:1.5rem; background:white;">
+      <div style="font-size:0.78rem; font-weight:600; color:var(--coral-600); margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.08em;">Never do in Storm Mode</div>
+      <ul style="font-size:0.85rem; color:var(--muted); line-height:1.8; padding-left:1rem;">
+        <li>Don't use pure red — it triggers alarm response, not action</li>
+        <li>Don't animate decoratively — every motion should communicate</li>
+        <li>Don't reduce type size — legibility under stress is non-negotiable</li>
+        <li>Don't add new navigation — reduce choices, not add them</li>
+        <li>Don't use playful or casual copy — tone shifts to clear and direct</li>
+        <li>Don't show ads, promos, or upgrade nudges</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     06 UI COMPONENTS
+     ============================================ -->
+<section class="page page-alt" id="components">
+  <div class="chapter-eyebrow">Section 06</div>
+  <h2 class="page-title">UI Components</h2>
+  <p class="page-intro">Every component exists in two states: Blue Sky and Storm. Build components once, style them for both contexts using the mode token system.</p>
+
+  <h3 class="section-title">Buttons</h3>
+  <div class="component-grid">
+    <div class="component-card">
+      <div class="component-display">
+        <button class="btn-primary">Join your block</button>
+        <button class="btn-secondary">View resources</button>
+      </div>
+      <div class="component-info">
+        <div class="component-name">Primary &amp; Secondary</div>
+        <div class="component-note">Blue Sky mode. Primary: Block Teal fill. Secondary: teal outline, transparent fill.</div>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="component-display" style="background:var(--storm-surface);">
+        <button class="btn-storm">I'm OK</button>
+        <button class="btn-sos">I need help</button>
+      </div>
+      <div class="component-info">
+        <div class="component-name">Storm Mode CTAs</div>
+        <div class="component-note">Storm Mode only. Signal teal for "I'm OK," coral for SOS. Never swap these.</div>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="component-display">
+        <button class="btn-amber">Register resource</button>
+        <button class="btn-ghost">Maybe later</button>
+      </div>
+      <div class="component-info">
+        <div class="component-name">Accent &amp; Ghost</div>
+        <div class="component-note">Amber for high-value actions that build block readiness. Ghost for secondary/dismiss.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Tags &amp; labels</h3>
+  <div class="component-grid">
+    <div class="component-card">
+      <div class="component-display" style="flex-direction:row; flex-wrap:wrap; align-items:center; gap:0.5rem;">
+        <span class="tag-component tag-teal">Available</span>
+        <span class="tag-component tag-amber">Nearby</span>
+        <span class="tag-component tag-coral">Needs help</span>
+        <span class="tag-component tag-dark">Storm Active</span>
+      </div>
+      <div class="component-info">
+        <div class="component-name">Status tags</div>
+        <div class="component-note">Teal = positive / available. Amber = nearby / attention. Coral = needs help. Dark = mode state.</div>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="component-display" style="width:100%;">
+        <div class="score-bar-demo">
+          <div class="score-bar-demo-label">
+            <span>Block readiness</span>
+            <strong>68%</strong>
+          </div>
+          <div class="score-bar-track">
+            <div class="score-bar-fill-demo"></div>
+          </div>
+        </div>
+      </div>
+      <div class="component-info">
+        <div class="component-name">Readiness score bar</div>
+        <div class="component-note">Block-level metric. Always shown as collective progress, never individual. Teal fill on mist track.</div>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="component-display" style="flex-direction:column; width:100%; gap:0.5rem;">
+        <div class="notif-demo">
+          <div class="notif-title">Montford Hub is open</div>
+          <div class="notif-body">St. Lawrence Basilica · water &amp; charging available now</div>
+        </div>
+        <div class="notif-demo amber">
+          <div class="notif-title">Your block is counting on you</div>
+          <div class="notif-body">One resource registration away from 75% readiness.</div>
+        </div>
+      </div>
+      <div class="component-info">
+        <div class="component-name">Notification cards</div>
+        <div class="component-note">Standard: white border on paper. Amber variant for calls to action that build block readiness.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     07 IMAGERY & ICONS
+     ============================================ -->
+<section class="page" id="imagery">
+  <div class="chapter-eyebrow">Section 07</div>
+  <h2 class="page-title">Imagery &amp; Icons</h2>
+  <p class="page-intro">ReadyBlock's visual language is warm, specific, and deeply local. Real Asheville streets. Real neighborhoods. People who look like they actually live here.</p>
+
+  <h3 class="section-title">Photography direction</h3>
+  <div class="imagery-grid">
+    <div class="imagery-card">
+      <div class="imagery-preview" style="background:linear-gradient(135deg, #E6F3F0 0%, #D4EDE9 100%); flex-direction:column; gap:0.5rem;">
+        <svg width="60" height="60" viewBox="0 0 60 60">
+          <rect x="10" y="25" width="40" height="30" rx="4" fill="#1D5C5C" opacity="0.7"></rect>
+          <polygon points="30,8 8,26 52,26" fill="#1D5C5C" opacity="0.7"></polygon>
+          <rect x="22" y="38" width="16" height="17" rx="2" fill="#FAF7F2" opacity="0.6"></rect>
+        </svg>
+        <div style="font-size:0.72rem; color:var(--teal-600); font-weight:500;">Front porches, real streets</div>
+      </div>
+      <div class="imagery-label">
+        Neighborhood texture
+        <div class="imagery-sub">Real WNC homes, Asheville streets, local landmarks. Specificity builds trust.</div>
+      </div>
+    </div>
+    <div class="imagery-card">
+      <div class="imagery-preview" style="background:linear-gradient(135deg, #FDF3E3 0%, #FAE5C0 100%); flex-direction:column; gap:0.5rem;">
+        <svg width="60" height="50" viewBox="0 0 60 50">
+          <circle cx="20" cy="20" r="14" fill="#C4782A" opacity="0.5"></circle>
+          <circle cx="40" cy="20" r="14" fill="#1D5C5C" opacity="0.5"></circle>
+          <circle cx="30" cy="35" r="14" fill="#2D8A7A" opacity="0.5"></circle>
+        </svg>
+        <div style="font-size:0.72rem; color:var(--amber-800); font-weight:500;">Neighbors together</div>
+      </div>
+      <div class="imagery-label">
+        People in community
+        <div class="imagery-sub">Groups of 2–4 people. Candid, not posed. Warm light. Eye contact encouraged.</div>
+      </div>
+    </div>
+    <div class="imagery-card">
+      <div class="imagery-preview" style="background:linear-gradient(135deg, var(--coral-50) 0%, #FAE5C0 100%); flex-direction:column; gap:0.5rem;">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <path d="M25 5 C25 5 8 20 8 32 C8 41 16 48 25 48 C34 48 42 41 42 32 C42 20 25 5 25 5Z" fill="#E05C3A" opacity="0.3"></path>
+          <path d="M25 5 C25 5 8 20 8 32 C8 41 16 48 25 48 C34 48 42 41 42 32 C42 20 25 5 25 5Z" fill="none" stroke="#E05C3A" stroke-width="1.5" opacity="0.5"></path>
+          <circle cx="25" cy="32" r="7" fill="#E05C3A" opacity="0.5"></circle>
+        </svg>
+        <div style="font-size:0.72rem; color:var(--coral-600); font-weight:500;">Recovery, not just disaster</div>
+      </div>
+      <div class="imagery-label">
+        Community in action
+        <div class="imagery-sub">Show recovery and mutual aid — not destruction. Hope, not fear.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">What to avoid in imagery</h3>
+  <div class="donts-grid">
+    <div class="dont-card">
+      <div class="dont-display">
+        <div style="font-size:2rem; opacity:0.3;">🚨</div>
+      </div>
+      <div class="dont-label">
+        <div class="dont-rule">No disaster porn</div>
+        <div style="font-size:0.7rem; color:var(--muted); margin-top:2px;">Flood images, destruction, collapsed buildings</div>
+      </div>
+    </div>
+    <div class="dont-card">
+      <div class="dont-display">
+        <div style="font-size:2rem; opacity:0.3;">🎖️</div>
+      </div>
+      <div class="dont-label">
+        <div class="dont-rule">No military/tactical aesthetic</div>
+        <div style="font-size:0.7rem; color:var(--muted); margin-top:2px;">Camo, emergency vests, helmets, command centers</div>
+      </div>
+    </div>
+    <div class="dont-card">
+      <div class="dont-display">
+        <div style="font-size:2rem; opacity:0.3;">📱</div>
+      </div>
+      <div class="dont-label">
+        <div class="dont-rule">No staged stock photos</div>
+        <div style="font-size:0.7rem; color:var(--muted); margin-top:2px;">Generic smiling families, generic city skylines</div>
+      </div>
+    </div>
+    <div class="dont-card">
+      <div class="dont-display">
+        <div style="font-size:2rem; opacity:0.3;">🔴</div>
+      </div>
+      <div class="dont-label">
+        <div class="dont-rule">No red-dominant imagery</div>
+        <div style="font-size:0.7rem; color:var(--muted); margin-top:2px;">Creates anxiety in everyday app context</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     08 BRAND DON'TS
+     ============================================ -->
+<section class="page page-alt" id="dont">
+  <div class="chapter-eyebrow">Section 08</div>
+  <h2 class="page-title">Brand Don'ts</h2>
+  <p class="page-intro">The mark is a neighborhood. Treat it like one — with care and respect. These are the things that break the brand.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin-top:1.5rem;">
+    <div style="background:white; padding:1.5rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--coral-600); margin-bottom:0.75rem;">✗ Never stretch or distort the mark</div>
+      <p style="font-size:0.85rem; color:var(--muted);">The house proportions are fixed. Never scale x and y independently.</p>
+    </div>
+    <div style="background:white; padding:1.5rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--coral-600); margin-bottom:0.75rem;">✗ Never use on a busy background</div>
+      <p style="font-size:0.85rem; color:var(--muted);">The mark needs breathing room. Solid or very simple backgrounds only.</p>
+    </div>
+    <div style="background:white; padding:1.5rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--coral-600); margin-bottom:0.75rem;">✗ Never recolor the amber pin</div>
+      <p style="font-size:0.85rem; color:var(--muted);">The amber map pin is the brand's most specific element. It does not come in other colors.</p>
+    </div>
+    <div style="background:white; padding:1.5rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--coral-600); margin-bottom:0.75rem;">✗ Never replace the wordmark font</div>
+      <p style="font-size:0.85rem; color:var(--muted);">DM Serif Display is the only approved typeface for the "ReadyBlock" wordmark.</p>
+    </div>
+    <div style="background:white; padding:1.5rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--coral-600); margin-bottom:0.75rem;">✗ Never add drop shadows or effects</div>
+      <p style="font-size:0.85rem; color:var(--muted);">The mark is flat by design. No gradients, glows, or dimensional effects.</p>
+    </div>
+    <div style="background:white; padding:1.5rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--coral-600); margin-bottom:0.75rem;">✗ Never use red as a primary brand color</div>
+      <p style="font-size:0.85rem; color:var(--muted);">Coral (#E05C3A) is the only red-adjacent color allowed, and only for the SOS / Need Help button in Storm Mode.</p>
+    </div>
+  </div>
+
+  <div class="callout-block" style="background:var(--teal-50); border-left:4px solid var(--teal-600); padding:1.25rem 1.5rem; border-radius:4px; margin-top:2rem;">
+    <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--teal-600); margin-bottom:0.5rem;">The test</div>
+    <p style="font-size:0.95rem; color:var(--ink); margin-bottom:0;">Before any design goes out: "Does this look like it was made by a neighbor who cares, or by a brand team that doesn't?" If you're not sure, it's the second one. Fix it.</p>
+  </div>
+</section>
+
+<!-- ============================================
+     CLOSING
+     ============================================ -->
+<section class="closing">
+  <div class="closing-headline">
+    "Built for your block.<br>
+    <em>Ready for anything.</em>"
+  </div>
+  <div class="closing-rule"></div>
+  <div class="closing-tagline">ReadyBlock · Brand Identity Guide v1.0 · HatchThis 2026 · Asheville, NC</div>
+</section>
+
+
+
+</body></html>

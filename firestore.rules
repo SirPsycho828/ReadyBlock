@@ -74,9 +74,9 @@ service cloud.firestore {
 
     // ─── Households ───────────────────────────────────────────────────
     match /households/{householdId} {
-      // Read: owner, captain in same neighborhood, city admin in same city
+      // Read: owner, any member in same neighborhood, city admin in same city
       allow read: if isOwner(householdId)
-        || (isCaptain() && isSameNeighborhood(resource.data.neighborhoodId))
+        || (isSignedIn() && isSameNeighborhood(resource.data.neighborhoodId))
         || (isCityAdmin() && isSameCity(resource.data.cityId));
 
       // Create: own household

@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src=".github/screenshots/logo_wide.png" alt="ReadyBlock" width="420" />
+<img src="public/images/logo_wide.png" alt="ReadyBlock" width="420" />
 
 <br />
 
@@ -31,22 +31,22 @@
 <table>
   <tr>
     <td align="center">
-      <img src="public/pitch/images/slide-05.webp" alt="Home dashboard showing Block Readiness score" width="280" />
+      <img src="public/pitch/images/slide-04.webp" alt="Home dashboard showing Block Readiness score" width="280" />
       <br />
       <sub><b>Home Dashboard</b></sub>
     </td>
     <td align="center">
-      <img src="public/pitch/images/slide-09.webp" alt="Storm mode with active event alert and I'm Okay check-in" width="280" />
+      <img src="public/pitch/images/slide-10.webp" alt="Storm mode with active event alert and I'm Okay check-in" width="280" />
       <br />
       <sub><b>Storm Mode &mdash; Safety Check-In</b></sub>
     </td>
     <td align="center">
-      <img src="public/pitch/images/slide-06.webp" alt="Leaflet neighborhood map with rally points" width="280" />
+      <img src="public/pitch/images/slide-07.webp" alt="Leaflet neighborhood map with rally points" width="280" />
       <br />
       <sub><b>Neighborhood Map</b></sub>
     </td>
     <td align="center">
-      <img src="public/pitch/images/slide-11.webp" alt="Rally point details and welfare check status" width="280" />
+      <img src="public/pitch/images/slide-13.webp" alt="Rally point details and welfare check status" width="280" />
       <br />
       <sub><b>Welfare Check Status</b></sub>
     </td>

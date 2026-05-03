@@ -1,13 +1,241 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-/* Base styles */
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   SHADCN THEME → TAILWIND v4 MAPPING
+   Maps semantic CSS vars to Tailwind color utilities.
+   e.g. bg-primary → --color-primary → var(--primary)
+   ============================================ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand-specific colors for direct use */
+  --color-teal-50: #E6F3F0;
+  --color-teal-100: #D4EDE9;
+  --color-teal-200: #A8D8D0;
+  --color-teal-300: #7BBFB5;
+  --color-teal-400: #4DB8A0;
+  --color-teal-500: #2D8A7A;
+  --color-teal-600: #1D5C5C;
+  --color-teal-700: #1A4A4A;
+  --color-teal-800: #0D2B2B;
+  --color-teal-900: #0A2424;
+  --color-amber-50: #FDF3E3;
+  --color-amber-100: #FAE5C0;
+  --color-amber-200: #F5D8A8;
+  --color-amber-300: #EFC078;
+  --color-amber-400: #E8A830;
+  --color-amber-500: #D08A28;
+  --color-amber-600: #C4782A;
+  --color-amber-700: #A86020;
+  --color-amber-800: #7A4A10;
+  --color-amber-900: #3A2000;
+  --color-coral-600: #E05C3A;
+  --color-coral-50: #FBEAE7;
+  --color-ink: #1C1917;
+  --color-ink-soft: #3D3B38;
+  --color-paper: #FAF7F2;
+  --color-paper-mid: #F5F0E8;
+  --color-storm-deep: #0D2B2B;
+  --color-storm-surface: #1A4A4A;
+  --color-moonlight: #F0EDE6;
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* Font families */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+}
+
+/* ============================================
+   BLUE SKY MODE (Light) — Default
+   Brand: Hearthstone bg, Block Teal primary,
+   Appalachian Amber accent, Smokehouse text
+   ============================================ */
+:root {
+  --radius: 0.75rem;
+
+  /* Surfaces */
+  --background: #FAF7F2;
+  --foreground: #1C1917;
+  --card: #FFFFFF;
+  --card-foreground: #1C1917;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1917;
+
+  /* Brand primary — Block Teal */
+  --primary: #1D5C5C;
+  --primary-foreground: #FAF7F2;
+
+  /* Secondary — Morning Mist */
+  --secondary: #E6F3F0;
+  --secondary-foreground: #1D5C5C;
+
+  /* Muted */
+  --muted: #F5F0E8;
+  --muted-foreground: #6B7280;
+
+  /* Accent — Amber for hover/interactive */
+  --accent: #F5F0E8;
+  --accent-foreground: #1C1917;
+
+  /* Destructive — Coral */
+  --destructive: #E05C3A;
+  --destructive-foreground: #FFFFFF;
+
+  /* Borders & Inputs */
+  --border: #D8D4CC;
+  --input: #D8D4CC;
+  --ring: #1D5C5C;
+
+  /* Legacy tokens for existing components */
+  --color-surface-app: #FAF7F2;
+  --color-surface-primary: #FFFFFF;
+  --color-surface-secondary: #F5F0E8;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #3D3B38;
+  --color-text-inverse: #FAF7F2;
+  --color-brand-primary: #1D5C5C;
+  --color-brand-secondary: #2D8A7A;
+  --color-accent-brand: #C4782A;
+  --color-border-default: #D8D4CC;
+  --color-border-focus: #1D5C5C;
+  --color-status-confirmed: #2D8A7A;
+  --color-status-alert: #E05C3A;
+  --color-status-alert-bg: #FBEAE7;
+  --color-status-caution: #E8A830;
+  --color-status-neutral: #95A5A6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Radius */
+  --radius-community: 12px;
+  --radius-city: 4px;
+  --radius-full: 9999px;
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --duration-crawl: 600ms;
+
+  /* Typography */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-code: 'DM Mono', 'Courier New', monospace;
+}
+
+/* ============================================
+   STORM MODE (Dark) — Emergency-inspired
+   Brand: Storm Deep bg, Signal teal primary,
+   Alert Amber accent, Moonlight text
+   ============================================ */
+.dark {
+  /* Surfaces */
+  --background: #0D2B2B;
+  --foreground: #F0EDE6;
+  --card: #1A4A4A;
+  --card-foreground: #F0EDE6;
+  --popover: #1A4A4A;
+  --popover-foreground: #F0EDE6;
+
+  /* Brand primary — Signal Teal */
+  --primary: #4DB8A0;
+  --primary-foreground: #0A2424;
+
+  /* Secondary */
+  --secondary: #0A2424;
+  --secondary-foreground: #A8D8D0;
+
+  /* Muted */
+  --muted: #1A4A4A;
+  --muted-foreground: rgba(240, 237, 230, 0.55);
+
+  /* Accent */
+  --accent: #1A4A4A;
+  --accent-foreground: #F0EDE6;
+
+  /* Destructive — Coral */
+  --destructive: #E05C3A;
+  --destructive-foreground: #FFFFFF;
+
+  /* Borders & Inputs */
+  --border: rgba(77, 184, 160, 0.15);
+  --input: rgba(77, 184, 160, 0.2);
+  --ring: #4DB8A0;
+
+  /* Legacy tokens */
+  --color-surface-app: #0D2B2B;
+  --color-surface-primary: #1A4A4A;
+  --color-surface-secondary: #0A2424;
+  --color-text-primary: #F0EDE6;
+  --color-text-secondary: rgba(240, 237, 230, 0.7);
+  --color-text-inverse: #0D2B2B;
+  --color-brand-primary: #4DB8A0;
+  --color-brand-secondary: #2D8A7A;
+  --color-accent-brand: #E8A830;
+  --color-border-default: rgba(77, 184, 160, 0.15);
+  --color-border-focus: #4DB8A0;
+  --color-status-confirmed: #4DB8A0;
+  --color-status-alert: #E05C3A;
+  --color-status-alert-bg: rgba(224, 92, 58, 0.15);
+  --color-status-caution: #E8A830;
+  --color-status-neutral: #95A5A6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
 body {
   margin: 0;
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
-  color: var(--color-text-primary);
-  background: var(--color-surface-app);
+  color: var(--foreground);
+  background: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -16,7 +244,7 @@ body {
   min-height: 100svh;
 }
 
-/* Ensure 16px minimum on inputs to prevent iOS zoom */
+/* Prevent iOS auto-zoom on inputs */
 input,
 select,
 textarea {
@@ -25,6 +253,88 @@ textarea {
 
 /* Focus ring utility */
 *:focus-visible {
-  outline: 2px solid var(--color-border-focus);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-crawl: 0ms;
+  }
+}
+
+/* ── Leaflet theme overrides ─────────────────────────────────────── */
+
+.leaflet-container {
+  font-family: var(--font-body);
+  border-radius: var(--radius);
+}
+
+/* Tooltips */
+.leaflet-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-tooltip-top::before { border-top-color: var(--border); }
+.leaflet-tooltip-bottom::before { border-bottom-color: var(--border); }
+.leaflet-tooltip-left::before { border-left-color: var(--border); }
+.leaflet-tooltip-right::before { border-right-color: var(--border); }
+
+/* Rally point labels */
+.rb-rally-label {
+  font-weight: 600;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+/* Zoom controls */
+.leaflet-control-zoom a {
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--accent) !important;
+}
+
+/* Attribution */
+.leaflet-control-attribution {
+  background: color-mix(in srgb, var(--card) 85%, transparent) !important;
+  color: var(--muted-foreground) !important;
+  font-size: 0.6rem !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--primary) !important;
+}
+
+/* ── Resource Inventory Cards ────────────────────────────────────── */
+
+.resource-inventory-card {
+  box-shadow: inset 0 1px 0 0 rgba(77, 184, 160, 0.06);
+}
+
+.resource-inventory-card:hover {
+  box-shadow:
+    inset 0 1px 0 0 rgba(77, 184, 160, 0.1),
+    0 0 12px -2px rgba(77, 184, 160, 0.15),
+    0 0 4px -1px rgba(232, 168, 48, 0.1);
+}
+
+.dark .resource-inventory-card:hover {
+  box-shadow:
+    inset 0 1px 0 0 rgba(77, 184, 160, 0.12),
+    0 0 16px -2px rgba(77, 184, 160, 0.2),
+    0 0 6px -1px rgba(232, 168, 48, 0.15);
 }

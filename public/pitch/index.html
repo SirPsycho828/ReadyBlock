@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReadyBlock — HatchThis 2026 Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --dark:#1C1917;--body:#52525B;--dim:#71717A;--faint:#A1A1AA;
+  --amber:#C4782A;--teal:#1D5C5C;--canopy:#2D8A7A;--rose:#DC2626;
+  --blue:#2563EB;--violet:#7C3AED;--storm:#0D2B2B;
+  --card:rgba(255,255,255,0.88);--glass:rgba(255,255,255,0.75);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:#0a0e17;color:#f1f5f9;overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased}
+.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}
+.deck::-webkit-scrollbar{display:none}
+
+/* ═══ SLIDES ═══ */
+.slide{height:100vh;width:100vw;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:5vh 8vw}
+.slide-inner{max-width:90vw;width:100%;z-index:2;position:relative}
+
+/* Background images */
+.bg-img{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
+/* Light overlay — images show through softly */
+.bg-img::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.78)}
+/* Darker for emphasis slides */
+.slide-dark .bg-img::after{background:linear-gradient(135deg,rgba(13,43,43,0.85),rgba(28,25,23,0.9))}
+/* Extra light for data-heavy slides */
+.bg-heavy .bg-img::after{background:rgba(255,255,255,0.88)}
+
+/* Grain */
+.slide::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");z-index:1;pointer-events:none}
+
+/* ═══ NAV ═══ */
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--amber),var(--canopy));z-index:100;transition:width 0.4s}
+.counter{position:fixed;bottom:2.5vh;left:3.5vw;font-family:'JetBrains Mono',monospace;font-size:max(12px,0.9vw);color:rgba(0,0,0,0.12);z-index:100;transition:color 0.4s}
+.counter.dark{color:rgba(255,255,255,0.15)}
+.qr-badge{position:absolute;bottom:2.5vh;right:2vw;z-index:10;background:transparent;border-radius:0;padding:0;box-shadow:none;opacity:0.85;transition:opacity 0.3s}
+.qr-badge:hover{opacity:1}
+.qr-badge img{width:max(50px,5vh);height:auto;display:block;border-radius:4px}
+.slide-dark .qr-badge{box-shadow:0 2px 16px rgba(0,0,0,0.4)}
+.nav-dots{position:fixed;right:2vw;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:100}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,0.08);cursor:pointer;transition:all 0.3s;border:none}
+.nav-dot.active{background:var(--amber);box-shadow:0 0 12px rgba(196,120,42,0.4);transform:scale(1.5)}
+
+/* ═══ TYPOGRAPHY ═══ */
+.slide-label{font-family:'JetBrains Mono',monospace;font-size:max(15px,1.3vw);letter-spacing:0.3em;text-transform:uppercase;color:var(--amber);margin-bottom:1.5vh;font-weight:600}
+h1{font-family:'Playfair Display',serif;font-weight:800;line-height:1.05;letter-spacing:-0.03em}
+h2{font-family:'Playfair Display',serif;font-size:max(32px,4.5vw);font-weight:800;line-height:1.08;letter-spacing:-0.02em;margin-bottom:2vh;color:var(--dark)}
+h3{font-size:max(16px,1.4vw);font-weight:700;margin-bottom:0.5vh}
+p{font-size:max(15px,1.3vw);line-height:1.6;color:var(--body)}
+.slide-dark h2,.slide-dark h3{color:#f1f5f9}
+.slide-dark p{color:rgba(255,255,255,0.6)}
+
+.text-amber{color:var(--amber)}.text-teal{color:var(--teal)}.text-canopy{color:var(--canopy)}.text-rose{color:var(--rose)}.text-blue{color:var(--blue)}.text-violet{color:var(--violet)}.text-dim{color:var(--dim)}
+.text-gradient{background:linear-gradient(135deg,var(--amber),var(--canopy));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes borderGlow{0%,100%{border-color:rgba(196,120,42,0.12)}50%{border-color:rgba(196,120,42,0.5)}}
+.fade-in{opacity:0;animation:fadeInUp 0.6s both}
+.fade-in-1{opacity:0;animation:fadeInUp 0.6s 0.12s both}
+.fade-in-2{opacity:0;animation:fadeInUp 0.6s 0.24s both}
+.fade-in-3{opacity:0;animation:fadeInUp 0.6s 0.36s both}
+.fade-in-4{opacity:0;animation:fadeInUp 0.6s 0.48s both}
+
+/* ═══ GLASS CARDS ═══ */
+.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(0,0,0,0.05);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.06)}
+.glass-dark{background:rgba(13,43,43,0.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+
+/* ═══ STAT CARDS ═══ */
+.stat-row{display:flex;gap:max(12px,1.8vw);margin:2vh 0}
+.stat-card{flex:1;text-align:center;padding:max(16px,2.5vh) max(10px,1.2vw)}
+.stat-number{font-family:'Playfair Display',serif;font-size:max(44px,6vw);font-weight:800;line-height:1}
+.stat-label{font-size:max(12px,1vw);color:var(--dim);margin-top:0.8vh;line-height:1.3}
+
+/* ═══ MODE GRID ═══ */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:max(10px,1.5vw)}
+.mode-card{padding:max(16px,2vw);border-radius:16px;position:relative;overflow:hidden}
+.mode-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.mode-blue::before{background:var(--canopy)}.mode-storm::before{background:var(--amber)}.mode-recovery::before{background:var(--blue)}
+.mode-emoji{font-size:max(28px,3vw);margin-bottom:1vh;display:block}
+.mode-card h3{font-size:max(15px,1.3vw)}
+.mode-card p{font-size:max(12px,1.05vw);color:var(--body);line-height:1.5}
+
+/* ═══ SAUCE ═══ */
+.sauce-grid{display:grid;grid-template-columns:1fr 1fr;gap:max(8px,0.8vw)}
+.sauce-item{padding:max(10px,1.1vw) max(12px,1.3vw);border-radius:12px;position:relative;padding-left:max(16px,2vw)}
+.sauce-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.sauce-item:nth-child(1)::before{background:var(--amber)}.sauce-item:nth-child(2)::before{background:var(--canopy)}.sauce-item:nth-child(3)::before{background:var(--blue)}.sauce-item:nth-child(4)::before{background:var(--violet)}.sauce-item:nth-child(5)::before{background:var(--rose)}
+.sauce-item h3{font-size:max(13px,1.05vw);margin-bottom:0}
+.sauce-item p{font-size:max(11px,0.85vw);color:var(--body);line-height:1.35}
+
+/* ═══ MARKET ═══ */
+.market-bars{display:flex;flex-direction:column;gap:max(16px,2.5vh)}
+.market-bar-row{display:grid;grid-template-columns:max(70px,6vw) 1fr max(140px,12vw);align-items:center;gap:1.5vw}
+.market-bar-label{font-family:'JetBrains Mono',monospace;font-size:max(18px,1.6vw);font-weight:700;text-align:right}
+.market-bar-track{height:max(52px,6.5vh);background:rgba(0,0,0,0.03);border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,0.05)}
+.market-bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;padding-left:1.5vw;font-size:max(16px,1.4vw);color:var(--dark);font-weight:500}
+.market-bar-value{font-family:'Playfair Display',serif;font-size:max(28px,2.8vw);font-weight:800}
+
+/* ═══ FINANCIALS ═══ */
+.fin-row{display:flex;gap:max(14px,2vw)}
+.fin-card{flex:1;padding:max(20px,2.5vw)}
+.fin-card .year{font-family:'JetBrains Mono',monospace;font-size:max(14px,1.2vw);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1vh}
+.fin-card .amount{font-family:'Playfair Display',serif;font-size:max(40px,4.5vw);font-weight:800;line-height:1;margin-bottom:1.5vh}
+.fin-card li{font-size:max(15px,1.3vw);color:var(--body);padding:0.3vh 0;list-style:none;display:flex;align-items:center;gap:0.5rem}
+.fin-card li::before{content:'→';color:var(--amber);font-weight:600;font-size:0.85em}
+
+/* ═══ TEAM ═══ */
+.team-grid{display:flex;justify-content:center;gap:max(16px,3vw)}
+.team-card{text-align:center;padding:max(20px,2.5vw);min-width:max(140px,15vw)}
+.team-card .icon{font-size:max(32px,4vw);margin-bottom:0.8vh}
+.team-card .name{font-family:'Playfair Display',serif;font-size:max(22px,2.2vw);font-weight:800;margin-bottom:0.3vh;color:var(--dark)}
+.team-card .role{font-family:'JetBrains Mono',monospace;font-size:max(10px,0.8vw);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1vh}
+.team-card p{font-size:max(11px,0.9vw);color:var(--body);line-height:1.4}
+
+/* ═══ ROADMAP ═══ */
+.roadmap{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;position:relative;margin:3vh 0}
+.roadmap::before{content:'';position:absolute;top:max(16px,1.8vh);left:6%;right:6%;height:2px;background:linear-gradient(90deg,var(--amber),var(--canopy),var(--blue),var(--violet))}
+.rm-item{text-align:center;position:relative}
+.rm-dot{width:max(10px,0.9vw);height:max(10px,0.9vw);border-radius:50%;margin:1vh auto;position:relative;z-index:2}
+.rm-item:nth-child(1) .rm-dot{background:var(--amber);box-shadow:0 0 14px rgba(196,120,42,0.3)}
+.rm-item:nth-child(2) .rm-dot{background:var(--canopy);box-shadow:0 0 14px rgba(45,138,122,0.3)}
+.rm-item:nth-child(3) .rm-dot{background:var(--blue)}
+.rm-item:nth-child(4) .rm-dot{background:var(--violet)}
+.rm-label{font-family:'JetBrains Mono',monospace;font-size:max(10px,0.75vw);letter-spacing:0.08em;text-transform:uppercase;color:var(--dim)}
+.rm-text{font-size:max(11px,0.9vw);color:var(--body);margin-top:0.3vh}
+
+/* ═══ COMPETITION ═══ */
+.comp-matrix{display:grid;grid-template-columns:1fr 1fr;gap:max(8px,0.8vw);max-width:65vw;margin:0 auto}
+.comp-cell{padding:max(14px,1.8vw);border-radius:16px;text-align:center}
+.comp-cell.ours{border:2px solid rgba(196,120,42,0.4)}
+.comp-cell.theirs{border:1px solid rgba(0,0,0,0.05)}
+.comp-cell h3{font-size:max(14px,1.2vw);margin-bottom:0.3vh}
+.comp-cell p{font-size:max(11px,0.85vw);color:var(--body);line-height:1.35}
+.comp-label{font-family:'JetBrains Mono',monospace;font-size:max(9px,0.7vw);letter-spacing:0.12em;text-transform:uppercase;color:var(--faint)}
+
+/* ═══ APPENDIX ═══ */
+.appendix-grid{display:grid;grid-template-columns:1fr 1fr;gap:max(12px,2vw)}
+.appendix-section{padding:max(14px,1.8vw);border-radius:12px}
+.appendix-section h3{font-size:max(14px,1.2vw);margin-bottom:1vh}
+.appendix-section ul{list-style:none;padding:0}
+.appendix-section li{font-size:max(12px,0.95vw);color:var(--body);padding:0.3vh 0;display:flex;align-items:center;gap:0.4rem}
+.appendix-section li::before{content:'›';color:var(--canopy);font-weight:800;font-size:1.1em}
+
+/* ═══ SHARED ═══ */
+.callout{padding:max(10px,1.2vw) max(14px,1.8vw);border-radius:12px;margin:1.5vh 0}
+.badge{display:inline-block;padding:0.5rem 1.5rem;border:1px solid var(--amber);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:max(11px,0.85vw);color:var(--amber);letter-spacing:0.1em}
+.quote-ems{font-family:'Playfair Display',serif;font-size:max(20px,2.2vw);font-weight:700;font-style:italic;line-height:1.3}
+
+/* ═══ ROTATE OVERLAY ═══ */
+.rotate-overlay{display:none;position:fixed;inset:0;z-index:9999;background:#0a0e17;flex-direction:column;align-items:center;justify-content:center;gap:2rem;text-align:center;padding:2rem}
+.rotate-overlay .rotate-icon{font-size:4rem;animation:rotateHint 2s ease-in-out infinite}
+.rotate-overlay p{font-family:'Outfit',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.6);max-width:260px;line-height:1.5}
+.rotate-overlay p strong{color:var(--amber);font-weight:600}
+@keyframes rotateHint{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-90deg)}75%{transform:rotate(-90deg)}}
+
+@media(max-width:900px) and (orientation:portrait){
+  .rotate-overlay{display:flex}
+  .deck,.progress,.counter,.nav-dots{display:none!important}
+}
+
+@media(max-width:900px){
+  .slide{padding:4vh 5vw}
+  .mode-grid,.sauce-grid,.appendix-grid,.comp-matrix{grid-template-columns:1fr}
+  .stat-row,.fin-row{flex-direction:column}
+  .roadmap{grid-template-columns:1fr 1fr;gap:1rem}.roadmap::before{display:none}
+  .nav-dots{display:none}
+  .team-grid{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+<div class="rotate-overlay">
+  <div class="rotate-icon">📱</div>
+  <p>Rotate your device to <strong>landscape</strong> for the best experience</p>
+</div>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">01 / 14</div>
+<div class="nav-dots" id="navDots"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ═══ 1 · TITLE ═══ -->
+  <div class="slide slide-dark" data-visible="true">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1632249750586-4b35a9b2c580?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner">
+      <div class="fade-in" style="display:inline-flex;align-items:center;gap:0.5rem;font-family:'JetBrains Mono',monospace;font-size:max(11px,0.9vw);letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);background:rgba(196,120,42,0.1);border:1px solid rgba(196,120,42,0.25);padding:0.5rem 1.3rem;border-radius:100px;margin-bottom:3vh">⚡ HatchThis 2026 · Asheville, NC</div>
+      <h1 style="font-size:max(64px,10vw);margin-bottom:2vh;opacity:0;animation:fadeInUp 1s 0.2s both">Ready<span class="text-gradient">Block</span></h1>
+      <p style="font-size:max(20px,2.2vw);font-weight:300;color:rgba(255,255,255,0.5);max-width:50vw;opacity:0;animation:fadeInUp 0.8s 0.6s both">Online/offline neighborhood resilience.</p>
+      <p style="margin-top:5vh;font-size:max(12px,1vw);color:rgba(255,255,255,0.2);opacity:0;animation:fadeIn 0.6s 1s both">Steve · Samantha · Yaya &nbsp;|&nbsp; March 29, 2026 &nbsp;|&nbsp; readyblock.app</p>
+    </div>
+  </div>
+
+  <!-- ═══ 2a · PROBLEM — BEFORE ═══ -->
+  <div class="slide slide-dark">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=1920&q=80&auto=format');"></div>
+    <style>.slide:nth-child(2).slide-dark .bg-img::after{background:linear-gradient(135deg,rgba(0,0,0,0.45),rgba(0,0,0,0.55))}</style>
+    <div class="slide-inner" style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div class="slide-label fade-in" style="color:var(--amber);">Before</div>
+      <h2 class="fade-in-1" style="color:#f1f5f9;font-size:max(42px,6vw);margin-bottom:2vh">Asheville. <span style="color:var(--amber)">Connected.</span></h2>
+      <p class="fade-in-2" style="font-size:max(22px,2vw);color:rgba(255,255,255,0.6);max-width:55vw">Power. Water. Cell service. Internet.<br><strong style="color:rgba(255,255,255,0.85)">Everything worked. Everyone was reachable.</strong></p>
+    </div>
+    <div class="qr-badge"><img src="images/slide-01.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 2b · PROBLEM — AFTER ═══ -->
+  <div class="slide slide-dark">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1532978379173-523e16f371f2?w=1920&q=80&auto=format');"></div>
+    <style>.slide:nth-child(3).slide-dark .bg-img::after{background:linear-gradient(135deg,rgba(0,0,0,0.5),rgba(10,10,10,0.6))}</style>
+    <div class="slide-inner">
+      <div class="slide-label fade-in" style="color:var(--rose);">September 27, 2024</div>
+      <h2 class="fade-in-1" style="color:#f1f5f9;font-size:max(42px,6vw);margin-bottom:2vh">Then Helene hit.<br><span style="color:var(--rose)">Everything went dark.</span></h2>
+
+      <div class="stat-row fade-in-2" style="gap:max(16px,2.5vw);margin-top:2vh">
+        <div class="stat-card glass-dark" style="border-top:4px solid #f1f5f9;padding:max(24px,3.5vh) max(14px,2vw)">
+          <div class="stat-number" style="color:#f1f5f9;font-size:max(64px,8.5vw)">85K</div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.7);font-size:max(18px,1.5vw)">Households alone</div>
+        </div>
+        <div class="stat-card glass-dark" style="border-top:4px solid var(--amber);padding:max(24px,3.5vh) max(14px,2vw)">
+          <div class="stat-number" style="color:var(--amber);font-size:max(64px,8.5vw)">16</div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.7);font-size:max(18px,1.5vw)">Days fully offline</div>
+        </div>
+        <div class="stat-card glass-dark" style="border-top:4px solid var(--rose);padding:max(24px,3.5vh) max(14px,2vw)">
+          <div class="stat-number" style="color:var(--rose);font-size:max(64px,8.5vw)">0</div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.7);font-size:max(18px,1.5vw)">Ways to communicate</div>
+        </div>
+      </div>
+
+      <p class="fade-in-3" style="font-size:max(22px,2vw);color:rgba(255,255,255,0.6);margin-top:3vh;max-width:65vw;text-align:center">Nobody knew who needed help. Nobody knew where resources were.<br><strong style="color:#f1f5f9">Neighbors were invisible to each other.</strong></p>
+    </div>
+    <div class="qr-badge"><img src="images/slide-02.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 3 · VALUE PROP ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1502297950640-56e0742c63f9?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:85vh">
+      <div class="slide-label fade-in">Value Proposition</div>
+      <h2 class="fade-in-1" style="font-size:max(48px,7vw);max-width:85vw;margin:0 auto 2vh;line-height:1.05">Prepared before.<br>Connected during.<br><span class="text-gradient">Together after.</span></h2>
+      <p class="fade-in-2" style="font-size:max(26px,2.8vw);font-weight:300;color:var(--body);margin-bottom:5vh;letter-spacing:0.01em">The neighborhood app that works when <strong style="font-weight:800;color:var(--dark)">nothing else does.</strong></p>
+
+      <div class="fade-in-3" style="display:flex;align-items:stretch;gap:max(20px,3vw);width:100%;max-width:85vw">
+        <div style="flex:1;text-align:left;border-left:5px solid var(--canopy);padding-left:max(16px,1.8vw)">
+          <p style="font-size:max(20px,1.8vw);color:var(--dark);line-height:1.4"><strong style="color:var(--canopy)">16 residents interviewed.</strong><br>Nearly all would sign up immediately.</p>
+        </div>
+        <div style="flex:1;text-align:left;border-left:5px solid var(--rose);padding-left:max(16px,1.8vw)">
+          <p style="font-family:'Playfair Display',serif;font-size:max(24px,2.2vw);font-weight:700;font-style:italic;color:var(--dark);line-height:1.3">"This would be <span style="color:var(--rose)">life-changing!</span>"</p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:max(13px,1.1vw);font-weight:600;letter-spacing:0.12em;color:var(--body);margin-top:0.8vh">— EMS WORKER, ASHEVILLE</p>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-03.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4 · SOLUTION ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1572816703269-bccda14a887b?w=1920&q=80&auto=format')"></div>
+    <style>
+      .phase-timeline{display:flex;align-items:stretch;gap:0;width:100%;margin-top:4vh;position:relative}
+      .phase-timeline::before{content:'';position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(90deg,#38bdf8 0%,#38bdf8 25%,var(--amber) 25%,var(--amber) 50%,var(--rose) 50%,var(--rose) 75%,var(--canopy) 75%,var(--canopy) 100%);border-radius:4px}
+      .phase-block{flex:1;padding:max(30px,4vh) max(16px,1.5vw);padding-top:max(38px,5vh);position:relative;border-right:1px solid rgba(0,0,0,0.06)}
+      .phase-block:last-child{border-right:none}
+      .phase-name{font-family:'Playfair Display',serif;font-weight:800;font-size:max(32px,3.5vw);line-height:1.1;margin-bottom:max(12px,1.8vh)}
+      .phase-name.c-sky{color:#0284c7}.phase-name.c-prep{color:var(--amber)}.phase-name.c-storm{color:var(--rose)}.phase-name.c-recov{color:var(--canopy)}
+      .phase-detail{font-size:max(17px,1.5vw);color:var(--body);line-height:1.5}
+      .phase-detail strong{color:var(--dark);font-weight:700}
+      .phase-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:max(12px,0.95vw);letter-spacing:0.15em;text-transform:uppercase;color:var(--dark);font-weight:600;margin-bottom:max(6px,0.8vh)}
+      .demo-line{text-align:center;margin-top:max(20px,3vh);font-size:max(20px,2vw);color:var(--dark);font-weight:600}
+      .demo-line span{color:var(--canopy)}
+    </style>
+    <div class="slide-inner">
+      <div class="slide-label fade-in">The Solution</div>
+      <h2 class="fade-in-1" style="font-size:max(40px,5.5vw);margin-bottom:0.5vh">Four modes. One mission.</h2>
+      <p class="fade-in-1" style="font-size:max(20px,2vw);color:var(--dim);max-width:70vw;margin-bottom:1vh">Prepares you now. Connects you when it matters. Unites community through recovery.</p>
+
+      <div class="phase-timeline fade-in-2">
+        <div class="phase-block">
+          <div class="phase-tag">Peacetime</div>
+          <div class="phase-name c-sky">Blue Sky</div>
+          <div class="phase-detail">Register resources.<br>No names. No addresses.</div>
+        </div>
+        <div class="phase-block">
+          <div class="phase-tag">Alert incoming</div>
+          <div class="phase-name c-prep">Prepare</div>
+          <div class="phase-detail">Cache syncs to every phone.<br><strong>Before the signal dies.</strong></div>
+        </div>
+        <div class="phase-block" style="background:rgba(220,38,38,0.04)">
+          <div class="phase-tag">Disaster strikes</div>
+          <div class="phase-name c-storm">Storm</div>
+          <div class="phase-detail">Locations revealed.<br><strong>Zero internet required.</strong></div>
+        </div>
+        <div class="phase-block">
+          <div class="phase-tag">Weeks, not hours</div>
+          <div class="phase-name c-recov">Recovery</div>
+          <div class="phase-detail">Water, volunteers, power.<br>Syncs on <strong>one bar.</strong></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="qr-badge"><img src="images/slide-04.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4b · BLUE SKY DEMO ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1572816703269-bccda14a887b?w=1920&q=80&auto=format')"></div>
+    <style>
+      .phone-showcase{display:flex;justify-content:center;align-items:flex-end;gap:max(20px,3vw);margin-top:2vh;width:100%}
+      .phone-frame{position:relative;transition:transform 0.4s}
+      .phone-frame img{height:min(62vh,520px);width:auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.15)) drop-shadow(0 8px 16px rgba(0,0,0,0.1))}
+      .phone-frame.center img{height:min(68vh,570px)}
+      .phone-label{text-align:center;margin-top:max(10px,1.2vh);font-family:'JetBrains Mono',monospace;font-size:max(11px,0.9vw);letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:var(--dim)}
+      .phone-label strong{color:var(--dark);font-weight:700}
+    </style>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:85vh">
+      <div style="text-align:center">
+        <div class="slide-label fade-in">Blue Sky Mode</div>
+        <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);margin-bottom:0.5vh">What residents see <span style="color:#0284c7">today.</span></h2>
+        <p class="fade-in-1" style="font-size:max(18px,1.8vw);color:var(--dim);margin-bottom:1vh">Register resources. Map your block. Know your neighbors. <strong style="color:var(--dark)">No addresses shared.</strong></p>
+      </div>
+
+      <div class="phone-showcase fade-in-2">
+        <div class="phone-frame">
+          <img src="images/slide-05.webp" loading="lazy" alt="Home Screen">
+          <div class="phone-label"><strong>Home</strong> — Block Readiness</div>
+        </div>
+        <div class="phone-frame center">
+          <img src="images/slide-06.webp" loading="lazy" alt="Map View">
+          <div class="phone-label"><strong>Map</strong> — Rally Points</div>
+        </div>
+        <div class="phone-frame">
+          <img src="images/slide-07.webp" loading="lazy" alt="Profile Resources">
+          <div class="phone-label"><strong>Profile</strong> — Resources & Skills</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-08.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4c · STORM MODE DEMO ═══ -->
+  <div class="slide slide-dark">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1509803874385-db7c23652552?w=1920&q=80&auto=format')"></div>
+    <style>
+      .slide-dark .bg-img.storm-bg::after{background:linear-gradient(135deg,rgba(120,30,20,0.75),rgba(28,25,23,0.85))}
+    </style>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:85vh">
+      <div style="text-align:center">
+        <div class="slide-label fade-in" style="color:var(--rose)">Storm Mode</div>
+        <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);color:#f1f5f9;margin-bottom:0.5vh">When the power goes out, <span style="color:var(--rose)">this activates.</span></h2>
+        <p class="fade-in-1" style="font-size:max(18px,1.8vw);color:rgba(255,255,255,0.55);margin-bottom:1vh">Active alerts. Welfare checks. Rally points. <strong style="color:rgba(255,255,255,0.85)">Zero internet required.</strong></p>
+      </div>
+
+      <div class="phone-showcase fade-in-2">
+        <div class="phone-frame">
+          <img src="images/slide-09.webp" loading="lazy" alt="Storm Home">
+          <div class="phone-label" style="color:rgba(255,255,255,0.45)"><strong style="color:rgba(255,255,255,0.7)">Alert</strong> — Active Event</div>
+        </div>
+        <div class="phone-frame center">
+          <img src="images/slide-10.webp" loading="lazy" alt="Storm Map">
+          <div class="phone-label" style="color:rgba(255,255,255,0.45)"><strong style="color:rgba(255,255,255,0.7)">Map</strong> — Households Revealed</div>
+        </div>
+        <div class="phone-frame">
+          <img src="images/slide-11.webp" loading="lazy" alt="Storm Rally">
+          <div class="phone-label" style="color:rgba(255,255,255,0.45)"><strong style="color:rgba(255,255,255,0.7)">Status</strong> — Welfare Checks</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-12.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4d · RECOVERY MODE DEMO ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&auto=format')"></div>
+    <style>
+      .slide .bg-img.recov-bg::after{background:linear-gradient(135deg,rgba(45,138,122,0.15),rgba(255,255,255,0.82))}
+    </style>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:85vh">
+      <div style="text-align:center">
+        <div class="slide-label fade-in" style="color:var(--canopy)">Recovery Mode</div>
+        <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);margin-bottom:0.5vh">Weeks, not hours. <span style="color:var(--canopy)">Still connected.</span></h2>
+        <p class="fade-in-1" style="font-size:max(18px,1.8vw);color:var(--dim);margin-bottom:1vh">Recovery updates. Rally points. Response plans. <strong style="color:var(--dark)">Syncs on one bar.</strong></p>
+      </div>
+
+      <div class="phone-showcase fade-in-2">
+        <div class="phone-frame">
+          <img src="images/slide-13.webp" loading="lazy" alt="Recovery Home">
+          <div class="phone-label"><strong>Updates</strong> — County EOC Alerts</div>
+        </div>
+        <div class="phone-frame center">
+          <img src="images/slide-14.webp" loading="lazy" alt="Recovery Map">
+          <div class="phone-label"><strong>Map</strong> — Households & Rally Points</div>
+        </div>
+        <div class="phone-frame">
+          <img src="images/slide-15.webp" loading="lazy" alt="Recovery Plans">
+          <div class="phone-label"><strong>Plans</strong> — Storm Response</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-16.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4e · CAPTAIN DASHBOARD ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1572816703269-bccda14a887b?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:85vh">
+      <div style="text-align:center">
+        <div class="slide-label fade-in" style="color:var(--amber)">Block Captain View</div>
+        <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);margin-bottom:0.5vh">The captain sees <span style="color:var(--amber)">everything.</span></h2>
+        <p class="fade-in-1" style="font-size:max(18px,1.8vw);color:var(--dim);margin-bottom:1vh">Household stats. Welfare checks. Member management. <strong style="color:var(--dark)">One dashboard.</strong></p>
+      </div>
+
+      <div class="fade-in-2" style="display:flex;justify-content:center;align-items:flex-end;gap:max(40px,5vw);margin-top:2vh">
+        <div class="phone-frame center">
+          <img src="images/slide-17.webp" loading="lazy" alt="Captain Dashboard">
+          <div class="phone-label"><strong>Dashboard</strong> — Block Overview</div>
+        </div>
+        <div class="phone-frame center">
+          <img src="images/slide-18.webp" loading="lazy" alt="Members List">
+          <div class="phone-label"><strong>Members</strong> — Welfare & Status</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-19.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4f · CITY VIEW ═══ -->
+  <div class="slide slide-dark">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:85vh">
+      <div style="text-align:center">
+        <div class="slide-label fade-in" style="color:var(--amber)">City Leader View</div>
+        <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);color:#f1f5f9;margin-bottom:0.5vh">The municipality sees the <span style="color:var(--amber)">big picture.</span></h2>
+        <p class="fade-in-1" style="font-size:max(18px,1.8vw);color:rgba(255,255,255,0.55);margin-bottom:1vh">All neighborhoods. Preparedness scores. Alerts. <strong style="color:rgba(255,255,255,0.85)">One city dashboard.</strong></p>
+      </div>
+
+      <div class="phone-showcase fade-in-2">
+        <div class="phone-frame">
+          <img src="images/slide-20.webp" loading="lazy" alt="City Dashboard">
+          <div class="phone-label" style="color:rgba(255,255,255,0.45)"><strong style="color:rgba(255,255,255,0.7)">Dashboard</strong> — County Stats</div>
+        </div>
+        <div class="phone-frame center">
+          <img src="images/slide-21.webp" loading="lazy" alt="City Map">
+          <div class="phone-label" style="color:rgba(255,255,255,0.45)"><strong style="color:rgba(255,255,255,0.7)">Map</strong> — All Neighborhoods</div>
+        </div>
+        <div class="phone-frame">
+          <img src="images/slide-22.webp" loading="lazy" alt="Neighborhood Detail">
+          <div class="phone-label" style="color:rgba(255,255,255,0.45)"><strong style="color:rgba(255,255,255,0.7)">Detail</strong> — Quick Actions</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-23.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 4g · IM OKAY ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:85vh">
+      <div style="text-align:center">
+        <div class="slide-label fade-in" style="color:var(--canopy)">Welfare Check</div>
+        <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);margin-bottom:0.5vh">One tap: <span style="color:var(--canopy)">"I'm Okay."</span></h2>
+        <p class="fade-in-1" style="font-size:max(18px,1.8vw);color:var(--dim);margin-bottom:1vh">Emergency contacts notified instantly. <strong style="color:var(--dark)">Works offline — queues until signal returns.</strong></p>
+      </div>
+
+      <div class="phone-showcase fade-in-2">
+        <div class="phone-frame">
+          <img src="images/slide-24.webp" loading="lazy" alt="I'm Okay Prompt">
+          <div class="phone-label"><strong>Prompt</strong> — One-Tap Check-In</div>
+        </div>
+        <div class="phone-frame center">
+          <img src="images/slide-25.webp" loading="lazy" alt="I'm Okay Sending">
+          <div class="phone-label"><strong>Sending</strong> — SMS + Email</div>
+        </div>
+        <div class="phone-frame">
+          <img src="images/slide-26.webp" loading="lazy" alt="I'm Okay Delivered">
+          <div class="phone-label"><strong>Delivered</strong> — Contacts Notified</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-27.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 5 · SECRET SAUCE ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1530212486532-d957d9c01d3e?w=1920&q=80&auto=format')"></div>
+    <style>
+      .inn-grid{display:flex;gap:max(20px,2vw);width:100%;margin-top:4vh}
+      .inn-card{flex:1;position:relative;border-radius:20px;padding:max(30px,3.5vh) max(24px,2vw);overflow:hidden;transition:transform 0.3s}
+      .inn-card::before{content:'';position:absolute;inset:0;border-radius:20px;z-index:0}
+      .inn-card:nth-child(1)::before{background:linear-gradient(145deg,rgba(196,120,42,0.12),rgba(196,120,42,0.04));border:2px solid rgba(196,120,42,0.25)}
+      .inn-card:nth-child(2)::before{background:linear-gradient(145deg,rgba(45,138,122,0.12),rgba(45,138,122,0.04));border:2px solid rgba(45,138,122,0.25)}
+      .inn-card:nth-child(3)::before{background:linear-gradient(145deg,rgba(37,99,235,0.12),rgba(37,99,235,0.04));border:2px solid rgba(37,99,235,0.25)}
+      .inn-num{font-family:'Playfair Display',serif;font-weight:800;font-size:max(72px,7vw);line-height:0.9;opacity:0.15;position:absolute;top:max(10px,1.5vh);right:max(14px,1.5vw);z-index:0}
+      .inn-card:nth-child(1) .inn-num{color:var(--amber)}
+      .inn-card:nth-child(2) .inn-num{color:var(--canopy)}
+      .inn-card:nth-child(3) .inn-num{color:var(--blue)}
+      .inn-body{position:relative;z-index:1}
+      .inn-icon{font-size:max(36px,3.5vw);margin-bottom:max(12px,1.5vh)}
+      .inn-title{font-family:'Playfair Display',serif;font-weight:800;font-size:max(28px,2.8vw);color:var(--dark);line-height:1.1;margin-bottom:max(10px,1.5vh)}
+      .inn-card:nth-child(1) .inn-title{color:#B86B1D}
+      .inn-card:nth-child(2) .inn-title{color:#1D7A6A}
+      .inn-card:nth-child(3) .inn-title{color:#1D4ED8}
+      .inn-desc{font-size:max(18px,1.6vw);color:var(--body);line-height:1.5}
+      .inn-desc strong{color:var(--dark);font-weight:700}
+      .inn-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:max(10px,0.8vw);letter-spacing:0.15em;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:100px;margin-top:max(12px,1.5vh)}
+      .inn-card:nth-child(1) .inn-tag{background:rgba(196,120,42,0.12);color:var(--amber)}
+      .inn-card:nth-child(2) .inn-tag{background:rgba(45,138,122,0.12);color:var(--canopy)}
+      .inn-card:nth-child(3) .inn-tag{background:rgba(37,99,235,0.12);color:var(--blue)}
+    </style>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">Secret Sauce</div>
+      <h2 class="fade-in-1" style="font-size:max(42px,5.5vw);margin-bottom:0.5vh">Three innovations stacked.</h2>
+      <p class="fade-in-1" style="font-size:max(20px,2.2vw);color:var(--dim);margin-bottom:1vh">No competitor has more than one.</p>
+
+      <div class="inn-grid fade-in-2">
+        <div class="inn-card">
+          <div class="inn-num">01</div>
+          <div class="inn-body">
+            <div class="inn-icon">&#x1F4E1;</div>
+            <div class="inn-title">Offline-First</div>
+            <div class="inn-desc">Works with <strong>zero connectivity.</strong> Data syncs to every phone before the signal dies.</div>
+            <div class="inn-tag">No internet required</div>
+          </div>
+        </div>
+        <div class="inn-card">
+          <div class="inn-num">02</div>
+          <div class="inn-body">
+            <div class="inn-icon">&#x1F512;</div>
+            <div class="inn-title">Privacy by Architecture</div>
+            <div class="inn-desc"><strong>"What vs. Where"</strong> — locations are only revealed during active emergencies.</div>
+            <div class="inn-tag">Zero trust model</div>
+          </div>
+        </div>
+        <div class="inn-card">
+          <div class="inn-num">03</div>
+          <div class="inn-body">
+            <div class="inn-icon">&#x1F504;</div>
+            <div class="inn-title">Full Lifecycle</div>
+            <div class="inn-desc">Prep &#x2192; Storm &#x2192; <strong>weeks of Recovery.</strong> Not just alerts — an entire operating system.</div>
+            <div class="inn-tag">4 operating modes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-28.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 6 · MARKET ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1698409704555-e6e46c400523?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">Market Size</div>
+      <h2 class="fade-in-1" style="font-size:max(42px,5.5vw)">The money is <span style="color:var(--amber)">already moving.</span></h2>
+      <div class="fade-in-2" style="border-left:5px solid var(--amber);padding-left:max(16px,1.8vw);margin:2vh 0 3vh">
+        <p style="font-size:max(20px,1.8vw);color:var(--dark)"><strong style="color:var(--amber)">This week</strong> — Asheville pledged <strong>$10M</strong> for resilience hubs. ReadyBlock is the digital layer.</p>
+      </div>
+      <div class="market-bars fade-in-3">
+        <div class="market-bar-row">
+          <div class="market-bar-label text-violet">TAM</div>
+          <div class="market-bar-track"><div class="market-bar-fill" style="width:100%;background:rgba(124,58,237,0.1)">~100M residents in FEMA zones</div></div>
+          <div class="market-bar-value text-violet">$50M+</div>
+        </div>
+        <div class="market-bar-row">
+          <div class="market-bar-label text-blue">SAM</div>
+          <div class="market-bar-track"><div class="market-bar-fill" style="width:50%;background:rgba(37,99,235,0.1)">SE + Appalachian</div></div>
+          <div class="market-bar-value text-blue">$7.5M</div>
+        </div>
+        <div class="market-bar-row">
+          <div class="market-bar-label text-amber">SOM</div>
+          <div class="market-bar-track"><div class="market-bar-fill" style="width:22%;background:rgba(196,120,42,0.1)">WNC Year 1</div></div>
+          <div class="market-bar-value text-amber">$50–180K</div>
+        </div>
+      </div>
+      <div class="fade-in-4" style="margin-top:3vh;padding:max(14px,1.8vh) max(20px,2vw);border:1px solid rgba(0,0,0,0.08);border-radius:12px;background:rgba(255,255,255,0.5)">
+        <p style="font-size:max(17px,1.5vw);color:var(--dark);line-height:1.5"><strong>FEMA requires</strong> governments to maintain hazard mitigation plans — updated <strong>every five years</strong> — to receive disaster funding.<br><span style="color:var(--amber);font-weight:600">ReadyBlock is the digital infrastructure that supports these plans at the neighborhood level.</span></p>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-29.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 7 · BUSINESS MODEL ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1560472804-b8b7888e81cd?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">Business Model</div>
+      <h2 class="fade-in-1" style="font-size:max(42px,5.5vw);margin-bottom:1vh">Free for residents.<br>Funded as <span class="text-gradient">public infrastructure.</span></h2>
+
+      <div class="fade-in-2" style="display:flex;align-items:center;gap:max(24px,4vw);margin-top:2vh;width:100%">
+        <!-- Left: Municipal Contracts -->
+        <div style="flex:1;text-align:center">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(12px,1vw);letter-spacing:0.2em;text-transform:uppercase;color:var(--canopy);font-weight:600;margin-bottom:1vh">Municipal Contracts</div>
+          <div style="font-family:'Playfair Display',serif;font-size:max(64px,8vw);font-weight:800;color:var(--amber);line-height:0.9">$0.50</div>
+          <div style="font-size:max(20px,1.8vw);color:var(--dim);margin-top:1vh">per resident / year</div>
+          <div style="font-size:max(17px,1.5vw);color:var(--dark);font-weight:600;margin-top:1.5vh">Asheville (~94K) = <span style="color:var(--amber)">~$47K/yr</span></div>
+          <div style="font-size:max(14px,1.2vw);color:var(--dim);margin-top:0.5vh">Less than a bottle of water per resident.</div>
+        </div>
+
+        <!-- Divider -->
+        <div style="width:2px;height:max(140px,18vh);background:linear-gradient(180deg,transparent,rgba(0,0,0,0.1),transparent)"></div>
+
+        <!-- Right: grants + why free -->
+        <div style="flex:1">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(12px,1vw);letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:1.5vh">Grants &amp; Partnerships</div>
+          <p style="font-size:max(18px,1.6vw);color:var(--dark);line-height:1.5;font-weight:500">FEMA resilience grants<br>NC IDEA<br>Community Foundation of WNC<br>Red Cross deployments</p>
+          <div style="margin-top:2vh;border-left:4px solid var(--canopy);padding-left:max(14px,1.5vw)">
+            <p style="font-size:max(16px,1.4vw);color:var(--canopy);font-weight:600;font-style:italic">If you charge for preparedness, those who can't afford it need it most.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in-3" style="text-align:center;margin-top:3vh">
+        <p style="font-size:max(20px,1.8vw);color:var(--dim)">Cities don't buy apps. They invest in infrastructure.</p>
+        <p style="font-size:max(22px,2vw);color:var(--dark);font-weight:800;margin-top:0.5vh">ReadyBlock is infrastructure of resilience.</p>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-30.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 8 · COMPETITION ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1675652202189-d33f7fa075f0?w=1920&q=80&auto=format')"></div>
+    <style>
+      .cq-container{position:relative;width:80%;max-width:1000px;margin:0 auto;aspect-ratio:16/10}
+      .cq-board{position:relative;width:100%;height:100%;border-radius:20px;background:linear-gradient(145deg,rgba(240,240,245,0.94),rgba(225,227,232,0.9));box-shadow:0 30px 60px rgba(0,0,0,0.12),0 12px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.4);transform:perspective(1200px) rotateX(5deg) rotateY(-1deg);overflow:visible}
+      .cq-axis-h{position:absolute;top:50%;left:6%;right:6%;height:2px;background:linear-gradient(90deg,rgba(0,0,0,0.06),rgba(0,0,0,0.14),rgba(0,0,0,0.06))}
+      .cq-axis-v{position:absolute;left:50%;top:6%;bottom:6%;width:2px;background:linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.14),rgba(0,0,0,0.06))}
+      .cq-label{font-family:'JetBrains Mono',monospace;font-size:max(13px,1vw);letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,0,0,0.55);font-weight:700;position:absolute;white-space:nowrap}
+      .cq-label.top{top:2.5%;left:50%;transform:translateX(-50%)}
+      .cq-label.bottom{bottom:2.5%;left:50%;transform:translateX(-50%)}
+      .cq-label.left{left:-4%;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:center center}
+      .cq-label.right{right:-4%;top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:center center}
+      .cq-bubble{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+      .cq-bubble::after{content:'';position:absolute;bottom:-6px;left:15%;right:15%;height:10px;border-radius:50%;background:rgba(0,0,0,0.1);filter:blur(5px);z-index:-1}
+      .cq-bubble .bname{font-family:'Outfit',sans-serif;font-weight:700;line-height:1.15;color:white;text-shadow:0 1px 4px rgba(0,0,0,0.25)}
+      .cq-bubble .bsub{font-family:'Outfit',sans-serif;font-weight:400;color:rgba(255,255,255,0.75);line-height:1.2;margin-top:3px}
+      .cq-rb{width:28%;aspect-ratio:1;background:linear-gradient(135deg,#B86B1D,#C4782A,#D8943F);box-shadow:0 10px 40px rgba(196,120,42,0.45),0 4px 14px rgba(196,120,42,0.3),inset 0 2px 4px rgba(255,255,255,0.25);z-index:10;animation:rbPulse 3s ease-in-out infinite;top:6%;right:8%}
+      .cq-rb .bname{font-size:max(18px,1.6vw)}
+      .cq-rb .bsub{font-size:max(11px,0.85vw)}
+      .cq-fema{width:18%;aspect-ratio:1;top:12%;left:12%;background:linear-gradient(135deg,rgba(165,130,130,0.92),rgba(190,155,155,0.88));box-shadow:0 6px 20px rgba(0,0,0,0.1),inset 0 1px 2px rgba(255,255,255,0.2)}
+      .cq-fema .bname{font-size:max(14px,1.1vw)}
+      .cq-fema .bsub{font-size:max(9px,0.7vw)}
+      .cq-nd{width:17%;aspect-ratio:1;bottom:16%;left:18%;background:linear-gradient(135deg,rgba(165,130,130,0.92),rgba(190,155,155,0.88));box-shadow:0 6px 20px rgba(0,0,0,0.1),inset 0 1px 2px rgba(255,255,255,0.2)}
+      .cq-nd .bname{font-size:max(13px,1vw)}
+      .cq-nd .bsub{font-size:max(9px,0.7vw)}
+      .cq-rc{width:16%;aspect-ratio:1;bottom:12%;right:20%;background:linear-gradient(135deg,rgba(165,130,130,0.92),rgba(190,155,155,0.88));box-shadow:0 6px 20px rgba(0,0,0,0.1),inset 0 1px 2px rgba(255,255,255,0.2)}
+      .cq-rc .bname{font-size:max(12px,0.95vw)}
+      .cq-rc .bsub{font-size:max(9px,0.7vw)}
+      @keyframes rbPulse{0%,100%{box-shadow:0 10px 40px rgba(196,120,42,0.45),0 4px 14px rgba(196,120,42,0.3)}50%{box-shadow:0 14px 50px rgba(196,120,42,0.6),0 6px 18px rgba(196,120,42,0.4)}}
+    </style>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">Competitive Landscape</div>
+      <h2 class="fade-in-1" style="font-size:max(42px,5.5vw);margin-bottom:2vh"><span style="color:var(--amber)">First Mover.</span></h2>
+
+      <div class="cq-container fade-in-2">
+        <div class="cq-board">
+          <div class="cq-axis-h"></div>
+          <div class="cq-axis-v"></div>
+
+          <div class="cq-label top">Platform Solution</div>
+          <div class="cq-label bottom">Point Solution</div>
+          <div class="cq-label left">Online Only</div>
+          <div class="cq-label right">Offline-First</div>
+
+          <!-- ReadyBlock — top right -->
+          <div class="cq-bubble cq-rb">
+            <div class="bname">ReadyBlock</div>
+            <div class="bsub">Offline-first Platform</div>
+          </div>
+
+          <!-- FEMA — top left -->
+          <div class="cq-bubble cq-fema">
+            <div class="bname">FEMA</div>
+            <div class="bsub">Regional Alerts</div>
+          </div>
+
+          <!-- Nextdoor — bottom left -->
+          <div class="cq-bubble cq-nd">
+            <div class="bname">Nextdoor</div>
+            <div class="bsub">Social / Online</div>
+          </div>
+
+          <!-- Red Cross — bottom right-ish -->
+          <div class="cq-bubble cq-rc">
+            <div class="bname">Red Cross</div>
+            <div class="bsub">Generic Lists</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in-3" style="text-align:center;margin-top:2.5vh">
+        <p style="font-family:'Playfair Display',serif;font-size:max(20px,1.8vw);font-style:italic;color:var(--dim);line-height:1.4">"Nextdoor is the block party. <span style="color:var(--dark);font-weight:700">ReadyBlock is what happens when the power goes out."</span></p>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-31.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 9 · FINANCIALS ═══ -->
+  <div class="slide bg-heavy">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1598559069352-3d8437b0d42c?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">Financials</div>
+      <h2 class="fade-in-1" style="font-size:max(42px,5.5vw)">Conservative. Credible. <span style="color:var(--amber)">Fundable.</span></h2>
+      <div class="fin-row fade-in-2" style="margin-top:2vh">
+        <div class="fin-card glass" style="border-top:5px solid var(--amber)">
+          <div class="year text-amber">Year 1</div>
+          <div class="amount text-amber">$75–100K</div>
+          <ul><li>1 municipal pilot (Asheville)</li><li>NC IDEA grant</li><li>500 organic blocks</li></ul>
+        </div>
+        <div class="fin-card glass" style="border-top:5px solid var(--canopy)">
+          <div class="year text-canopy">Year 2</div>
+          <div class="amount text-canopy">$250K</div>
+          <ul><li>3 municipal contracts</li><li>across WNC region</li><li>FEMA grant revenue</li></ul>
+        </div>
+        <div class="fin-card glass" style="border-top:5px solid var(--violet)">
+          <div class="year text-violet">Year 3</div>
+          <div class="amount text-violet">$750K–1M</div>
+          <ul><li>8–10 cities nationwide</li><li>Insurance partnerships</li><li>Federal grant pipeline</li></ul>
+        </div>
+      </div>
+      <div class="fade-in-3" style="margin-top:3vh;padding:max(16px,2vh) max(24px,2.5vw);background:rgba(255,248,230,0.9);border-radius:12px;border:1px solid rgba(196,120,42,0.15);text-align:center">
+        <p style="font-size:max(18px,1.6vw);color:var(--dark);line-height:1.5"><strong style="color:var(--amber)">First contract path:</strong> Asheville is spending $10M on resilience. We approach Thrive Asheville with pilot data from our first 5 blocks. We apply for NC IDEA — <strong>a sponsor of this event.</strong></p>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-32.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 10 · TEAM ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1723521421884-d2729f1e30d9?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">The Team</div>
+      <h2 class="fade-in-1" style="font-size:max(42px,5.5vw)">Built this weekend.<br>Ready to <span class="text-gradient">ship</span>.</h2>
+
+      <div class="fade-in-2" style="display:flex;gap:max(20px,3vw);margin-top:4vh;width:100%">
+        <div style="flex:1;border-left:5px solid var(--canopy);padding-left:max(16px,1.8vw)">
+          <div style="font-family:'Playfair Display',serif;font-size:max(32px,3.5vw);font-weight:800;color:var(--dark)">Steve</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(14px,1.2vw);letter-spacing:0.15em;text-transform:uppercase;color:var(--canopy);font-weight:600;margin:0.5vh 0 1vh">Builder</div>
+          <p style="font-size:max(17px,1.5vw);color:var(--body)">Dev lead. Built the working app in 48 hours.</p>
+        </div>
+        <div style="flex:1;border-left:5px solid var(--amber);padding-left:max(16px,1.8vw)">
+          <div style="font-family:'Playfair Display',serif;font-size:max(32px,3.5vw);font-weight:800;color:var(--dark)">Samantha</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(14px,1.2vw);letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);font-weight:600;margin:0.5vh 0 1vh">Marketing</div>
+          <p style="font-size:max(17px,1.5vw);color:var(--body)">16 interviews. Business model + go-to-market.</p>
+        </div>
+        <div style="flex:1;border-left:5px solid var(--violet);padding-left:max(16px,1.8vw)">
+          <div style="font-family:'Playfair Display',serif;font-size:max(32px,3.5vw);font-weight:800;color:var(--dark)">Yaya</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(14px,1.2vw);letter-spacing:0.15em;text-transform:uppercase;color:var(--violet);font-weight:600;margin:0.5vh 0 1vh">Design</div>
+          <p style="font-size:max(17px,1.5vw);color:var(--body)">Brand identity + UX. Trust made visible.</p>
+        </div>
+      </div>
+
+      <div class="fade-in-3" style="display:flex;align-items:center;gap:max(16px,2vw);margin-top:5vh;width:100%">
+        <div style="height:3px;flex:1;background:linear-gradient(90deg,var(--amber),var(--canopy),var(--blue),var(--violet));border-radius:2px"></div>
+      </div>
+      <div class="fade-in-3" style="display:flex;justify-content:space-between;margin-top:1.5vh;width:100%">
+        <div style="text-align:center;flex:1">
+          <div style="font-family:'Playfair Display',serif;font-size:max(22px,2.2vw);font-weight:800;color:var(--amber)">Weeks 1–4</div>
+          <div style="font-size:max(16px,1.4vw);color:var(--body);margin-top:0.3vh">Ship PWA</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="font-family:'Playfair Display',serif;font-size:max(22px,2.2vw);font-weight:800;color:var(--canopy)">Weeks 4–8</div>
+          <div style="font-size:max(16px,1.4vw);color:var(--body);margin-top:0.3vh">Pilot blocks</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="font-family:'Playfair Display',serif;font-size:max(22px,2.2vw);font-weight:800;color:var(--blue)">Weeks 8–12</div>
+          <div style="font-size:max(16px,1.4vw);color:var(--body);margin-top:0.3vh">NC IDEA</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="font-family:'Playfair Display',serif;font-size:max(22px,2.2vw);font-weight:800;color:var(--violet)">Summer '26</div>
+          <div style="font-size:max(16px,1.4vw);color:var(--body);margin-top:0.3vh">First contract</div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-33.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 11 · CLOSING ═══ -->
+  <div class="slide slide-dark">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1758260990024-c8ad2660f1ff?w=1920&q=80&auto=format')"></div>
+    <div class="slide-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:85vh">
+      <h1 class="fade-in" style="font-size:max(64px,9vw);margin-bottom:2vh">Ready<span class="text-gradient">Block</span></h1>
+
+      <div class="fade-in-1" style="margin-bottom:3vh">
+        <div style="display:flex;flex-direction:column;gap:max(6px,0.6vh);align-items:center">
+          <p style="font-family:'Playfair Display',serif;font-size:max(32px,4vw);font-weight:800;line-height:1.2"><span style="color:var(--amber)">know</span> <span style="color:rgba(255,255,255,0.9)">your neighbors</span></p>
+          <p style="font-family:'Playfair Display',serif;font-size:max(32px,4vw);font-weight:800;line-height:1.2"><span style="color:var(--amber)">know</span> <span style="color:rgba(255,255,255,0.9)">your resources</span></p>
+          <p style="font-family:'Playfair Display',serif;font-size:max(32px,4vw);font-weight:800;line-height:1.2"><span style="color:var(--amber)">know</span> <span style="background:linear-gradient(90deg,#38bdf8,var(--canopy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">you're not alone</span></p>
+        </div>
+        <p style="font-size:max(18px,1.6vw);color:rgba(255,255,255,0.35);margin-top:2vh;font-style:italic;letter-spacing:0.15em">infrastructure of resilience</p>
+      </div>
+
+      <div class="fade-in-2" style="display:flex;align-items:center;gap:max(30px,4vw)">
+        <!-- QR Code -->
+        <div style="background:white;border-radius:16px;padding:max(10px,1vw);box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+          <img src="images/slide-34.webp" loading="lazy" alt="QR Code" style="width:max(140px,14vh);height:max(140px,14vh);display:block;border-radius:8px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(10px,0.8vw);letter-spacing:0.1em;color:var(--dark);text-align:center;margin-top:max(4px,0.5vh);font-weight:600">SCAN ME</div>
+        </div>
+        <!-- URL + CTA -->
+        <div style="text-align:left">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:max(14px,1.2vw);letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);margin-bottom:1vh;font-weight:600">Try it right now</div>
+          <div style="font-family:'Playfair Display',serif;font-size:max(42px,5vw);font-weight:800">readyblock.app</div>
+          <div style="font-size:max(18px,1.6vw);color:rgba(255,255,255,0.5);margin-top:1vh">Always free for residents.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:max(50px,7vw);margin-top:4vh;opacity:0;animation:fadeIn 0.6s 0.8s both">
+        <div style="text-align:center"><div style="font-size:max(26px,2.4vw);font-weight:700">Steve</div><div style="font-size:max(18px,1.5vw);color:rgba(255,255,255,0.5)">Builder</div></div>
+        <div style="text-align:center"><div style="font-size:max(26px,2.4vw);font-weight:700">Samantha</div><div style="font-size:max(18px,1.5vw);color:rgba(255,255,255,0.5)">Marketing</div></div>
+        <div style="text-align:center"><div style="font-size:max(26px,2.4vw);font-weight:700">Yaya</div><div style="font-size:max(18px,1.5vw);color:rgba(255,255,255,0.5)">Design</div></div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-35.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+  <!-- ═══ 12 · APPENDIX ═══ -->
+  <div class="slide">
+    <div class="bg-img" style="background-image:url('https://images.unsplash.com/photo-1641785730480-a954191118c7?w=1920&q=80&auto=format')"></div>
+    <style>
+      .app-grid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto;gap:max(12px,1.4vw);margin-top:2.5vh;width:100%}
+      .app-card{background:rgba(255,255,255,0.93);border-radius:14px;padding:max(18px,2.2vh) max(18px,1.8vw);border-top:4px solid var(--teal)}
+      .app-card:nth-child(1){border-top-color:var(--canopy)}
+      .app-card:nth-child(2){border-top-color:var(--amber)}
+      .app-card:nth-child(3){border-top-color:var(--blue)}
+      .app-card:nth-child(4){border-top-color:var(--rose)}
+      .app-card:nth-child(5){border-top-color:var(--violet)}
+      .app-card h3{font-family:'Playfair Display',serif;font-size:max(20px,1.8vw);font-weight:800;color:var(--dark);margin-bottom:max(8px,1vh)}
+      .app-card p,.app-card li{font-size:max(14px,1.15vw);color:var(--body);line-height:1.45}
+      .app-card strong{color:var(--dark);font-weight:700}
+      .road-line{display:flex;align-items:baseline;gap:max(6px,0.6vw);margin-bottom:max(6px,0.7vh)}
+      .road-line .rl-wk{font-family:'JetBrains Mono',monospace;font-size:max(12px,1vw);font-weight:700;white-space:nowrap;min-width:max(70px,6vw)}
+      .road-line .rl-txt{font-size:max(14px,1.15vw);color:var(--body);line-height:1.35}
+      .comp-row{display:flex;align-items:center;gap:max(8px,0.8vw);margin-bottom:max(5px,0.6vh)}
+      .comp-dot{width:max(8px,0.6vw);height:max(8px,0.6vw);border-radius:50%;flex-shrink:0}
+      .comp-name{font-weight:700;font-size:max(14px,1.15vw);color:var(--dark);min-width:max(70px,6vw)}
+      .comp-gap{font-size:max(13px,1.05vw);color:var(--dim)}
+    </style>
+    <div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;height:85vh">
+      <div class="slide-label fade-in">Appendix</div>
+      <h2 class="fade-in-1" style="font-size:max(38px,4.5vw);margin-bottom:0.5vh">Deep Dive</h2>
+
+      <div class="app-grid fade-in-2">
+        <!-- Row 1 -->
+        <div class="app-card">
+          <h3 style="color:var(--canopy)">Privacy & Governance</h3>
+          <p>Google Address API verification. Geo-fenced to participating cities. Three tiers: City Leader, Captain, Resident. <strong>No data monetization, ever.</strong></p>
+        </div>
+        <div class="app-card">
+          <h3 style="color:var(--amber)">Technical Stack</h3>
+          <p>React + TypeScript + Firebase. PWA with Service Workers for offline. IndexedDB local cache. NWS weather API. <strong>Deployed via Netlify.</strong></p>
+        </div>
+        <div class="app-card">
+          <h3 style="color:var(--blue)">90-Day Roadmap</h3>
+          <div class="road-line"><span class="rl-wk" style="color:var(--amber)">Weeks 1–4</span><span class="rl-txt">Ship production PWA</span></div>
+          <div class="road-line"><span class="rl-wk" style="color:var(--canopy)">Weeks 4–8</span><span class="rl-txt">Recruit 3–5 pilot blocks</span></div>
+          <div class="road-line"><span class="rl-wk" style="color:var(--blue)">Weeks 8–12</span><span class="rl-txt">Approach Thrive Asheville + city EM. Apply for NC IDEA.</span></div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="app-card">
+          <h3 style="color:var(--rose)">Why Now</h3>
+          <p>Asheville pledged <strong>$10M</strong> for resilience. FEMA prioritizing community prep. <strong>The next storm isn't a question of if.</strong></p>
+        </div>
+        <div class="app-card" style="grid-column:span 2">
+          <h3 style="color:var(--violet)">Competitive Gaps</h3>
+          <!-- ReadyBlock hero row -->
+          <div style="background:linear-gradient(135deg,rgba(196,120,42,0.1),rgba(196,120,42,0.04));border:1.5px solid rgba(196,120,42,0.3);border-radius:10px;padding:max(10px,1.2vh) max(12px,1.2vw);margin-bottom:max(8px,1vh);box-shadow:0 0 18px rgba(196,120,42,0.12)">
+            <div style="display:flex;align-items:center;gap:max(8px,0.8vw);margin-bottom:max(4px,0.5vh)"><div class="comp-dot" style="background:var(--amber);width:max(10px,0.8vw);height:max(10px,0.8vw)"></div><span class="comp-name" style="color:var(--amber)">ReadyBlock</span></div>
+            <div style="display:flex;gap:max(10px,1.2vw);flex-wrap:wrap">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:max(13px,1.05vw);color:var(--dark);font-weight:600;background:rgba(196,120,42,0.1);padding:3px 10px;border-radius:100px"><span style="color:var(--canopy);font-size:max(15px,1.2vw)">&#x2714;</span> Offline</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:max(13px,1.05vw);color:var(--dark);font-weight:600;background:rgba(196,120,42,0.1);padding:3px 10px;border-radius:100px"><span style="color:var(--canopy);font-size:max(15px,1.2vw)">&#x2714;</span> Hyperlocal</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:max(13px,1.05vw);color:var(--dark);font-weight:600;background:rgba(196,120,42,0.1);padding:3px 10px;border-radius:100px"><span style="color:var(--canopy);font-size:max(15px,1.2vw)">&#x2714;</span> Privacy</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:max(13px,1.05vw);color:var(--dark);font-weight:600;background:rgba(196,120,42,0.1);padding:3px 10px;border-radius:100px"><span style="color:var(--canopy);font-size:max(15px,1.2vw)">&#x2714;</span> Lifecycle</span>
+            </div>
+          </div>
+          <!-- Competitors -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:max(4px,0.5vw) max(12px,1.2vw)">
+            <div class="comp-row"><div class="comp-dot" style="background:rgba(165,130,130,0.5)"></div><span class="comp-name">FEMA App</span><span class="comp-gap" style="font-size:max(12px,1vw);color:var(--dim)">Partial offline. Regional only.</span></div>
+            <div class="comp-row"><div class="comp-dot" style="background:rgba(165,130,130,0.5)"></div><span class="comp-name">Nextdoor</span><span class="comp-gap" style="font-size:max(12px,1vw);color:var(--dim)">Online-only.<br>Ad-funded.</span></div>
+            <div class="comp-row"><div class="comp-dot" style="background:rgba(165,130,130,0.5)"></div><span class="comp-name">Red Cross</span><span class="comp-gap" style="font-size:max(12px,1vw);color:var(--dim)">Generic.<br>No community.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="qr-badge"><img src="images/slide-36.webp" loading="lazy" alt="QR"></div>
+  </div>
+
+</div>
+
+<script>
+const deck=document.getElementById('deck'),slides=document.querySelectorAll('.slide'),progress=document.getElementById('progress'),counter=document.getElementById('counter'),navDotsContainer=document.getElementById('navDots'),total=slides.length;let current=0;
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.addEventListener('click',()=>goToSlide(i));navDotsContainer.appendChild(d)});
+const dots=document.querySelectorAll('.nav-dot');
+function updateUI(){
+  progress.style.width=((current+1)/total*100)+'%';
+  counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
+  dots.forEach((d,i)=>d.classList.toggle('active',i===current));
+  slides.forEach((s,i)=>s.setAttribute('data-visible',i===current?'true':'false'));
+  counter.classList.toggle('dark',slides[current].classList.contains('slide-dark'));
+}
+function goToSlide(i){current=i;slides[i].scrollIntoView({behavior:'smooth'});updateUI()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();if(current<total-1)goToSlide(current+1)}else if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();if(current>0)goToSlide(current-1)}});
+let st;deck.addEventListener('scroll',()=>{clearTimeout(st);st=setTimeout(()=>{const n=Math.round(deck.scrollTop/window.innerHeight);if(n!==current&&n>=0&&n<total){current=n;updateUI()}},50)});
+let ty=0;deck.addEventListener('touchstart',e=>{ty=e.touches[0].clientY},{passive:true});deck.addEventListener('touchend',e=>{const d=ty-e.changedTouches[0].clientY;if(Math.abs(d)>50){d>0&&current<total-1?goToSlide(current+1):d<0&&current>0?goToSlide(current-1):null}},{passive:true});
+updateUI();
+</script>
+</body>
+</html>

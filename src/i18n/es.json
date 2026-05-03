@@ -1,7 +1,10 @@
 {
   "app": {
     "name": "ReadyBlock",
-    "tagline": "Tu vecindario, preparado juntos."
+    "tagline": "Tu vecindario, preparado juntos.",
+    "tagline_line1": "Conoce a tus vecinos.",
+    "tagline_line2": "Conoce tus recursos.",
+    "tagline_line3": "Sabe que no estás solo."
   },
   "nav": {
     "home": "Inicio",
@@ -31,14 +34,30 @@
     "backToSignIn": "Volver a iniciar sesión",
     "noAccount": "¿No tienes cuenta?",
     "hasAccount": "¿Ya tienes cuenta?",
+    "backToReadyBlock": "Volver a ReadyBlock",
+    "welcomeBack": "Bienvenido de nuevo. Inicia sesión para ver tu cuadra.",
+    "joinSubtitle": "Únete a tu cuadra en solo 2 minutos.",
+    "pwCheck8Chars": "Al menos 8 caracteres",
+    "pwCheckNumber": "Contiene un número",
+    "pwCheckUppercase": "Contiene mayúscula",
+    "pwCheckSpecial": "Contiene carácter especial",
+    "pwWeak": "Débil",
+    "pwFair": "Regular",
+    "pwGood": "Buena",
+    "pwStrong": "Fuerte",
+    "firstName": "Tu nombre",
+    "firstNamePlaceholder": "¿Cómo te llamamos?",
     "createAccount": "Crear cuenta",
     "verifyAddress": "Verifica tu dirección",
     "addressPlaceholder": "Ingresa tu dirección",
     "pendingTitle": "¡Casi listo!",
     "pendingMessage": "Tu dirección se está verificando y pronto serás asignado a tu vecindario.",
     "pendingWhileWaiting": "Recibirás una notificación cuando tu coordinador de vecindario confirme tu dirección.",
+    "continueToDashboard": "Continuar al panel",
     "verifyAddressDescription": "Necesitamos tu dirección para conectarte con tu cuadra.",
     "streetAddress": "Dirección",
+    "address2": "Apto, suite, unidad (opcional)",
+    "address2Placeholder": "Apto 4B, Unidad 12, etc.",
     "city": "Ciudad",
     "state": "Estado",
     "zip": "Código postal",
@@ -79,9 +98,9 @@
     "viewQueue": "Ver"
   },
   "theme": {
-    "light": "Claro",
+    "light": "Cielo Azul",
     "system": "Sistema",
-    "dark": "Oscuro",
+    "dark": "Tormenta",
     "label": "Apariencia"
   },
   "common": {
@@ -113,7 +132,8 @@
   "emergency": {
     "imAlive": "Estoy bien",
     "imAliveConfirm": "¿Marcarte como a salvo?",
-    "imAliveDescription": "Envía una notificación de seguridad a tus {{count}} contactos designados.",
+    "imAliveDescription": "Tu {{count}} contacto designado recibirá un SMS y un correo electrónico informándole que estás a salvo. Funciona sin conexión — los mensajes se guardan y se envían automáticamente cuando tu dispositivo se reconecte.",
+    "imAliveDescriptionPlural": "Tus {{count}} contactos designados recibirán un SMS y un correo electrónico informándoles que estás a salvo. Funciona sin conexión — los mensajes se guardan y se envían automáticamente cuando tu dispositivo se reconecte.",
     "imAliveSent": "Entregado a {{count}} de {{total}} contactos",
     "imAliveQueued": "Estado guardado. Se enviará cuando haya conexión.",
     "imAliveUndo": "Deshacer",
@@ -150,13 +170,21 @@
     "contactsDescription": "Agrega un contacto de emergencia fuera de tu vecindario que pueda ser contactado si los teléfonos locales no funcionan.",
     "primaryContactName": "Nombre del contacto",
     "primaryContactPhone": "Teléfono del contacto",
+    "primaryContactEmail": "Correo del contacto",
+    "contactPhoneOrEmail": "Se requiere al menos un teléfono o correo electrónico.",
     "petType": "Tipo de mascota",
+    "petTypeLabel": "Tipo",
     "petTypePlaceholder": "ej., Perro, Gato, Pez",
     "petCount": "¿Cuántas?",
+    "addPet": "Agregar otra mascota",
+    "addFirstPet": "Agregar una mascota",
     "resourcesDescription": "¿Tienes alguno de estos disponibles para compartir en una emergencia?",
     "resource_generator": "Generador",
     "resource_vehicle": "Vehículo (4x4 / camioneta)",
     "resource_tools": "Herramientas (motosierra, herramientas manuales)",
+    "resource_solarPanel": "Panel solar / batería portátil",
+    "resource_waterStorage": "Almacenamiento de agua (garrafones, barriles)",
+    "resource_firstAidKit": "Botiquín de primeros auxilios",
     "resource_extraSpace": "Espacio extra para vecinos",
     "languagesDescription": "¿Qué idiomas se hablan en tu hogar?",
     "needsConsent": "Esta información ayuda a tu coordinador a prepararse para emergencias. Tú eliges quién puede verla.",
@@ -180,6 +208,12 @@
     "drillNamePlaceholder": "ej., Simulacro de emergencia de primavera",
     "endDrill": "Terminar simulacro",
     "drillBlockedDuringEmergency": "No se pueden iniciar simulacros durante una emergencia activa."
+  },
+  "map": {
+    "layer_households": "Hogares",
+    "layer_rallyPoints": "Puntos de reunión",
+    "unassigned": "Tu dirección está fuera del área de cobertura actual. Un coordinador te asignará a la cuadra más cercana.",
+    "loading": "Cargando el mapa de tu vecindario..."
   },
   "plans": {
     "rallyPoints": "Puntos de reunión",
@@ -221,8 +255,93 @@
     "resourceInventory": "¿Tienes un generador, herramientas o suministros para compartir? Agregar recursos ayuda a toda tu cuadra.",
     "welfareChecks": "No hay emergencia activa. Tu lista de verificación de bienestar aparecerá aquí cuando sea necesario."
   },
+  "onboarding": {
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "step_yourName": "¿Cómo te llamas?",
+    "step_yourName_desc": "Para que tus vecinos sepan quién eres.",
+    "step_address": "¿Dónde vives?",
+    "step_address_desc": "Te conectaremos con tu cuadra.",
+    "step_basics": "¿Quién vive aquí?",
+    "step_basics_desc": "Ayuda a tu coordinador a planificar para todos.",
+    "step_contacts": "Contacto de emergencia",
+    "step_contacts_desc": "Alguien fuera de tu vecindario que pueda ser contactado si los teléfonos locales no funcionan.",
+    "step_pets": "¿Tienes mascotas?",
+    "step_pets_desc": "Las mascotas también deben ser consideradas en emergencias.",
+    "step_resources": "Recursos para compartir",
+    "step_resources_desc": "¿Algo que puedas prestar a vecinos en una crisis?",
+    "step_skills": "Habilidades y formación",
+    "step_skills_desc": "¿Alguna habilidad profesional o voluntaria que pueda ayudar en una emergencia?",
+    "skillsDescription": "Marca las que apliquen a cualquier persona en tu hogar.",
+    "skill_nurseDoctor": "Enfermero/a o Médico",
+    "skill_emt": "Técnico en emergencias médicas",
+    "skill_cprFirstAid": "Certificado en RCP / Primeros auxilios",
+    "skill_firefighter": "Bombero (activo o retirado)",
+    "skill_searchRescue": "Entrenado en Búsqueda y Rescate",
+    "skill_hamRadio": "Operador de radioaficionado",
+    "skill_electrician": "Electricista",
+    "skill_plumber": "Plomero",
+    "skill_mechanic": "Mecánico",
+    "skill_constructionCarpentry": "Construcción / Carpintería",
+    "skill_chainsawTreeRemoval": "Motosierra / Remoción de árboles",
+    "skill_mentalHealthCounselor": "Consejero de salud mental",
+    "skill_childcare": "Cuidado de niños",
+    "skill_animalCare": "Cuidado animal / Veterinaria",
+    "step_languages": "Idiomas que hablas",
+    "step_languages_desc": "Ayuda a los coordinadores a conectar vecinos que puedan traducir.",
+    "step_needs": "Necesidades de emergencia",
+    "step_needs_desc": "Opcional y privado. Ayuda a tu coordinador a verificar a las personas correctas primero.",
+    "complete": "¡Listo! Bienvenido a tu cuadra."
+  },
+  "landing": {
+    "hero": {
+      "title": "Conoce a tus vecinos. Conoce tus recursos. Sabe que no estás solo.",
+      "subtitle": "ReadyBlock conecta tu hogar con tu cuadra para que cuando lleguen las emergencias, nadie esté solo.",
+      "cta": "Únete a tu cuadra",
+      "learnMore": "Aprende cómo funciona"
+    },
+    "features": {
+      "title": "Hecho por vecinos. Para vecinos.",
+      "subtitle": "Todo lo que necesitas para hacer tu cuadra más resiliente — antes, durante y después de una emergencia.",
+      "map": {
+        "title": "Mapea tu cuadra",
+        "description": "Ve quién está en tu calle, qué recursos hay cerca y qué tan preparado está tu vecindario."
+      },
+      "resources": {
+        "title": "Comparte recursos",
+        "description": "Generadores, habilidades médicas, motosierras, refugio — sabe lo que tu cuadra tiene antes de necesitarlo."
+      },
+      "checkIn": {
+        "title": "Repórtate rápido",
+        "description": "Un toque le dice a tus contactos que estás a salvo. En una emergencia, cada segundo cuenta."
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "step1": { "title": "Registra tu hogar", "description": "Tu dirección, tu gente, tus mascotas — 2 minutos." },
+      "step2": { "title": "Agrega recursos y habilidades", "description": "Lo que puedes compartir, lo que sabes. Tu cuadra se hace más fuerte." },
+      "step3": { "title": "Conoce tu cuadra", "description": "Ve a tus vecinos, rastrea la preparación, estén preparados juntos." }
+    },
+    "community": {
+      "title": "Hecho en Asheville. Listo para todo.",
+      "description": "Después de que el huracán Helene nos mostró lo que los vecinos pueden hacer, nació ReadyBlock. Porque el mejor plan de emergencia es saber quién está en tu cuadra.",
+      "cta": "Comienza — toma 2 minutos"
+    },
+    "nav": {
+      "signIn": "Iniciar sesión",
+      "getStarted": "Comenzar"
+    },
+    "footer": {
+      "credit": "ReadyBlock 2026 · Asheville, NC",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "about": "Acerca de"
+    }
+  },
   "dashboard": {
     "welcome": "Hola, {{name}}",
+    "blockReadiness": "Preparación de cuadra",
+    "checkInNow": "Reportarse ahora",
     "noNeighborhood": "Aún no asignado a un vecindario",
     "getStarted": "Prepara tu hogar",
     "getStartedDescription": "Completa estos pasos para que tu coordinador sepa cómo ayudarte en una emergencia.",
@@ -238,11 +357,13 @@
     "viewNeighborhood": "Ver tu cuadra",
     "emergencyPlans": "Ver planes",
     "neighborhoodStatus": "Tu vecindario",
-    "households": "Registrados",
+    "households": "Hogares",
     "readiness": "Preparación",
-    "total": "Total"
+    "resources": "Recursos",
+    "skills": "Habilidades"
   },
   "profile": {
+    "name": "Nombre",
     "address": "Dirección",
     "members": "Personas",
     "adults": "adultos",
@@ -255,7 +376,26 @@
     "addContact": "Agrega un contacto de emergencia",
     "addResource": "Agrega un recurso",
     "addSkill": "Agrega una habilidad o certificación",
-    "contactRemoved": "Contacto eliminado"
+    "contactAdded": "Contacto agregado",
+    "contactUpdated": "Contacto actualizado",
+    "contactRemoved": "Contacto eliminado",
+    "editContact": "Editar contacto",
+    "resourceAdded": "Recurso agregado",
+    "editResource": "Editar recurso",
+    "resourceUpdated": "Recurso actualizado",
+    "resourceRemoved": "Recurso eliminado",
+    "resourceName": "¿Qué es?",
+    "resourceNamePlaceholder": "ej., Generador, Motosierra, Tanque de agua",
+    "resourceType": "Categoría",
+    "resourceDetails": "Detalles (opcional)",
+    "resourceDetailsPlaceholder": "ej., Honda EU2200i, bolsa de arroz de 50lb",
+    "shareableLabel": "Disponible para compartir con vecinos",
+    "skillAdded": "Habilidad agregada",
+    "editSkill": "Editar habilidad",
+    "skillUpdated": "Habilidad actualizada",
+    "skillRemoved": "Habilidad eliminada",
+    "skillCategory": "Tipo de habilidad",
+    "skillLevel": "Nivel de experiencia"
   },
   "settings": {
     "account": "Cuenta",
@@ -263,13 +403,18 @@
     "notifications": "Notificaciones",
     "notificationsDescription": "Las notificaciones push estarán disponibles cuando tu vecindario esté configurado.",
     "privacy": "Privacidad",
-    "dataSharingPreferences": "Preferencias de compartir datos"
+    "dataSharingPreferences": "Preferencias de compartir datos",
+    "privacyDescription": "Elige quién puede ver tu información de necesidades de emergencia.",
+    "privacySaved": "Preferencias de privacidad guardadas",
+    "savePrivacy": "Guardar configuración de privacidad"
   },
   "resource": {
     "type": {
       "medical": "Médico",
       "power": "Energía",
       "water": "Agua",
+      "food": "Alimento",
+      "shelter": "Refugio",
       "foodShelter": "Alimento y refugio",
       "tools": "Herramientas",
       "communications": "Comunicaciones"

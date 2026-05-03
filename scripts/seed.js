@@ -7,6 +7,8 @@
  *
  * Or with Firebase Emulator:
  *   FIRESTORE_EMULATOR_HOST=localhost:8080 node scripts/seed.js
+ *
+ * Set SEED_PASSWORD env var to override the default demo password.
  */
 
 import { initializeApp, cert } from 'firebase-admin/app';
@@ -17,6 +19,8 @@ import { getAuth } from 'firebase-admin/auth';
 const app = initializeApp();
 const db = getFirestore();
 const auth = getAuth();
+
+const SEED_PASSWORD = process.env.SEED_PASSWORD || 'Demo1234!';
 
 const NEIGHBORHOOD_ID = 'montford-north';
 const CITY_ID = 'asheville-nc';
@@ -55,7 +59,7 @@ const DEMO_USERS = [
   // Block Captain
   {
     email: 'captain@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Sarah Chen',
     role: 'blockCaptain',
     household: {
@@ -78,7 +82,7 @@ const DEMO_USERS = [
   // City/County Admin
   {
     email: 'admin@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Marcus Johnson',
     role: 'cityCountyCaptain',
     household: {
@@ -90,7 +94,7 @@ const DEMO_USERS = [
   // Regular households with varied statuses
   {
     email: 'martinez@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Rosa Martinez',
     role: 'householdMember',
     household: {
@@ -112,7 +116,7 @@ const DEMO_USERS = [
   },
   {
     email: 'lee@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'James Lee',
     role: 'householdMember',
     household: {
@@ -131,7 +135,7 @@ const DEMO_USERS = [
   },
   {
     email: 'patel@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Priya Patel',
     role: 'householdMember',
     household: {
@@ -148,7 +152,7 @@ const DEMO_USERS = [
   },
   {
     email: 'wilson@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Tom Wilson',
     role: 'householdMember',
     household: {
@@ -160,7 +164,7 @@ const DEMO_USERS = [
   },
   {
     email: 'nguyen@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Mai Nguyen',
     role: 'householdMember',
     household: {
@@ -183,7 +187,7 @@ const DEMO_USERS = [
   },
   {
     email: 'garcia@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Carlos Garcia',
     role: 'householdMember',
     household: {
@@ -199,7 +203,7 @@ const DEMO_USERS = [
   },
   {
     email: 'brown@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Angela Brown',
     role: 'householdMember',
     household: {
@@ -215,7 +219,7 @@ const DEMO_USERS = [
   },
   {
     email: 'kim@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Soo-Jin Kim',
     role: 'householdMember',
     household: {
@@ -229,7 +233,7 @@ const DEMO_USERS = [
   // Unregistered / incomplete households
   {
     email: 'davis@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Robert Davis',
     role: 'householdMember',
     household: {
@@ -240,7 +244,7 @@ const DEMO_USERS = [
   },
   {
     email: 'thompson@readyblock.demo',
-    password: 'REDACTED_PASSWORD',
+    password: SEED_PASSWORD,
     displayName: 'Linda Thompson',
     role: 'unverified',
     household: {
@@ -404,10 +408,10 @@ async function seed() {
 
   console.log('\nSeed complete!');
   console.log('\nDemo accounts:');
-  console.log('  Captain:  captain@readyblock.demo / REDACTED_PASSWORD');
-  console.log('  Admin:    admin@readyblock.demo / REDACTED_PASSWORD');
-  console.log('  Resident: martinez@readyblock.demo / REDACTED_PASSWORD');
-  console.log('\nAll demo passwords: REDACTED_PASSWORD');
+  console.log(`  Captain:  captain@readyblock.demo / ${SEED_PASSWORD}`);
+  console.log(`  Admin:    admin@readyblock.demo / ${SEED_PASSWORD}`);
+  console.log(`  Resident: martinez@readyblock.demo / ${SEED_PASSWORD}`);
+  console.log(`\nAll demo passwords: ${SEED_PASSWORD}`);
 }
 
 seed().catch(console.error);
