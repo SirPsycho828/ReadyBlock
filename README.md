@@ -282,6 +282,11 @@ VITE_ADMIN_EMAIL=              # Email that sees the demo role switcher
 # TWILIO_PHONE_NUMBER=         # SMS sender number
 ```
 
+## Related
+
+- [ReadyBlock Flutter App](https://github.com/SirPsycho828/ReadyBlock-Flutter) &mdash; Companion mobile app (Flutter/Dart) with full feature parity
+- [Video Walkthrough](https://www.youtube.com/shorts/cMQAAtAUSHQ) &mdash; YouTube Shorts demo of the app in action
+
 ## License
 
 MIT
